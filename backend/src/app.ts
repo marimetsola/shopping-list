@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import listRouter from './routes/lists';
 require('express-async-errors');
 import middleware from './utils/middleware';
@@ -44,6 +45,7 @@ if (url) {
     throw new Error('No mongodb url provided');
 }
 
+app.use(cors());
 app.use(express.json());
 app.use('/api/lists', listRouter);
 app.use(middleware.errorHandler);
