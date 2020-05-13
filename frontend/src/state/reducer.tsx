@@ -27,6 +27,10 @@ export type Action =
     }
     | {
         type: "CLOSE_LIST_MODAL";
+    }
+    | {
+        type: "ADD_ITEM";
+        payload: { list: ItemList; item: string };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -40,22 +44,34 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 activeList: action.payload
-            }
+            };
         case "OPEN_LIST_MODAL":
             return {
                 ...state,
                 listModalOpen: true
-            }
+            };
         case "CLOSE_LIST_MODAL":
             return {
                 ...state,
                 listModalOpen: false
-            }
+            };
         case "ADD_LIST":
             return {
                 ...state,
                 lists: [...state.lists, action.payload]
-            }
+            };
+        case "DELETE_LIST":
+            return {
+                ...state,
+                lists: state.lists.filter(l => l.id !== action.payload.id),
+                activeList: null
+            };
+        case "ADD_ITEM":
+            action.payload.list.items.push(action.payload.item);
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
+            };
         // case "ADD_LIST":
         //     return {
         //         ...state,
@@ -108,16 +124,16 @@ export const openListModal = () => {
         {
             type: "OPEN_LIST_MODAL" as "OPEN_LIST_MODAL"
         }
-    )
-}
+    );
+};
 
 export const closeListModal = () => {
     return (
         {
             type: "CLOSE_LIST_MODAL" as "CLOSE_LIST_MODAL"
         }
-    )
-}
+    );
+};
 
 export const addList = (list: ItemList) => {
     return (
@@ -125,8 +141,26 @@ export const addList = (list: ItemList) => {
             type: "ADD_LIST" as "ADD_LIST",
             payload: list
         }
-    )
-}
+    );
+};
+
+export const deleteList = (list: ItemList) => {
+    return (
+        {
+            type: "DELETE_LIST" as "DELETE_LIST",
+            payload: list
+        }
+    );
+};
+
+export const addItem = (list: ItemList, item: string) => {
+    return (
+        {
+            type: "ADD_ITEM" as "ADD_ITEM",
+            payload: { list, item }
+        }
+    );
+};
 
 // // used for updating patient to include sensitive data
 // export const editPatient = (patient: Patient) => {

@@ -6,7 +6,7 @@ import { apiBaseUrl } from '../../constants'
 import axios from 'axios'
 import { ItemList } from '../../types';
 
-const AddListModal = () => {
+const AddListModal: React.FC = () => {
     const [{ listModalOpen }, dispatch] = useStateValue();
 
     const addNewList = async (values: { name: string }) => {
@@ -23,7 +23,7 @@ const AddListModal = () => {
     }
 
     return (
-        <Modal open={listModalOpen} onClose={() => dispatch(closeListModal())} centered={false} closeIcon>
+        <Modal open={listModalOpen} onClose={() => dispatch(closeListModal())} centered={false} size="tiny" closeIcon>
             <Modal.Header>Add a new list</Modal.Header>
             <Modal.Content>
                 <AddListForm onSubmit={addNewList} onCancel={() => dispatch(closeListModal())} />

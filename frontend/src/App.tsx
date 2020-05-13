@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import NavBar from './components/NavBar'
-import ActiveList from './components/ActiveList'
-import AddListModal from './components/AddListModal'
-import { ItemList } from './types'
+import NavBar from './components/NavBar';
+import ActiveList from './components/ActiveList';
+import AddListModal from './components/AddListModal';
+import { ItemList } from './types';
 
 import { apiBaseUrl } from './constants';
-import { useStateValue, setLists } from './state'
+import { useStateValue, setLists } from './state';
 
-import { Container } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react';
 
 const App: React.FC = () => {
     const [, dispatch] = useStateValue();
@@ -24,14 +24,16 @@ const App: React.FC = () => {
             }
         };
         fetchLists();
-    }, [dispatch])
+    }, [dispatch]);
     return (
-        <Container>
+        <div>
             <NavBar />
-            <ActiveList />
-            <AddListModal />
-        </Container>
+            <Container>
+                <ActiveList />
+                <AddListModal />
+            </Container>
+        </div >
     );
-}
+};
 
 export default App;

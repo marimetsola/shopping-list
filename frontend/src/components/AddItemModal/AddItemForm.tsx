@@ -26,7 +26,7 @@ interface Props {
     onCancel: () => void;
 }
 
-export const AddListForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     return (
         <Formik
             initialValues={{
@@ -75,4 +75,4 @@ export const AddListForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     );
 };
 
-export default AddListForm;
+export default AddItemForm;
