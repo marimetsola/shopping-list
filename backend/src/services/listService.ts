@@ -25,16 +25,16 @@ const deleteList = (id: string) => {
     return ItemList.findByIdAndRemove(id);
 };
 
-const addItem = async (id: string, itemName: string) => {
+const addItem = (id: string, itemName: string) => {
     if (!itemName) throw new Error('item name not provided');
-    return await ItemList.findByIdAndUpdate(id, { $push: { "items": itemName } }, { new: true });
+    return ItemList.findByIdAndUpdate(id, { $push: { "items": itemName } }, { new: true });
 };
 
-const deleteItem = async (id: string, itemName: string) => {
-    return await ItemList.findByIdAndUpdate(id, { $pull: { "items": itemName } }, { new: true });
+const deleteItem = (id: string, itemName: string) => {
+    return ItemList.findByIdAndUpdate(id, { $pull: { "items": itemName } }, { new: true });
 };
 
-const updateList = async (id: string, items: string[]) => {
+const updateList = (id: string, items: string[]) => {
     if (!items || items.length === 0) {
         throw new Error('items not provided');
     }
@@ -43,7 +43,7 @@ const updateList = async (id: string, items: string[]) => {
         if (!i) throw new Error('item with no name provided');
     });
 
-    const list = await ItemList.findByIdAndUpdate(id, { items }, { new: true });
+    const list = ItemList.findByIdAndUpdate(id, { items }, { new: true });
     return list;
 };
 

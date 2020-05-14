@@ -31,6 +31,10 @@ export type Action =
     | {
         type: "ADD_ITEM";
         payload: { list: ItemList; item: string };
+    }
+    | {
+        type: "DELETE_ITEM";
+        payload: { list: ItemList; item: string };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -60,6 +64,12 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 lists: [...state.lists, action.payload]
             };
+        case "EDIT_LIST":
+            return {
+                ...state,
+                // lists: state.lists.map(l => l.id !== action.payload.id ? l : action.payload),
+                activeList: action.payload
+            };
         case "DELETE_LIST":
             return {
                 ...state,
@@ -68,6 +78,12 @@ export const reducer = (state: State, action: Action): State => {
             };
         case "ADD_ITEM":
             action.payload.list.items.push(action.payload.item);
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
+            };
+        case "DELETE_ITEM":
+            action.payload.list.items = action.payload.list.items.filter(i => i !== action.payload.item);
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
@@ -144,6 +160,15 @@ export const addList = (list: ItemList) => {
     );
 };
 
+export const editList = (list: ItemList) => {
+    return (
+        {
+            type: "EDIT_LIST" as "EDIT_LIST",
+            payload: list
+        }
+    );
+};
+
 export const deleteList = (list: ItemList) => {
     return (
         {
@@ -157,6 +182,15 @@ export const addItem = (list: ItemList, item: string) => {
     return (
         {
             type: "ADD_ITEM" as "ADD_ITEM",
+            payload: { list, item }
+        }
+    );
+};
+
+export const deleteItem = (list: ItemList, item: string) => {
+    return (
+        {
+            type: "DELETE_ITEM" as "DELETE_ITEM",
             payload: { list, item }
         }
     );

@@ -127,7 +127,7 @@ describe('when there is initially some lists saved', () => {
             await api
                 .delete(`/api/lists/${id}/delete-item`)
                 .send({ name: 'milk' })
-                .expect(200);
+                .expect(204);
 
             const response = await api.get(`/api/lists/${id}`);
             expect(response.body.items).not.toContain('milk');

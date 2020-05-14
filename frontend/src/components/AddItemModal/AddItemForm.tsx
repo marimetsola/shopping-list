@@ -1,25 +1,7 @@
 import React from "react";
-import { Grid, Button, Form as UIForm } from "semantic-ui-react";
-import { Field, Formik, Form, FieldProps, ErrorMessage } from "formik";
-
-interface TextProps extends FieldProps {
-    label: string;
-    placeholder: string;
-}
-
-export const TextField: React.FC<TextProps> = ({
-    field,
-    label,
-    placeholder
-}) => (
-        <UIForm.Field>
-            <label>{label}</label>
-            <Field placeholder={placeholder} {...field} />
-            <div style={{ color: 'red' }}>
-                <ErrorMessage name={field.name} />
-            </div>
-        </UIForm.Field>
-    );
+import { Grid, Button } from "semantic-ui-react";
+import { Field, Formik, Form, } from "formik";
+import { TextField } from '../FieldForm';
 
 interface Props {
     onSubmit: (values: { name: string }) => void;
@@ -46,7 +28,7 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                 return (
                     <Form className="form ui">
                         <Field
-                            label="Name of the list"
+                            label="Name of the item"
                             placeholder="Name"
                             name="name"
                             component={TextField}
