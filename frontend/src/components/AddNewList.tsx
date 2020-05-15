@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Icon } from 'semantic-ui-react';
-import { useStateValue, openListModal } from '../state'
+import { useStateValue, openListModal } from '../state';
 
 const AddNewList: React.FC = () => {
     const [, dispatch] = useStateValue();
@@ -9,7 +9,7 @@ const AddNewList: React.FC = () => {
             <Icon name='add' size='tiny' />
         Add New
         </Menu.Item>
-    )
-}
+    );
+};
 
-export default AddNewList
+export default AddNewList;

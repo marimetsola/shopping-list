@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { useStateValue, addItem } from '../../state';
-import { apiBaseUrl } from '../../constants';
-import axios from 'axios';
+import listService from '../../services/lists';
 import { ItemList } from '../../types';
 import AddItemForm from './AddItemForm';
 
@@ -16,9 +15,7 @@ const AddItemModal: React.FC<Props> = ({ open, onClose, list }) => {
     const [, dispatch] = useStateValue();
     const addNewItem = async (values: { name: string }) => {
         try {
-            await axios.post<ItemList>(
-                `${apiBaseUrl}/lists/${list.id}/add-item`, values
-            );
+            await listService.addItem(list.id, values.name);
             dispatch(addItem(list, values.name));
 
         } catch (e) {

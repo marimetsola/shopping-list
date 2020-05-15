@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Grid, Icon } from 'semantic-ui-react';
-// import EditListForm from './EditListForm';
+import listService from '../../services/lists';
 import { useStateValue, deleteList } from '../../state';
-import { apiBaseUrl } from '../../constants';
-import axios from 'axios';
 import { ItemList } from '../../types';
 
 interface Props {
@@ -20,7 +18,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         setDeleteModalOpen(false);
         onClose();
         try {
-            await axios.delete(`${apiBaseUrl}/lists/${list.id}`);
+            await listService.deleteList(list.id);
             dispatch(deleteList(list));
         } catch (error) {
             console.log(error);
@@ -31,8 +29,6 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
             <Modal.Header>Edit list {list.name}</Modal.Header>
             <Modal.Content>
-                {/* <AddListForm onSubmit={addNewList} onCancel={() => dispatch(closeListModal())} /> */}
-                {/* <Button>Delete</Button> */}
                 <Button color="red" onClick={() => setDeleteModalOpen(true)}>
                     <Icon name='delete' />Delete
                 </Button>

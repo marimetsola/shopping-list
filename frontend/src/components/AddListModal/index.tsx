@@ -1,10 +1,8 @@
 import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import AddListForm from './AddListForm';
-import { useStateValue, closeListModal, addList, setActiveList } from '../../state'
-import { apiBaseUrl } from '../../constants'
-import axios from 'axios'
-import { ItemList } from '../../types';
+import { useStateValue, closeListModal, addList, setActiveList } from '../../state';
+import listService from '../../services/lists';
 
 const AddListModal: React.FC = () => {
     const [{ listModalOpen }, dispatch] = useStateValue();
@@ -12,15 +10,13 @@ const AddListModal: React.FC = () => {
     const addNewList = async (values: { name: string }) => {
         dispatch(closeListModal());
         try {
-            const { data: addedList } = await axios.post<ItemList>(
-                `${apiBaseUrl}/lists`, values
-            );
+            const addedList = await listService.addList(values.name);
             dispatch(addList(addedList));
             dispatch(setActiveList(addedList));
         } catch (e) {
             console.error(e);
         }
-    }
+    };
 
     return (
         <Modal open={listModalOpen} onClose={() => dispatch(closeListModal())} centered={false} size="tiny" closeIcon>
@@ -29,7 +25,7 @@ const AddListModal: React.FC = () => {
                 <AddListForm onSubmit={addNewList} onCancel={() => dispatch(closeListModal())} />
             </Modal.Content>
         </Modal>
-    )
+    );
 };
 
 export default AddListModal;

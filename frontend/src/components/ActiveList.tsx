@@ -7,6 +7,7 @@ import EditListModal from './EditListModal';
 import AddItemModal from './AddItemModal';
 import Item from './Item';
 import { ItemList } from '../types';
+import listService from '../services/lists';
 
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
@@ -30,9 +31,7 @@ const ActiveList: React.FC = () => {
     const removeItem = async (item: string) => {
         if (activeList) {
             try {
-                await axios.delete<ItemList>(
-                    `${apiBaseUrl}/lists/${activeList.id}/delete-item`, { data: { name: item } }
-                );
+                await listService.deleteItem(activeList.id, item);
                 dispatch(deleteItem(activeList, item));
 
             } catch (e) {
@@ -89,18 +88,19 @@ const ActiveList: React.FC = () => {
                         ? activeList.items.map(item => (<Item key={item} item={item} onRemove={() => removeItem(item)} />))
                         : 'List has no items'} */}
             <Divider />
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId={activeList.id}>
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}>
-                            {activeList.items.map((item, index) => (<Item index={index} key={item} item={item} onRemove={() => removeItem(item)} />))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+            {activeList.items.length === 0 ? 'List has no items' :
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId={activeList.id}>
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}>
+                                {activeList.items.map((item, index) => (<Item index={index} key={item} item={item} onRemove={() => removeItem(item)} />))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>}
             <EditListModal open={editModalOpen} onClose={() => setEditModalOpen(false)} list={activeList} />
             <AddItemModal open={addItemModalOpen} onClose={() => { setAddItemModalOpen(false); focusAddButton(); }} list={activeList} />
             <Divider />
