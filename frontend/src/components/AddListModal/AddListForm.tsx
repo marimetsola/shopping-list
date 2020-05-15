@@ -2,6 +2,7 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { TextField } from '../FieldForm';
+import { useStateValue } from '../../state';
 
 interface Props {
     onSubmit: (values: { name: string }) => void;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const AddListForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+    const [{ lists }] = useStateValue();
     return (
         <Formik
             initialValues={{
@@ -17,9 +19,13 @@ export const AddListForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             onSubmit={onSubmit}
             validate={values => {
                 const requiredError = "Field is required";
+                const uniqueViolationError = 'List with that name already exists';
                 const errors: { [field: string]: string } = {};
                 if (!values.name) {
                     errors.name = requiredError;
+                }
+                if (lists.map(l => l.name).includes(values.name)) {
+                    errors.name = uniqueViolationError;
                 }
                 return errors;
             }}
