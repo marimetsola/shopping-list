@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import { ItemListType } from '../types';
 
-const itemListSchema = new mongoose.Schema({
+const itemListSchema = new Schema({
     name: {
         type: String, required: true, unique: true
     },
-    items: [String]
+    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }]
 });
 
 itemListSchema.plugin(uniqueValidator);

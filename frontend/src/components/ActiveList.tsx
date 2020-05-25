@@ -34,8 +34,18 @@ const ActiveList: React.FC = () => {
                 await listService.deleteItem(activeList.id, item);
                 dispatch(deleteItem(activeList, item));
 
-            } catch (e) {
-                console.error(e);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    };
+
+    const editItem = async (item: string) => {
+        if (activeList) {
+            try {
+                console.log('open EditItemModal for', item);
+            } catch (error) {
+                console.error(error);
             }
         }
     };
@@ -83,10 +93,6 @@ const ActiveList: React.FC = () => {
     return (
         <Container style={contStyle}>
             {<Header as="h3" style={{ paddingRight: "1rem", marginBottom: 0 }}>{activeList.name}</Header>}
-
-            {/* {activeList.items.length > 0
-                        ? activeList.items.map(item => (<Item key={item} item={item} onRemove={() => removeItem(item)} />))
-                        : 'List has no items'} */}
             <Divider />
             {activeList.items.length === 0 ? 'List has no items' :
                 <DragDropContext onDragEnd={onDragEnd}>
@@ -95,7 +101,14 @@ const ActiveList: React.FC = () => {
                             <div
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}>
-                                {activeList.items.map((item, index) => (<Item index={index} key={item} item={item} onRemove={() => removeItem(item)} />))}
+                                {activeList.items.map((item, index) => (
+                                    <Item
+                                        index={index}
+                                        key={item}
+                                        item={item}
+                                        onRemove={() => removeItem(item)}
+                                        onEdit={() => editItem(item)}
+                                    />))}
                                 {provided.placeholder}
                             </div>
                         )}

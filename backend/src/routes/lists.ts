@@ -40,7 +40,7 @@ router.post('/:id/add-item', async (req, res) => {
 
 // Delete item from list
 router.delete('/:id/delete-item', async (req, res) => {
-    await listService.deleteItem(req.params.id, req.body.name);
+    await listService.deleteItem(req.params.id, req.body.itemID);
     res.status(204).end();
 });
 
