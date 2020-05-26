@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../app';
 const api = supertest(app);
-import { ItemListType } from '../types';
+import { ItemListType, ItemType } from '../types';
 import ItemList from '../models/itemList';
 import helper from './test_helper';
 
@@ -97,7 +97,9 @@ describe('when there is initially some lists saved', () => {
                 .expect(200);
 
             const response = await api.get(`/api/lists/${id}`);
-            expect(response.body.items).toContain('milk');
+            const items = response.body.items.map((i: ItemType) => i.name);
+            console.log(response.body.items);
+            expect(items).toContain('milk');
         });
 
         test('fails with an empty name', async () => {
@@ -119,18 +121,21 @@ describe('when there is initially some lists saved', () => {
             const lists: ItemListType[] = await helper.listsInDb();
             const id = lists[0].id;
 
-            await api
+            const listResp = await api
                 .post(`/api/lists/${id}/add-item`)
                 .send({ name: 'milk' })
                 .expect(200);
 
+            const itemID = listResp.body.items[0].id;
+
             await api
                 .delete(`/api/lists/${id}/delete-item`)
-                .send({ name: 'milk' })
+                .send({ itemID })
                 .expect(204);
 
             const response = await api.get(`/api/lists/${id}`);
-            expect(response.body.items).not.toContain('milk');
+            const items = response.body.items.map((i: ItemType) => i.name);
+            expect(items).not.toContain('milk');
         });
     });
 
@@ -152,7 +157,7 @@ describe('when there is initially some lists saved', () => {
                 .expect(200);
 
             const response = await api.get(`/api/lists/${id}`);
-            const items: string[] = response.body.items;
+            const items: string[] = response.body.items.map((i: ItemType) => i.name);
             expect(items).toEqual(newItems);
             expect(items).not.toContain('milk');
         });
@@ -172,7 +177,7 @@ describe('when there is initially some lists saved', () => {
                 .expect(400);
 
             const response = await api.get(`/api/lists/${id}`);
-            const items: string[] = response.body.items;
+            const items: string[] = response.body.items.map((i: ItemType) => i.name);
             expect(items).toEqual(['milk']);
         });
 
@@ -193,7 +198,7 @@ describe('when there is initially some lists saved', () => {
                 .expect(400);
 
             const response = await api.get(`/api/lists/${id}`);
-            const items: string[] = response.body.items;
+            const items: string[] = response.body.items.map((i: ItemType) => i.name);
             expect(items).toEqual(['milk']);
         });
     });

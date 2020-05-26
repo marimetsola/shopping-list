@@ -1,6 +1,5 @@
 import ItemList from '../models/itemList';
 import Item from '../models/item';
-import ItemType from '../types';
 
 const getAll = () => {
     const lists = ItemList.find({}).populate('items');
@@ -8,7 +7,7 @@ const getAll = () => {
 };
 
 const findById = (id: string) => {
-    const list = ItemList.findById(id);
+    const list = ItemList.findById(id).populate('items');
     return list;
 };
 
@@ -31,11 +30,13 @@ const addItem = async (id: string, itemName: string) => {
     if (!itemName) throw new Error('item name not provided');
     const newItem = new Item({ name: itemName });
     await newItem.save();
-    return ItemList.findByIdAndUpdate(id, { $push: { "items": newItem } }, { new: true });
+    return ItemList.findByIdAndUpdate(id, { $push: { "items": newItem } }, { new: true }).populate('items');
 };
 
-const deleteItem = (id: string, itemID: string) => {
-    return ItemList.findByIdAndUpdate(id, { $pull: { "items": itemID } }, { new: true });
+const deleteItem = async (id: string, itemID: string) => {
+    await Item.findByIdAndRemove(itemID);
+    return ItemList.findByIdAndUpdate(id, { $pull: { "items": { id: itemID } } }, { new: true });
+    // return ItemList.findById(id);
 };
 
 const updateList = async (id: string, items: string[]) => {
