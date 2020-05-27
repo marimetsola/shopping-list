@@ -15,8 +15,8 @@ const AddItemModal: React.FC<Props> = ({ open, onClose, list }) => {
     const [, dispatch] = useStateValue();
     const addNewItem = async (values: { name: string }) => {
         try {
-            await listService.addItem(list.id, values.name);
-            dispatch(addItem(list, values.name));
+            const item = (await listService.addItem(list.id, values.name)).data;
+            dispatch(addItem(list, item));
 
         } catch (e) {
             console.error(e);

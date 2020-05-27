@@ -6,7 +6,7 @@ import { Container, Header, Divider, Button, Icon } from 'semantic-ui-react';
 import EditListModal from './EditListModal';
 import AddItemModal from './AddItemModal';
 import Item from './Item';
-import { ItemList } from '../types';
+import { ItemList, ItemType } from '../types';
 import listService from '../services/lists';
 
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
@@ -28,7 +28,7 @@ const ActiveList: React.FC = () => {
         focusAddButton();
     }, [activeList]);
 
-    const removeItem = async (item: string) => {
+    const removeItem = async (item: ItemType) => {
         if (activeList) {
             try {
                 await listService.deleteItem(activeList.id, item);
@@ -40,7 +40,7 @@ const ActiveList: React.FC = () => {
         }
     };
 
-    const editItem = async (item: string) => {
+    const editItem = async (item: ItemType) => {
         if (activeList) {
             try {
                 console.log('open EditItemModal for', item);
@@ -52,6 +52,7 @@ const ActiveList: React.FC = () => {
 
     const onDragEnd = async (result: DropResult) => {
         const { destination, source, draggableId } = result;
+
 
         if (!destination) {
             return;
@@ -65,9 +66,12 @@ const ActiveList: React.FC = () => {
         const items = activeList?.items;
         if (items && activeList) {
             const newItems = [...items];
-            newItems.splice(source.index, 1);
-            newItems.splice(destination.index, 0, draggableId);
-            activeList.items = newItems;
+            const draggedItem = newItems.find(i => i.id === draggableId);
+            if (draggedItem) {
+                newItems.splice(source.index, 1);
+                newItems.splice(destination.index, 0, draggedItem);
+                activeList.items = newItems;
+            }
 
             try {
                 await axios.put<ItemList>(
@@ -104,7 +108,7 @@ const ActiveList: React.FC = () => {
                                 {activeList.items.map((item, index) => (
                                     <Item
                                         index={index}
-                                        key={item}
+                                        key={item.id}
                                         item={item}
                                         onRemove={() => removeItem(item)}
                                         onEdit={() => editItem(item)}

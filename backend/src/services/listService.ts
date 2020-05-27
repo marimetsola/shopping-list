@@ -1,5 +1,6 @@
 import ItemList from '../models/itemList';
 import Item from '../models/item';
+import { ItemType } from '../types';
 
 const getAll = () => {
     const lists = ItemList.find({}).populate('items');
@@ -30,7 +31,8 @@ const addItem = async (id: string, itemName: string) => {
     if (!itemName) throw new Error('item name not provided');
     const newItem = new Item({ name: itemName });
     await newItem.save();
-    return ItemList.findByIdAndUpdate(id, { $push: { "items": newItem } }, { new: true }).populate('items');
+    await ItemList.findByIdAndUpdate(id, { $push: { "items": newItem } }, { new: true }).populate('items');
+    return newItem;
 };
 
 const deleteItem = async (id: string, itemID: string) => {
@@ -39,7 +41,7 @@ const deleteItem = async (id: string, itemID: string) => {
     // return ItemList.findById(id);
 };
 
-const updateList = async (id: string, items: string[]) => {
+const updateList = async (id: string, items: ItemType[]) => {
     if (!items || items.length === 0) {
         throw new Error('items not provided');
     }
@@ -50,7 +52,7 @@ const updateList = async (id: string, items: string[]) => {
 
     await Item.deleteMany({ list: id });
 
-    const itemsToSave = items.map(i => new Item({ name: i, list: id }));
+    const itemsToSave = items.map(i => new Item({ name: i.name, list: id }));
     const itemObjects = await Item.insertMany(itemsToSave);
 
     const list = ItemList.findByIdAndUpdate(id, { items: itemObjects }, { new: true });

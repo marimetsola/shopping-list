@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button, Icon, Segment, Grid } from 'semantic-ui-react';
 import { Draggable } from 'react-beautiful-dnd';
+import { ItemType } from '../types';
 
 interface Props {
-    item: string;
+    item: ItemType;
     onRemove: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onEdit: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     index: number;
@@ -11,7 +12,7 @@ interface Props {
 
 const Item: React.FC<Props> = ({ item, onRemove, onEdit, index }) => {
     return (
-        <Draggable draggableId={item} index={index} >
+        <Draggable draggableId={item.id} index={index} >
             {(provided) => (
                 <div
                     {...provided.draggableProps}
@@ -20,7 +21,7 @@ const Item: React.FC<Props> = ({ item, onRemove, onEdit, index }) => {
                     <Segment>
                         <Grid>
                             <Grid.Column floated="left" verticalAlign="middle" width={5}>
-                                <span>{item}</span>
+                                <span>{item.name}</span>
                             </Grid.Column>
                             <Grid.Column floated="right" width={5}>
                                 <Button floated="right" size="tiny" color="red" onClick={onRemove} icon>

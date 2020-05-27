@@ -4,6 +4,7 @@ import app from '../app';
 const api = supertest(app);
 import { ItemListType, ItemType } from '../types';
 import ItemList from '../models/itemList';
+import Item from '../models/item';
 import helper from './test_helper';
 
 describe('when there is initially some lists saved', () => {
@@ -98,7 +99,6 @@ describe('when there is initially some lists saved', () => {
 
             const response = await api.get(`/api/lists/${id}`);
             const items = response.body.items.map((i: ItemType) => i.name);
-            console.log(response.body.items);
             expect(items).toContain('milk');
         });
 
@@ -121,12 +121,11 @@ describe('when there is initially some lists saved', () => {
             const lists: ItemListType[] = await helper.listsInDb();
             const id = lists[0].id;
 
-            const listResp = await api
+            const itemID = (await api
                 .post(`/api/lists/${id}/add-item`)
                 .send({ name: 'milk' })
-                .expect(200);
-
-            const itemID = listResp.body.items[0].id;
+                .expect(200))
+                .body.id;
 
             await api
                 .delete(`/api/lists/${id}/delete-item`)
@@ -149,7 +148,10 @@ describe('when there is initially some lists saved', () => {
                 .send({ name: 'milk' })
                 .expect(200);
 
-            const newItems = ['beef', 'candy'];
+            const newItems = [
+                new Item({ name: 'beef' }),
+                new Item({ name: 'candy' })
+            ];
 
             await api
                 .put(`/api/lists/${id}/update`)
@@ -158,7 +160,7 @@ describe('when there is initially some lists saved', () => {
 
             const response = await api.get(`/api/lists/${id}`);
             const items: string[] = response.body.items.map((i: ItemType) => i.name);
-            expect(items).toEqual(newItems);
+            expect(items).toEqual(newItems.map((i: ItemType) => i.name));
             expect(items).not.toContain('milk');
         });
 
@@ -190,7 +192,7 @@ describe('when there is initially some lists saved', () => {
                 .send({ name: 'milk' })
                 .expect(200);
 
-            const newItems = ['beef', ''];
+            const newItems = [new Item({ name: 'beef' }), ''];
 
             await api
                 .put(`/api/lists/${id}/update`)

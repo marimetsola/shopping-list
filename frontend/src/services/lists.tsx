@@ -1,4 +1,4 @@
-import { ItemList } from '../types';
+import { ItemList, ItemType } from '../types';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
 
@@ -23,14 +23,15 @@ const deleteList = async (listID: string) => {
 };
 
 const addItem = async (listID: string, item: string) => {
-    await axios.post<ItemList>(
+    const addedItem = await axios.post<ItemType>(
         `${apiBaseUrl}/lists/${listID}/add-item`, { name: item }
     );
+    return addedItem;
 };
 
-const deleteItem = async (listID: string, item: string) => {
+const deleteItem = async (listID: string, item: ItemType) => {
     await axios.delete<ItemList>(
-        `${apiBaseUrl}/lists/${listID}/delete-item`, { data: { name: item } }
+        `${apiBaseUrl}/lists/${listID}/delete-item`, { data: { itemID: item.id } }
     );
 };
 

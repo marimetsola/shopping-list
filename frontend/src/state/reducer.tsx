@@ -1,5 +1,5 @@
 import { State } from "./state";
-import { ItemList } from "../types";
+import { ItemList, ItemType } from "../types";
 
 export type Action =
     | {
@@ -30,11 +30,11 @@ export type Action =
     }
     | {
         type: "ADD_ITEM";
-        payload: { list: ItemList; item: string };
+        payload: { list: ItemList; item: ItemType };
     }
     | {
         type: "DELETE_ITEM";
-        payload: { list: ItemList; item: string };
+        payload: { list: ItemList; item: ItemType };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -83,7 +83,7 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
         case "DELETE_ITEM":
-            action.payload.list.items = action.payload.list.items.filter(i => i !== action.payload.item);
+            action.payload.list.items = action.payload.list.items.filter(i => i.id !== action.payload.item.id);
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
@@ -178,7 +178,7 @@ export const deleteList = (list: ItemList) => {
     );
 };
 
-export const addItem = (list: ItemList, item: string) => {
+export const addItem = (list: ItemList, item: ItemType) => {
     return (
         {
             type: "ADD_ITEM" as "ADD_ITEM",
@@ -187,7 +187,7 @@ export const addItem = (list: ItemList, item: string) => {
     );
 };
 
-export const deleteItem = (list: ItemList, item: string) => {
+export const deleteItem = (list: ItemList, item: ItemType) => {
     return (
         {
             type: "DELETE_ITEM" as "DELETE_ITEM",
