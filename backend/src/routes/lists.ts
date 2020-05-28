@@ -44,10 +44,18 @@ router.delete('/:id/delete-item', async (req, res) => {
     res.status(204).end();
 });
 
+// Edit item on a list
+router.patch('/:id/edit-item', async (req, res) => {
+    const updatedList = await listService.editItem(req.body.item);
+    res.send(updatedList);
+});
+
 // Update list
 router.put('/:id/update', async (req, res) => {
     const updatedList = await listService.updateList(req.params.id, req.body.items);
     res.send(updatedList);
 });
+
+
 
 export default router;

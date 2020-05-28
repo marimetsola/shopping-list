@@ -35,4 +35,10 @@ const deleteItem = async (listID: string, item: ItemType) => {
     );
 };
 
-export default { getLists, addList, addItem, deleteItem, deleteList };
+const editItem = async (listID: string, item: ItemType) => {
+    await axios.patch<ItemList>(
+        `${apiBaseUrl}/lists/${listID}/edit-item`, { item }
+    );
+};
+
+export default { getLists, addList, addItem, deleteItem, editItem, deleteList };

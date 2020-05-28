@@ -5,6 +5,7 @@ import { useStateValue, deleteItem, editList } from '../state';
 import { Container, Header, Divider, Button, Icon } from 'semantic-ui-react';
 import EditListModal from './EditListModal';
 import AddItemModal from './AddItemModal';
+import EditItemModal from './EditItemModal';
 import Item from './Item';
 import { ItemList, ItemType } from '../types';
 import listService from '../services/lists';
@@ -12,7 +13,8 @@ import listService from '../services/lists';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 const ActiveList: React.FC = () => {
-    const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+    const [editListModalOpen, setEditListModalOpen] = useState<boolean>(false);
+    const [editedItem, setEditedItem] = useState<ItemType | null>(null);
     const [addItemModalOpen, setAddItemModalOpen] = useState<boolean>(false);
     const [{ activeList }, dispatch] = useStateValue();
     const refContainer = useRef<Button>(null);
@@ -34,16 +36,6 @@ const ActiveList: React.FC = () => {
                 await listService.deleteItem(activeList.id, item);
                 dispatch(deleteItem(activeList, item));
 
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    };
-
-    const editItem = async (item: ItemType) => {
-        if (activeList) {
-            try {
-                console.log('open EditItemModal for', item);
             } catch (error) {
                 console.error(error);
             }
@@ -111,17 +103,18 @@ const ActiveList: React.FC = () => {
                                         key={item.id}
                                         item={item}
                                         onRemove={() => removeItem(item)}
-                                        onEdit={() => editItem(item)}
+                                        onEdit={() => setEditedItem(item)}
                                     />))}
                                 {provided.placeholder}
                             </div>
                         )}
                     </Droppable>
                 </DragDropContext>}
-            <EditListModal open={editModalOpen} onClose={() => setEditModalOpen(false)} list={activeList} />
+            <EditListModal open={editListModalOpen} onClose={() => setEditListModalOpen(false)} list={activeList} />
             <AddItemModal open={addItemModalOpen} onClose={() => { setAddItemModalOpen(false); focusAddButton(); }} list={activeList} />
+            <EditItemModal open={editedItem ? true : false} onClose={() => setEditedItem(null)} list={activeList} item={editedItem} />
             <Divider />
-            <Button floated="left" color='olive' onClick={() => setEditModalOpen(true)}>
+            <Button floated="left" color='olive' onClick={() => setEditListModalOpen(true)}>
                 <Icon name='edit' />Edit
             </Button>
             <Button color="green" floated="right" onClick={() => setAddItemModalOpen(true)} ref={refContainer}>

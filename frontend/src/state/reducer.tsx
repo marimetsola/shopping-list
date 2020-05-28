@@ -1,5 +1,6 @@
 import { State } from "./state";
 import { ItemList, ItemType } from "../types";
+import listService from '../services/lists';
 
 export type Action =
     | {
@@ -35,6 +36,10 @@ export type Action =
     | {
         type: "DELETE_ITEM";
         payload: { list: ItemList; item: ItemType };
+    }
+    | {
+        type: "EDIT_ITEM";
+        payload: { list: ItemList; editedItem: ItemType };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -88,30 +93,13 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
-        // case "ADD_LIST":
-        //     return {
-        //         ...state,
-        //         lists: {
-        //             ...state.lists,
-        //             [action.payload.id]: action.payload
-        //         }
-        //     };
-        // case "EDIT_LIST":
-        //     return {
-        //         ...state,
-        //         lists: {
-        //             ...state.lists,
-        //             [action.payload.id]: action.payload
-        //         }
-        //     };
-        // case "DELETE_LIST":
-        //     // eslint-disable-next-line no-case-declarations
-        //     const newLists = { ...state.lists }
-        //     delete newLists[action.payload.id];
-        //     return {
-        //         ...state,
-        //         lists: newLists
-        //     };
+        case "EDIT_ITEM":
+            action.payload.list.items = action.payload.list.items.map(i => i.id === action.payload.editedItem.id ? action.payload.editedItem : i);
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
+            };
+
         default:
             return state;
     }
@@ -192,6 +180,17 @@ export const deleteItem = (list: ItemList, item: ItemType) => {
         {
             type: "DELETE_ITEM" as "DELETE_ITEM",
             payload: { list, item }
+        }
+    );
+};
+
+export const editItem = async (list: ItemList, item: ItemType, newName: string, dispatch: any) => {
+    const newItem = { ...item, name: newName };
+    await listService.editItem(list.id, newItem);
+    dispatch(
+        {
+            type: "EDIT_ITEM" as "EDIT_ITEM",
+            payload: { list, editedItem: newItem }
         }
     );
 };

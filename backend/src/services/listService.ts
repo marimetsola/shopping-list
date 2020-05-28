@@ -1,6 +1,7 @@
 import ItemList from '../models/itemList';
 import Item from '../models/item';
 import { ItemType } from '../types';
+import item from '../models/item';
 
 const getAll = () => {
     const lists = ItemList.find({}).populate('items');
@@ -41,6 +42,10 @@ const deleteItem = async (id: string, itemID: string) => {
     // return ItemList.findById(id);
 };
 
+const editItem = async (item: ItemType) => {
+    return await Item.findByIdAndUpdate(item.id, { name: item.name }, { new: true });
+};
+
 const updateList = async (id: string, items: ItemType[]) => {
     if (!items || items.length === 0) {
         throw new Error('items not provided');
@@ -66,5 +71,6 @@ export default {
     deleteList,
     addItem,
     deleteItem,
+    editItem,
     updateList
 };
