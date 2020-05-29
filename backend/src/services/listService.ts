@@ -1,7 +1,6 @@
 import ItemList from '../models/itemList';
 import Item from '../models/item';
 import { ItemType } from '../types';
-import item from '../models/item';
 
 const getAll = () => {
     const lists = ItemList.find({}).populate('items');

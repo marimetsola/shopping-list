@@ -9,8 +9,6 @@ import helper from './test_helper';
 
 describe('when there is initially some lists saved', () => {
 
-
-
     beforeEach(async () => {
         await ItemList.deleteMany({});
         await ItemList.insertMany(helper.initialLists);
@@ -135,6 +133,30 @@ describe('when there is initially some lists saved', () => {
             const response = await api.get(`/api/lists/${id}`);
             const items = response.body.items.map((i: ItemType) => i.name);
             expect(items).not.toContain('milk');
+        });
+    });
+
+    describe('editing an item', () => {
+        test('succeeds', async () => {
+            const lists: ItemListType[] = await helper.listsInDb();
+            const id = lists[0].id;
+
+            const item = (await api
+                .post(`/api/lists/${id}/add-item`)
+                .send({ name: 'milk' })
+                .expect(200))
+                .body;
+
+            const editedItem = { ...item, name: "chicken" };
+
+            await api
+                .patch(`/api/lists/${id}/edit-item`)
+                .send({ item: editedItem });
+
+            const response = await api.get(`/api/lists/${id}`);
+            const items = response.body.items.map((i: ItemType) => i.name);
+            expect(items).not.toContain('milk');
+            expect(items).toContain('chicken');
         });
     });
 
