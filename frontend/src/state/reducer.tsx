@@ -1,3 +1,4 @@
+import React from 'react';
 import { State } from "./state";
 import { ItemList, ItemType } from "../types";
 import listService from '../services/lists';
@@ -72,7 +73,6 @@ export const reducer = (state: State, action: Action): State => {
         case "EDIT_LIST":
             return {
                 ...state,
-                // lists: state.lists.map(l => l.id !== action.payload.id ? l : action.payload),
                 activeList: action.payload
             };
         case "DELETE_LIST":
@@ -139,17 +139,23 @@ export const closeListModal = () => {
     );
 };
 
-export const addList = (list: ItemList) => {
-    return (
+export const addList = async (name: string, dispatch: React.Dispatch<Action>) => {
+    const addedList = await listService.addList(name);
+    dispatch(
         {
             type: "ADD_LIST" as "ADD_LIST",
-            payload: list
+            payload: addedList
         }
     );
+    dispatch({
+        type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
+        payload: addedList
+    });
 };
 
-export const editList = (list: ItemList) => {
-    return (
+export const editList = async (list: ItemList, items: ItemType[], dispatch: React.Dispatch<Action>) => {
+    await listService.editList(list.id, items);
+    dispatch(
         {
             type: "EDIT_LIST" as "EDIT_LIST",
             payload: list
@@ -157,8 +163,9 @@ export const editList = (list: ItemList) => {
     );
 };
 
-export const deleteList = (list: ItemList) => {
-    return (
+export const deleteList = async (list: ItemList, dispatch: React.Dispatch<Action>) => {
+    await listService.deleteList(list.id);
+    dispatch(
         {
             type: "DELETE_LIST" as "DELETE_LIST",
             payload: list
@@ -166,8 +173,9 @@ export const deleteList = (list: ItemList) => {
     );
 };
 
-export const addItem = (list: ItemList, item: ItemType) => {
-    return (
+export const addItem = async (list: ItemList, itemName: string, dispatch: React.Dispatch<Action>) => {
+    const item = (await listService.addItem(list.id, itemName)).data;
+    dispatch(
         {
             type: "ADD_ITEM" as "ADD_ITEM",
             payload: { list, item }
@@ -175,8 +183,9 @@ export const addItem = (list: ItemList, item: ItemType) => {
     );
 };
 
-export const deleteItem = (list: ItemList, item: ItemType) => {
-    return (
+export const deleteItem = async (list: ItemList, item: ItemType, dispatch: React.Dispatch<Action>) => {
+    await listService.deleteItem(list.id, item.id);
+    dispatch(
         {
             type: "DELETE_ITEM" as "DELETE_ITEM",
             payload: { list, item }
@@ -184,7 +193,7 @@ export const deleteItem = (list: ItemList, item: ItemType) => {
     );
 };
 
-export const editItem = async (list: ItemList, item: ItemType, newName: string, dispatch: any) => {
+export const editItem = async (list: ItemList, item: ItemType, newName: string, dispatch: React.Dispatch<Action>) => {
     const newItem = { ...item, name: newName };
     await listService.editItem(list.id, newItem);
     dispatch(
@@ -194,40 +203,3 @@ export const editItem = async (list: ItemList, item: ItemType, newName: string, 
         }
     );
 };
-
-// // used for updating patient to include sensitive data
-// export const editPatient = (patient: Patient) => {
-//     return (
-//         {
-//             type: "EDIT_PATIENT" as "EDIT_PATIENT",
-//             payload: patient
-//         }
-//     );
-// };
-
-// export const addPatient = (patient: Patient) => {
-//     return (
-//         {
-//             type: "ADD_PATIENT" as "ADD_PATIENT",
-//             payload: patient
-//         }
-//     );
-// };
-
-// export const setDiagnosisList = (diagnosisList: Diagnosis[]) => {
-//     return (
-//         {
-//             type: "SET_DIAGNOSIS_LIST" as "SET_DIAGNOSIS_LIST",
-//             payload: diagnosisList
-//         }
-//     );
-// };
-
-// export const addEntry = (patientID: string, entry: Entry) => {
-//     return (
-//         {
-//             type: "ADD_ENTRY" as "ADD_ENTRY",
-//             payload: { patientID, entry }
-//         }
-//     );
-// };

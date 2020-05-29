@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import AddListForm from './AddListForm';
-import { useStateValue, closeListModal, addList, setActiveList } from '../../state';
-import listService from '../../services/lists';
+import { useStateValue, closeListModal, addList } from '../../state';
 
 const AddListModal: React.FC = () => {
     const [{ listModalOpen }, dispatch] = useStateValue();
@@ -10,9 +9,7 @@ const AddListModal: React.FC = () => {
     const addNewList = async (values: { name: string }) => {
         dispatch(closeListModal());
         try {
-            const addedList = await listService.addList(values.name);
-            dispatch(addList(addedList));
-            dispatch(setActiveList(addedList));
+            addList(values.name, dispatch);
         } catch (e) {
             console.error(e);
         }

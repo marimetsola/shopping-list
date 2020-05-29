@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Modal, Button, Grid, Icon } from 'semantic-ui-react';
-import listService from '../../services/lists';
 import { useStateValue, deleteList } from '../../state';
 import { ItemList } from '../../types';
 
@@ -18,8 +17,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         setDeleteModalOpen(false);
         onClose();
         try {
-            await listService.deleteList(list.id);
-            dispatch(deleteList(list));
+            deleteList(list, dispatch);
         } catch (error) {
             console.log(error);
         }

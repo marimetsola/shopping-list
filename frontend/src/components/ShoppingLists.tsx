@@ -1,18 +1,18 @@
-import React from 'react'
-import AddNewList from './AddNewList'
-import { useStateValue, setActiveList } from '../state'
-import { ItemList } from '../types'
-import { Dropdown } from 'semantic-ui-react'
+import React from 'react';
+import AddNewList from './AddNewList';
+import { useStateValue, setActiveList } from '../state';
+import { ItemList } from '../types';
+import { Dropdown } from 'semantic-ui-react';
 
 const ShoppingLists: React.FC = () => {
     const [{ lists, activeList }, dispatch] = useStateValue();
 
     const setActive = (list: ItemList) => {
         dispatch(setActiveList(list));
-    }
+    };
 
     if (lists.length === 0) {
-        return <AddNewList />
+        return <AddNewList />;
     }
 
     return (
@@ -25,7 +25,7 @@ const ShoppingLists: React.FC = () => {
                 <AddNewList />
             </Dropdown.Menu>
         </Dropdown >
-    )
-}
+    );
+};
 
-export default ShoppingLists
+export default ShoppingLists;

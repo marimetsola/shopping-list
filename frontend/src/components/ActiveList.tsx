@@ -1,14 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-import { apiBaseUrl } from '../constants';
 import { useStateValue, deleteItem, editList } from '../state';
 import { Container, Header, Divider, Button, Icon } from 'semantic-ui-react';
 import EditListModal from './EditListModal';
 import AddItemModal from './AddItemModal';
 import EditItemModal from './EditItemModal';
 import Item from './Item';
-import { ItemList, ItemType } from '../types';
-import listService from '../services/lists';
+import { ItemType } from '../types';
 
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
@@ -33,8 +30,7 @@ const ActiveList: React.FC = () => {
     const removeItem = async (item: ItemType) => {
         if (activeList) {
             try {
-                await listService.deleteItem(activeList.id, item);
-                dispatch(deleteItem(activeList, item));
+                deleteItem(activeList, item, dispatch);
 
             } catch (error) {
                 console.error(error);
@@ -66,10 +62,11 @@ const ActiveList: React.FC = () => {
             }
 
             try {
-                await axios.put<ItemList>(
-                    `${apiBaseUrl}/lists/${activeList.id}/update`, { items: newItems }
-                );
-                dispatch(editList(activeList));
+                // await axios.put<ItemList>(
+                //     `${apiBaseUrl}/lists/${activeList.id}/update`, { items: newItems }
+                // );
+                // dispatch(editList(activeList));
+                editList(activeList, newItems, dispatch);
 
             } catch (e) {
                 console.error(e);
