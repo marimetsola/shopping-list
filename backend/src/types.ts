@@ -10,3 +10,10 @@ export interface ItemListType extends Document {
     name: string;
     items: ItemType[];
 }
+
+export interface UserType extends Document {
+    id: string;
+    name: string;
+    passwordHash: string;
+    lists: ItemListType[];
+}

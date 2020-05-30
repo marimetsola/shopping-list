@@ -1,15 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
 import { ItemListType } from '../types';
 
 const itemListSchema = new Schema({
     name: {
-        type: String, required: true, unique: true
+        type: String,
+        required: true,
     },
-    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }]
+    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
-
-itemListSchema.plugin(uniqueValidator);
 
 itemListSchema.set('toJSON', {
     transform: (_document, returnedObject) => {

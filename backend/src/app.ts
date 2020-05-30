@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import listRouter from './routes/lists';
+import usersRouter from './routes/users';
 require('express-async-errors');
 import middleware from './utils/middleware';
 const app = express();
@@ -48,6 +49,7 @@ if (url) {
 app.use(cors());
 app.use(express.json());
 app.use('/api/lists', listRouter);
+app.use('/api/users', usersRouter);
 app.use(middleware.errorHandler);
 
 export default app;

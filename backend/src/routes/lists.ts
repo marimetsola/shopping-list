@@ -56,6 +56,4 @@ router.put('/:id/update', async (req, res) => {
     res.send(updatedList);
 });
 
-
-
 export default router;

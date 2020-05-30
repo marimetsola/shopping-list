@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
 import { ItemType } from '../types';
 
 const itemSchema = new mongoose.Schema({
@@ -9,8 +8,6 @@ const itemSchema = new mongoose.Schema({
     },
     list: { type: Schema.Types.ObjectId, ref: 'ItemList' }
 });
-
-itemSchema.plugin(uniqueValidator);
 
 itemSchema.set('toJSON', {
     transform: (_document, returnedObject) => {
