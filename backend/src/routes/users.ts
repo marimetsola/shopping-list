@@ -1,27 +1,23 @@
-import bcrypt from 'bcrypt';
 import express from 'express';
 const usersRouter = express.Router();
-import User from '../models/user';
+require('express-async-errors');
+import userService from '../services/userService';
 
 usersRouter.get('/', async (_req, res) => {
-    const users = await User.find({});
+    const users = await userService.getAll();
+    res.json(users);
+});
+
+usersRouter.get('/:id', async (req, res) => {
+    const users = await userService.getUser(req.params.id);
     res.json(users);
 });
 
 usersRouter.post('/', async (req, res) => {
     const body = req.body;
+    const user = await userService.addUser(body.name, body.password);
 
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(body.password, saltRounds);
-
-    const user = new User({
-        name: body.name,
-        passwordHash
-    });
-
-    const savedUser = await user.save();
-
-    res.json(savedUser);
+    res.json(user);
 });
 
 export default usersRouter;

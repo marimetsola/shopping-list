@@ -1,6 +1,7 @@
 import ItemList from '../models/itemList';
 import Item from '../models/item';
 import { ItemType } from '../types';
+import User from '../models/user';
 
 const getAll = () => {
     const lists = ItemList.find({}).populate('items');
@@ -12,15 +13,17 @@ const findById = (id: string) => {
     return list;
 };
 
-const addList = (name: string) => {
-    if (name) {
-        const newList = new ItemList({ name });
-        const savedList = newList.save();
+const addList = async (name: string, userId: string) => {
+    const user = await User.findById(userId);
+    if (name && user) {
+        const newList = new ItemList({ name, user: user.id });
+        const savedList = await newList.save();
+        user.lists = user.lists.concat(savedList);
+        await user.save();
         return savedList;
     } else {
-        throw new Error('list name missing');
+        throw new Error('list name missing or user missing');
     }
-
 };
 
 const deleteList = (id: string) => {

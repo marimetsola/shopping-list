@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
 
 // Add list with name
 router.post('/', async (req, res) => {
-    const newList = await listService.addList(req.body.name);
+    const newList = await listService.addList(req.body.name, req.body.userId);
     res.send(newList);
 });
 
