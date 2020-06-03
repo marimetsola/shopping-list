@@ -2,6 +2,15 @@ import ItemList from '../models/itemList';
 import Item from '../models/item';
 import { ItemType } from '../types';
 import User from '../models/user';
+import jwt from 'jsonwebtoken';
+
+const getTokenFrom = (req: any) => {
+    const authorization = req.get('authorization');
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        return authorization.substring(7);
+    }
+    return null;
+};
 
 const getAll = () => {
     const lists = ItemList.find({}).populate('items');
@@ -13,16 +22,26 @@ const findById = (id: string) => {
     return list;
 };
 
-const addList = async (name: string, userId: string) => {
-    const user = await User.findById(userId);
-    if (name && user) {
-        const newList = new ItemList({ name, user: user.id });
-        const savedList = await newList.save();
-        user.lists = user.lists.concat(savedList);
-        await user.save();
-        return savedList;
-    } else {
-        throw new Error('list name missing or user missing');
+const addList = async (req: any) => {
+    const userId = req.body.userId;
+    const name = req.body.name;
+    const token = getTokenFrom(req);
+
+    if (process.env.JWT_SECRET) {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        if (!token || (typeof (decodedToken) === Object && !decodedToken.id)) {
+            throw Error('token missing or invalid');
+        }
+        const user = await User.findById(userId);
+        if (name && user) {
+            const newList = new ItemList({ name, user: user.id });
+            const savedList = await newList.save();
+            user.lists = user.lists.concat(savedList);
+            await user.save();
+            return savedList;
+        } else {
+            throw new Error('list name missing or user missing');
+        }
     }
 };
 

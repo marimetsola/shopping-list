@@ -4,6 +4,7 @@ require('express-async-errors');
 
 const router = express.Router();
 
+
 // Get all lists
 router.get('/', async (_req, res) => {
     res.send(await listService.getAll());
@@ -22,7 +23,9 @@ router.get('/:id', async (req, res) => {
 
 // Add list with name
 router.post('/', async (req, res) => {
-    const newList = await listService.addList(req.body.name, req.body.userId);
+    console.log(typeof (req));
+
+    const newList = await listService.addList(req);
     res.send(newList);
 });
 
