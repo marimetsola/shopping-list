@@ -3,8 +3,10 @@ import Item from '../models/item';
 import { ItemType } from '../types';
 import User from '../models/user';
 import jwt from 'jsonwebtoken';
+import express from 'express';
 
-const getTokenFrom = (req: any) => {
+const getTokenFrom = (req: express.Request) => {
+    console.log(typeof (req));
     const authorization = req.get('authorization');
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         return authorization.substring(7);
@@ -22,17 +24,21 @@ const findById = (id: string) => {
     return list;
 };
 
-const addList = async (req: any) => {
-    const userId = req.body.userId;
+const addList = async (req: express.Request) => {
     const name = req.body.name;
     const token = getTokenFrom(req);
 
+    if (!token) {
+        throw Error('token missing');
+    }
+
     if (process.env.JWT_SECRET) {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        if (!token || (typeof (decodedToken) === Object && !decodedToken.id)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as any;
+        if (!token || !decodedToken.id) {
             throw Error('token missing or invalid');
         }
-        const user = await User.findById(userId);
+        const user = await User.findById(decodedToken.id);
         if (name && user) {
             const newList = new ItemList({ name, user: user.id });
             const savedList = await newList.save();
@@ -40,8 +46,10 @@ const addList = async (req: any) => {
             await user.save();
             return savedList;
         } else {
-            throw new Error('list name missing or user missing');
+            throw Error('list name missing or user missing');
         }
+    } else {
+        throw Error('jwt secret missing');
     }
 };
 
