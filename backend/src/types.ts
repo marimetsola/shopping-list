@@ -9,6 +9,7 @@ export interface ItemListType extends Document {
     id: string;
     name: string;
     items: ItemType[];
+    user: UserType;
 }
 
 export interface UserType extends Document {

@@ -10,9 +10,9 @@ const errorHandler = (error: Error, _request: Request, response: Response, next:
             error: 'invalid token'
         });
     }
-    // else {
-    //     return response.status(400).json({ error: error.message });
-    // }
+    else {
+        response.status(400).json({ error: error.message });
+    }
 
     next(error);
 };

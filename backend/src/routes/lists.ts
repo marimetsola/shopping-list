@@ -5,14 +5,15 @@ require('express-async-errors');
 const router = express.Router();
 
 
-// Get all lists
+// Get all lists by the user
 router.get('/', async (_req, res) => {
-    res.send(await listService.getAll());
+    // const lists = await listService.getAll().populate('user');
+    const lists = await listService.getAll();
+    res.send(lists);
 });
 
 // Get list with id
 router.get('/:id', async (req, res) => {
-
     const list = await listService.findById(req.params.id);
     if (list) {
         res.json(list.toJSON());
@@ -23,15 +24,13 @@ router.get('/:id', async (req, res) => {
 
 // Add list with name
 router.post('/', async (req, res) => {
-    console.log(typeof (req));
-
     const newList = await listService.addList(req);
     res.send(newList);
 });
 
 // Delete list by id
 router.delete('/:id', async (req, res) => {
-    await listService.deleteList(req.params.id);
+    await listService.deleteList(req);
     res.status(204).end();
 });
 

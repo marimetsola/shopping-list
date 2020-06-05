@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 import express from 'express';
 
 const getTokenFrom = (req: express.Request) => {
-    console.log(typeof (req));
     const authorization = req.get('authorization');
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         return authorization.substring(7);
@@ -14,7 +13,37 @@ const getTokenFrom = (req: express.Request) => {
     return null;
 };
 
+const getUserFromToken = async (token: string | null) => {
+    if (!token) {
+        throw Error('token missing');
+    }
+
+    if (!process.env.JWT_SECRET) {
+        throw Error('jwt secret missing');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as any;
+    if (!decodedToken.id) {
+        throw Error('token invalid');
+    }
+    const user = await User.findById(decodedToken.id);
+    if (user) {
+        return user;
+    } else {
+        throw Error('user not found');
+    }
+};
+
+const getUserFromReq = async (req: express.Request) => {
+    const token = getTokenFrom(req);
+    const user = await getUserFromToken(token);
+    return user;
+};
+
 const getAll = () => {
+    // const token = getTokenFrom(req);
+    // const user = getUserFromToken(token);
     const lists = ItemList.find({}).populate('items');
     return lists;
 };
@@ -26,35 +55,36 @@ const findById = (id: string) => {
 
 const addList = async (req: express.Request) => {
     const name = req.body.name;
-    const token = getTokenFrom(req);
+    const user = await getUserFromReq(req);
 
-    if (!token) {
-        throw Error('token missing');
-    }
-
-    if (process.env.JWT_SECRET) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as any;
-        if (!token || !decodedToken.id) {
-            throw Error('token missing or invalid');
-        }
-        const user = await User.findById(decodedToken.id);
-        if (name && user) {
-            const newList = new ItemList({ name, user: user.id });
-            const savedList = await newList.save();
-            user.lists = user.lists.concat(savedList);
-            await user.save();
-            return savedList;
-        } else {
-            throw Error('list name missing or user missing');
-        }
+    if (name) {
+        const newList = new ItemList({ name, user: user.id });
+        const savedList = await newList.save();
+        user.lists = user.lists.concat(savedList);
+        await user.save();
+        return savedList;
     } else {
-        throw Error('jwt secret missing');
+        throw Error('list name missing');
     }
 };
 
-const deleteList = (id: string) => {
-    return ItemList.findByIdAndRemove(id);
+const deleteList = async (req: express.Request) => {
+    const listId = req.params.id;
+    const token = getTokenFrom(req);
+    const user = await getUserFromToken(token);
+    const list = await ItemList.findById(listId).populate('user');
+
+    if (!list) {
+        throw Error('list not provided');
+    }
+
+    if (user.id === list.user.id) {
+
+        return await list.remove();
+    } else {
+        throw Error('user not authorized to delete the list');
+    }
+
 };
 
 const addItem = async (id: string, itemName: string) => {
