@@ -14,11 +14,11 @@ router.get('/', async (_req, res) => {
 
 // Get list with id
 router.get('/:id', async (req, res) => {
-    const list = await listService.findById(req.params.id);
-    if (list) {
+    try {
+        const list = await listService.findById(req);
         res.json(list.toJSON());
-    } else {
-        res.status(404).end();
+    } catch (error) {
+        res.status(401).json({ error: error.message });
     }
 });
 

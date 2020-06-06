@@ -41,6 +41,20 @@ const getUserFromReq = async (req: express.Request) => {
     return user;
 };
 
+const authUserToList = async (req: express.Request) => {
+    const listId = req.params.id;
+    const token = getTokenFrom(req);
+    const user = await getUserFromToken(token);
+    const list = await ItemList.findById(listId).populate('user');
+    if (!list) {
+        throw Error('list not found');
+    }
+
+    if (user.id === list.user.id) {
+        return list;
+    }
+};
+
 const getAll = () => {
     // const token = getTokenFrom(req);
     // const user = getUserFromToken(token);
@@ -48,8 +62,11 @@ const getAll = () => {
     return lists;
 };
 
-const findById = (id: string) => {
-    const list = ItemList.findById(id).populate('items');
+const findById = async (req: express.Request) => {
+    // const list = ItemList.findById(req.params.id).populate('items');
+    // return list;
+
+    const list = authUserToList(req);
     return list;
 };
 
@@ -75,11 +92,10 @@ const deleteList = async (req: express.Request) => {
     const list = await ItemList.findById(listId).populate('user');
 
     if (!list) {
-        throw Error('list not provided');
+        throw Error('list not found');
     }
 
     if (user.id === list.user.id) {
-
         return await list.remove();
     } else {
         throw Error('user not authorized to delete the list');
