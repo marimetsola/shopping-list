@@ -5,7 +5,7 @@ require('express-async-errors');
 const router = express.Router();
 
 
-// Get all lists by the user
+// Get all lists
 router.get('/', async (_req, res) => {
     // const lists = await listService.getAll().populate('user');
     const lists = await listService.getAll();
@@ -16,7 +16,9 @@ router.get('/', async (_req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const list = await listService.findById(req);
-        res.json(list.toJSON());
+        if (list) {
+            res.json(list.toJSON());
+        }
     } catch (error) {
         res.status(401).json({ error: error.message });
     }
@@ -36,25 +38,25 @@ router.delete('/:id', async (req, res) => {
 
 // Add item to list
 router.post('/:id/add-item', async (req, res) => {
-    const addedItem = await listService.addItem(req.params.id, req.body.name);
+    const addedItem = await listService.addItem(req);
     res.send(addedItem);
 });
 
 // Delete item from list
-router.delete('/:id/delete-item', async (req, res) => {
-    await listService.deleteItem(req.params.id, req.body.itemID);
+router.delete('/:id/delete-item/:itemId', async (req, res) => {
+    await listService.deleteItem(req);
     res.status(204).end();
 });
 
 // Edit item on a list
 router.patch('/:id/edit-item', async (req, res) => {
-    const updatedList = await listService.editItem(req.body.item);
+    const updatedList = await listService.editItem(req);
     res.send(updatedList);
 });
 
 // Update list
 router.put('/:id/update', async (req, res) => {
-    const updatedList = await listService.updateList(req.params.id, req.body.items);
+    const updatedList = await listService.updateList(req);
     res.send(updatedList);
 });
 

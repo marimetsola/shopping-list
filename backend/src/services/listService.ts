@@ -51,21 +51,18 @@ const authUserToList = async (req: express.Request) => {
     }
 
     if (user.id === list.user.id) {
-        return list;
+        return { user, list };
     }
+
+    throw Error('user not authorized');
 };
 
 const getAll = () => {
-    // const token = getTokenFrom(req);
-    // const user = getUserFromToken(token);
     const lists = ItemList.find({}).populate('items');
     return lists;
 };
 
 const findById = async (req: express.Request) => {
-    // const list = ItemList.findById(req.params.id).populate('items');
-    // return list;
-
     const list = authUserToList(req);
     return list;
 };
@@ -86,57 +83,63 @@ const addList = async (req: express.Request) => {
 };
 
 const deleteList = async (req: express.Request) => {
-    const listId = req.params.id;
-    const token = getTokenFrom(req);
-    const user = await getUserFromToken(token);
-    const list = await ItemList.findById(listId).populate('user');
-
-    if (!list) {
-        throw Error('list not found');
-    }
+    const { user, list } = await authUserToList(req);
 
     if (user.id === list.user.id) {
-        return await list.remove();
-    } else {
-        throw Error('user not authorized to delete the list');
+        await list.remove();
     }
-
 };
 
-const addItem = async (id: string, itemName: string) => {
-    if (!itemName) throw new Error('item name not provided');
+const addItem = async (req: express.Request) => {
+    const itemName = req.body.name;
+    if (!itemName) throw Error('item name not provided');
+    const { list } = await authUserToList(req);
+
     const newItem = new Item({ name: itemName });
     await newItem.save();
-    await ItemList.findByIdAndUpdate(id, { $push: { "items": newItem } }, { new: true }).populate('items');
+    await ItemList.findByIdAndUpdate(list.id, { $push: { "items": newItem } }, { new: true }).populate('items');
     return newItem;
 };
 
-const deleteItem = async (id: string, itemID: string) => {
-    await Item.findByIdAndRemove(itemID);
-    return ItemList.findByIdAndUpdate(id, { $pull: { "items": { id: itemID } } }, { new: true });
-    // return ItemList.findById(id);
+const deleteItem = async (req: express.Request) => {
+    const itemId = req.params.itemId;
+    // id: string, itemID: string
+    const { list } = await authUserToList(req);
+    if (list) {
+        await Item.findByIdAndRemove(itemId);
+        ItemList.findByIdAndUpdate(list.id, { $pull: { "items": { id: itemId } } }, { new: true });
+    }
 };
 
-const editItem = async (item: ItemType) => {
-    return await Item.findByIdAndUpdate(item.id, { name: item.name }, { new: true });
+const editItem = async (req: express.Request) => {
+    const item = req.body.item;
+    const { user } = await authUserToList(req);
+    if (user) {
+        return await Item.findByIdAndUpdate(item.id, { name: item.name }, { new: true });
+    }
+    return null;
 };
 
-const updateList = async (id: string, items: ItemType[]) => {
+const updateList = async (req: express.Request) => {
+    const items = req.body.items;
     if (!items || items.length === 0) {
         throw new Error('items not provided');
     }
 
-    items.forEach(i => {
+    items.forEach((i: ItemType) => {
         if (!i) throw new Error('item with no name provided');
     });
 
-    await Item.deleteMany({ list: id });
+    const { list } = await authUserToList(req);
+    //req.params.id, req.body.items
 
-    const itemsToSave = items.map(i => new Item({ name: i.name, list: id }));
+    await Item.deleteMany({ list: list.id });
+
+    const itemsToSave: ItemType[] = items.map((i: ItemType) => new Item({ name: i, list: list.id }));
     const itemObjects = await Item.insertMany(itemsToSave);
 
-    const list = ItemList.findByIdAndUpdate(id, { items: itemObjects }, { new: true });
-    return list;
+    const editedList = ItemList.findByIdAndUpdate(list.id, { items: itemObjects }, { new: true });
+    return editedList;
 };
 
 export default {
