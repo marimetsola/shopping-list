@@ -5,7 +5,7 @@ import User from '../models/user';
 import jwt from 'jsonwebtoken';
 import express from 'express';
 
-const getTokenFrom = (req: express.Request) => {
+const getTokenFromReq = (req: express.Request) => {
     const authorization = req.get('authorization');
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         return authorization.substring(7);
@@ -36,14 +36,14 @@ const getUserFromToken = async (token: string | null) => {
 };
 
 const getUserFromReq = async (req: express.Request) => {
-    const token = getTokenFrom(req);
+    const token = getTokenFromReq(req);
     const user = await getUserFromToken(token);
     return user;
 };
 
 const authUserToList = async (req: express.Request) => {
     const listId = req.params.id;
-    const token = getTokenFrom(req);
+    const token = getTokenFromReq(req);
     const user = await getUserFromToken(token);
     const list = await ItemList.findById(listId).populate('user');
     if (!list) {
@@ -63,7 +63,7 @@ const getAll = () => {
 };
 
 const findById = async (req: express.Request) => {
-    const list = authUserToList(req);
+    const { list } = await authUserToList(req);
     return list;
 };
 
