@@ -4,7 +4,6 @@ import app from '../app';
 const api = supertest(app);
 import { ItemListType, ItemType } from '../types';
 import ItemList from '../models/itemList';
-import Item from '../models/item';
 import helper from './test_helper';
 import bcrypt from 'bcrypt';
 import User from '../models/user';
@@ -94,7 +93,12 @@ describe('when there is initially one user at db', () => {
                 new ItemList({ name: "Lidl", user: rootUser }),
                 new ItemList({ name: "Prisma", user: rootUser })
             ];
-            await ItemList.insertMany(initialLists);
+            const addedLists = await ItemList.insertMany(initialLists);
+            const rUser = await User.findById(rootUser.id);
+            if (rUser) {
+                rUser.set({ lists: addedLists });
+                await rUser.save();
+            }
         });
 
         test('lists are returned as json', async () => {
@@ -120,9 +124,10 @@ describe('when there is initially one user at db', () => {
 
         test('list can be found by id', async () => {
             const lists: ItemListType[] = await helper.listsInDb();
-            const response = await api.get(`/api/lists/${lists[0].id}`);
-            // expect(response.body.name).toBe(lists[0].name);
-            console.log(response.body);
+            const response = await api
+                .get(`/api/lists/${lists[0].id}`)
+                .set('Authorization', `Bearer ${token}`);
+            expect(response.body.name).toBe(lists[0].name);
         });
 
         describe('adding a list', () => {
@@ -159,15 +164,17 @@ describe('when there is initially one user at db', () => {
 
         describe('deleting a list', () => {
             test('succeeds', async () => {
-                const lists: ItemListType[] = await helper.listsInDb();
                 await api
-                    .delete(`/api/lists/${lists[0].id}`)
+                    .delete(`/api/lists/${initialLists[0].id}`)
+                    .set('Authorization', `Bearer ${token}`)
                     .expect(204);
 
                 const listsAtEnd: ItemListType[] = await helper.listsInDb();
                 expect(listsAtEnd).toHaveLength(initialLists.length - 1);
-                expect(listsAtEnd).not.toContainEqual(lists[0]);
-                expect(listsAtEnd).toContainEqual(lists[1]);
+
+                const listNames = listsAtEnd.map((l: ItemListType) => l.name);
+                expect(listNames).not.toContainEqual(initialLists[0].name);
+                expect(listNames).toContainEqual(initialLists[1].name);
             });
         });
 
@@ -178,10 +185,14 @@ describe('when there is initially one user at db', () => {
 
                 await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: 'milk' })
                     .expect(200);
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 const items = response.body.items.map((i: ItemType) => i.name);
                 expect(items).toContain('milk');
             });
@@ -192,10 +203,14 @@ describe('when there is initially one user at db', () => {
 
                 await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: '' })
                     .expect(400);
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 expect(response.body.items.length).toBe(0);
             });
         });
@@ -207,16 +222,20 @@ describe('when there is initially one user at db', () => {
 
                 const itemID = (await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: 'milk' })
                     .expect(200))
                     .body.id;
 
                 await api
-                    .delete(`/api/lists/${id}/delete-item`)
-                    .send({ itemID })
+                    .delete(`/api/lists/${id}/delete-item/${itemID}`)
+                    .set('Authorization', `Bearer ${token}`)
                     .expect(204);
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 const items = response.body.items.map((i: ItemType) => i.name);
                 expect(items).not.toContain('milk');
             });
@@ -229,6 +248,7 @@ describe('when there is initially one user at db', () => {
 
                 const item = (await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: 'milk' })
                     .expect(200))
                     .body;
@@ -237,9 +257,13 @@ describe('when there is initially one user at db', () => {
 
                 await api
                     .patch(`/api/lists/${id}/edit-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ item: editedItem });
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 const items = response.body.items.map((i: ItemType) => i.name);
                 expect(items).not.toContain('milk');
                 expect(items).toContain('chicken');
@@ -253,22 +277,24 @@ describe('when there is initially one user at db', () => {
 
                 await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: 'milk' })
                     .expect(200);
 
-                const newItems = [
-                    new Item({ name: 'beef' }),
-                    new Item({ name: 'candy' })
-                ];
+                const newItems = ['beef', 'candy'];
 
                 await api
                     .put(`/api/lists/${id}/update`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ items: newItems })
                     .expect(200);
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 const items: string[] = response.body.items.map((i: ItemType) => i.name);
-                expect(items).toEqual(newItems.map((i: ItemType) => i.name));
+                expect(items).toEqual(newItems);
                 expect(items).not.toContain('milk');
             });
 
@@ -278,15 +304,20 @@ describe('when there is initially one user at db', () => {
 
                 await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: 'milk' })
                     .expect(200);
 
                 await api
                     .put(`/api/lists/${id}/update`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ items: [] })
                     .expect(400);
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 const items: string[] = response.body.items.map((i: ItemType) => i.name);
                 expect(items).toEqual(['milk']);
             });
@@ -297,17 +328,22 @@ describe('when there is initially one user at db', () => {
 
                 await api
                     .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ name: 'milk' })
                     .expect(200);
 
-                const newItems = [new Item({ name: 'beef' }), ''];
+                const newItems = ['beef', ''];
 
                 await api
                     .put(`/api/lists/${id}/update`)
+                    .set('Authorization', `Bearer ${token}`)
                     .send({ items: newItems })
                     .expect(400);
 
-                const response = await api.get(`/api/lists/${id}`);
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
                 const items: string[] = response.body.items.map((i: ItemType) => i.name);
                 expect(items).toEqual(['milk']);
             });

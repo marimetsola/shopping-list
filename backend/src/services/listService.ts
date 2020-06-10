@@ -45,7 +45,10 @@ const authUserToList = async (req: express.Request) => {
     const listId = req.params.id;
     const token = getTokenFromReq(req);
     const user = await getUserFromToken(token);
-    const list = await ItemList.findById(listId).populate('user');
+    const list =
+        await ItemList.findById(listId)
+            .populate('user')
+            .populate('items');
     if (!list) {
         throw Error('list not found');
     }
