@@ -4,6 +4,7 @@ import { ItemType } from '../types';
 import User from '../models/user';
 import jwt from 'jsonwebtoken';
 import express from 'express';
+import itemList from '../models/itemList';
 
 const getTokenFromReq = (req: express.Request) => {
     const authorization = req.get('authorization');
@@ -60,9 +61,18 @@ const authUserToList = async (req: express.Request) => {
     throw Error('user not authorized');
 };
 
-const getAll = () => {
-    const lists = ItemList.find({}).populate('items');
-    return lists;
+// const getAll = () => {
+//     const lists = ItemList.find({}).populate('items');
+//     return lists;
+// };
+
+const getListsByUser = async (req: express.Request) => {
+    const user = await getUserFromReq(req);
+    if (user) {
+        const listsByUser = await itemList.find({ user: user });
+        return listsByUser;
+    }
+    return null;
 };
 
 const findById = async (req: express.Request) => {
@@ -146,7 +156,7 @@ const updateList = async (req: express.Request) => {
 };
 
 export default {
-    getAll,
+    getListsByUser,
     findById,
     addList,
     deleteList,

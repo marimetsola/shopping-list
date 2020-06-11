@@ -5,10 +5,10 @@ require('express-async-errors');
 const router = express.Router();
 
 
-// Get all lists
-router.get('/', async (_req, res) => {
+// Get all lists by user
+router.get('/', async (req, res) => {
     // const lists = await listService.getAll().populate('user');
-    const lists = await listService.getAll();
+    const lists = await listService.getListsByUser(req);
     res.send(lists);
 });
 

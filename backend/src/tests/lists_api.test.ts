@@ -104,18 +104,25 @@ describe('when there is initially one user at db', () => {
         test('lists are returned as json', async () => {
             await api
                 .get('/api/lists')
+                .set('Authorization', `Bearer ${token}`)
                 .expect(200)
                 .expect('Content-Type', /application\/json/);
         });
 
-        test('all lists are returned', async () => {
-            const response = await api.get('/api/lists');
+        test('all lists by user are returned', async () => {
+            const response =
+                await api
+                    .get('/api/lists')
+                    .set('Authorization', `Bearer ${token}`);
 
             expect(response.body).toHaveLength(initialLists.length);
         });
 
         test('specific lists are within the returned lists', async () => {
-            const response = await api.get('/api/lists');
+            const response =
+                await api
+                    .get('/api/lists')
+                    .set('Authorization', `Bearer ${token}`);
 
             const names: string[] = response.body.map((r: ItemListType) => r.name);
             expect(names).toContain('Prisma');
