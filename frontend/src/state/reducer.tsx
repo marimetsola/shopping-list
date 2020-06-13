@@ -1,7 +1,8 @@
 import React from 'react';
 import { State } from "./state";
-import { ItemList, ItemType } from "../types";
+import { ItemList, ItemType, User } from "../types";
 import listService from '../services/lists';
+import loginService from '../services/login';
 
 export type Action =
     | {
@@ -41,6 +42,13 @@ export type Action =
     | {
         type: "EDIT_ITEM";
         payload: { list: ItemList; editedItem: ItemType };
+    }
+    | {
+        type: "SET_USER";
+        payload: { user: User };
+    }
+    | {
+        type: "DISCARD_USER";
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -98,6 +106,16 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
+            };
+        case "SET_USER":
+            return {
+                ...state,
+                user: action.payload.user
+            };
+        case "DISCARD_USER":
+            return {
+                ...state,
+                user: null
             };
 
         default:
@@ -200,6 +218,42 @@ export const editItem = async (list: ItemList, item: ItemType, newName: string, 
         {
             type: "EDIT_ITEM" as "EDIT_ITEM",
             payload: { list, editedItem: newItem }
+        }
+    );
+};
+
+export const setUser = (dispatch: React.Dispatch<Action>) => {
+    const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
+    if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON);
+        listService.setToken(user.token);
+        dispatch(
+            {
+                type: "SET_USER" as "SET_USER",
+                payload: { user }
+            }
+        );
+    }
+};
+
+export const discardUser = (dispatch: React.Dispatch<Action>) => {
+    window.localStorage.removeItem('loggedShoppingListAppUser');
+    listService.setToken("");
+    dispatch(
+        {
+            type: "DISCARD_USER" as "DISCARD_USER"
+        }
+    );
+
+};
+
+export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
+    const user = await loginService.login(name, password);
+    console.log(user);
+    dispatch(
+        {
+            type: "SET_USER" as "SET_USER",
+            payload: { user }
         }
     );
 };

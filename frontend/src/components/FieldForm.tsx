@@ -20,3 +20,17 @@ export const TextField: React.FC<TextProps> = ({
             </div>
         </UIForm.Field>
     );
+
+export const PasswordField: React.FC<TextProps> = ({
+    field,
+    label,
+    placeholder
+}) => (
+        <UIForm.Field>
+            <label>{label}</label>
+            <Field type="password" placeholder={placeholder} {...field} autoFocus={false} />
+            <div style={{ color: 'red' }}>
+                <ErrorMessage name={field.name} />
+            </div>
+        </UIForm.Field>
+    );

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { ItemList } from "../types";
+import { ItemList, User } from "../types";
 
 import { Action } from "./reducer";
 
@@ -7,12 +7,14 @@ export type State = {
     lists: ItemList[];
     activeList: ItemList | null;
     listModalOpen: boolean;
+    user: null | User;
 };
 
 const initialState: State = {
     lists: [],
     activeList: null,
-    listModalOpen: false
+    listModalOpen: false,
+    user: null
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

@@ -1,6 +1,7 @@
 import React from 'react';
 import ShoppingLists from './ShoppingLists';
 import { Menu, Container, Icon } from 'semantic-ui-react';
+import LogInOut from './LogInOut';
 
 const NavBar: React.FC = () => {
     return (
@@ -12,6 +13,7 @@ const NavBar: React.FC = () => {
                 </Menu.Item>
                 <Menu.Menu position='right'>
                     <ShoppingLists />
+                    <LogInOut />
                 </Menu.Menu>
             </Container>
         </Menu>

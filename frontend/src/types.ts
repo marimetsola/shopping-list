@@ -8,3 +8,8 @@ export interface ItemList {
     name: string;
     items: ItemType[];
 }
+
+export interface User {
+    id: string;
+    name: string;
+}

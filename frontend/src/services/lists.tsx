@@ -2,6 +2,14 @@ import { ItemList, ItemType } from '../types';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
 
+let token: string | null = null;
+
+const config = () => ({ headers: { Authorization: token } });
+
+const setToken = (newToken: string) => {
+    token = `bearer ${newToken}`;
+};
+
 const getLists = async () => {
     const { data: listsFromApi } = await axios.get<ItemList[]>(
         `${apiBaseUrl}/lists`
@@ -47,4 +55,4 @@ const editItem = async (listID: string, item: ItemType) => {
     );
 };
 
-export default { getLists, addList, addItem, deleteItem, editItem, deleteList, editList };
+export default { setToken, getLists, addList, addItem, deleteItem, editItem, deleteList, editList };
