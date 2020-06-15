@@ -2,7 +2,6 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form, } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
-import { ItemType } from '../../types';
 
 interface Props {
     onSubmit: (values: { name: string; password: string }) => void;

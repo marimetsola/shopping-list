@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal } from 'semantic-ui-react';
-import { useStateValue, setUser, login } from '../../state';
-import { ItemList, ItemType } from '../../types';
+import { useStateValue, login } from '../../state';
 import LoginForm from './LoginForm';
 
 interface Props {
@@ -12,7 +11,6 @@ interface Props {
 const LoginModal: React.FC<Props> = ({ open, onClose }) => {
     const [, dispatch] = useStateValue();
     const Login = async (values: { name: string; password: string }) => {
-        console.log(values, "????????");
         try {
             await login(values.name, values.password, dispatch);
             onClose();

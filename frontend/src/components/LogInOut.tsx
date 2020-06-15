@@ -1,11 +1,7 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react';
-import { useStateValue, deleteItem, editList, setUser, discardUser } from '../state';
-import { Container, Header, Divider, Menu, Icon } from 'semantic-ui-react';
-import EditListModal from './EditListModal';
-import AddItemModal from './AddItemModal';
-import EditItemModal from './EditItemModal';
-import Item from './Item';
-import { ItemType } from '../types';
+import React, { Fragment, useState, useEffect } from 'react';
+import { useStateValue, setUser, discardUser } from '../state';
+import { Menu } from 'semantic-ui-react';
+
 import LoginModal from './LoginModal';
 
 interface Props {
@@ -20,18 +16,18 @@ const LogInOut: React.FC = () => {
     const Logout = () => {
         discardUser(dispatch);
     };
-    // const Login = (values: { name: string; password: string }) => {
-    //     setUser(dispatch);
-    // };
-    // useEffect(() => {
 
-    // }, []);
+    useEffect(() => {
+        setUser(dispatch);
+
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <Fragment>
             {user ?
                 <Menu.Item type="button" onClick={Logout} color="grey">
                     Logout
-                    </Menu.Item>
+                </Menu.Item>
                 :
                 <Menu.Item type="button" onClick={() => setLoginModalOpen(true)} color="grey">
                     Login

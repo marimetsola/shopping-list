@@ -7,7 +7,7 @@ const AddNewList: React.FC = () => {
     return (
         <Menu.Item name='newList' as='a' onClick={() => dispatch(openListModal())}>
             <Icon name='add' size='tiny' />
-        Add New
+        Add List
         </Menu.Item>
     );
 };

@@ -224,6 +224,7 @@ export const editItem = async (list: ItemList, item: ItemType, newName: string, 
 
 export const setUser = (dispatch: React.Dispatch<Action>) => {
     const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
+    console.log("logd", loggedUserJSON);
     if (loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON);
         listService.setToken(user.token);
@@ -249,7 +250,7 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
     const user = await loginService.login(name, password);
-    console.log(user);
+    window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(user));
     dispatch(
         {
             type: "SET_USER" as "SET_USER",
