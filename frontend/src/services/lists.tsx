@@ -10,9 +10,9 @@ const setToken = (newToken: string) => {
     token = `bearer ${newToken}`;
 };
 
-const getLists = async () => {
+const getListsByUser = async () => {
     const { data: listsFromApi } = await axios.get<ItemList[]>(
-        `${apiBaseUrl}/lists`
+        `${apiBaseUrl}/lists`, config()
     );
 
     return listsFromApi;
@@ -28,7 +28,7 @@ const addList = async (name: string) => {
 
 const editList = async (id: string, items: ItemType[]) => {
     return await axios.put<ItemList>(
-        `${apiBaseUrl}/lists/${id}/update`, { items }
+        `${apiBaseUrl}/lists/${id}/update`, { items }, config()
     );
 };
 
@@ -55,4 +55,4 @@ const editItem = async (listID: string, item: ItemType) => {
     );
 };
 
-export default { setToken, getLists, addList, addItem, deleteItem, editItem, deleteList, editList };
+export default { setToken, getListsByUser, addList, addItem, deleteItem, editItem, deleteList, editList };

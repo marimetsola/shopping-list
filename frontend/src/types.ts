@@ -12,4 +12,5 @@ export interface ItemList {
 export interface User {
     id: string;
     name: string;
+    token: string;
 }

@@ -69,7 +69,7 @@ const authUserToList = async (req: express.Request) => {
 const getListsByUser = async (req: express.Request) => {
     const user = await getUserFromReq(req);
     if (user) {
-        const listsByUser = await itemList.find({ user: user });
+        const listsByUser = await itemList.find({ user: user }).populate('items');
         return listsByUser;
     }
     return null;
@@ -140,7 +140,7 @@ const updateList = async (req: express.Request) => {
     }
 
     items.forEach((i: ItemType) => {
-        if (!i) throw new Error('item with no name provided');
+        if (!i.name) throw new Error('item with no name provided');
     });
 
     const { list } = await authUserToList(req);

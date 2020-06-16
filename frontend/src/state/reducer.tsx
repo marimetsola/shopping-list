@@ -59,6 +59,7 @@ export const reducer = (state: State, action: Action): State => {
                 lists: action.payload
             };
         case "SET_ACTIVE_LIST":
+            console.log(action.payload);
             return {
                 ...state,
                 activeList: action.payload
@@ -108,6 +109,8 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
         case "SET_USER":
+            window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(action.payload.user));
+            listService.setToken(action.payload.user.token);
             return {
                 ...state,
                 user: action.payload.user
@@ -224,10 +227,8 @@ export const editItem = async (list: ItemList, item: ItemType, newName: string, 
 
 export const setUser = (dispatch: React.Dispatch<Action>) => {
     const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
-    console.log("logd", loggedUserJSON);
     if (loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON);
-        listService.setToken(user.token);
         dispatch(
             {
                 type: "SET_USER" as "SET_USER",
@@ -250,7 +251,6 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
     const user = await loginService.login(name, password);
-    window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(user));
     dispatch(
         {
             type: "SET_USER" as "SET_USER",
