@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 export interface ItemType extends Document {
     id: string;
     name: string;
+    list: string;
 }
 
 export interface ItemListType extends Document {

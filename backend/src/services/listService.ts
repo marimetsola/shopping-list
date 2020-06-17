@@ -144,11 +144,10 @@ const updateList = async (req: express.Request) => {
     });
 
     const { list } = await authUserToList(req);
-    //req.params.id, req.body.items
 
     await Item.deleteMany({ list: list.id });
 
-    const itemsToSave: ItemType[] = items.map((i: ItemType) => new Item({ name: i, list: list.id }));
+    const itemsToSave: ItemType[] = items.map((i: ItemType) => new Item({ name: i.name, list: list.id }));
     const itemObjects = await Item.insertMany(itemsToSave);
 
     const editedList = ItemList.findByIdAndUpdate(list.id, { items: itemObjects }, { new: true });
