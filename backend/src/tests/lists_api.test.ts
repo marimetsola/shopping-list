@@ -336,36 +336,43 @@ describe('when there is initially one user at db', () => {
                 expect(items).toEqual(['milk']);
             });
 
-            // test.only('fails with an array containing an empty string', async () => {
-            //     const lists: ItemListType[] = await helper.listsInDb();
-            //     const id = lists[0].id;
+            test('fails with an array containing an empty string', async () => {
+                const lists: ItemListType[] = await helper.listsInDb();
+                const id = lists[0].id;
 
-            //     await api
-            //         .post(`/api/lists/${id}/add-item`)
-            //         .set('Authorization', `Bearer ${token}`)
-            //         .send({ name: 'milk' })
-            //         .expect(200);
+                await api
+                    .post(`/api/lists/${id}/add-item`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({ name: 'milk' })
+                    .expect(200);
 
-            //     const newItems = [
-            //         new Item({ name: "beef", list: id }),
-            //         new Item({ name: "", list: id })
-            //     ];
-            //     // const addedItems = await Item.insertMany(newItems);
-            //     // const addedItems = await expect(Item.insertMany(newItems)).rejects.toThrowError(mongoose.Error.ValidationError);
+                const newItems = [
+                    new Item({ name: "beef", list: id }),
+                    new Item({ name: "", list: id })
+                ];
 
-            //     await api
-            //         .put(`/api/lists/${id}/update`)
-            //         .set('Authorization', `Bearer ${token}`)
-            //         .send({ items: addedItems })
-            //         .expect(mongoose.Error.ValidationError);
+                let err;
+                let addedItems;
+                try {
+                    addedItems = await Item.insertMany(newItems);
+                } catch (error) {
+                    err = error;
+                }
+                expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
+                expect(err.errors.name).toBeDefined();
 
-            //     const response =
-            //         await api
-            //             .get(`/api/lists/${id}`)
-            //             .set('Authorization', `Bearer ${token}`);
-            //     const items: string[] = response.body.items.map((i: ItemType) => i.name);
-            //     expect(items).toEqual(['milk']);
-            // });
+                await api
+                    .put(`/api/lists/${id}/update`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({ items: addedItems });
+
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
+                const items: string[] = response.body.items.map((i: ItemType) => i.name);
+                expect(items).toEqual(['milk']);
+            });
         });
 
         afterAll(() => {
