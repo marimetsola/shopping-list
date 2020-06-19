@@ -6,4 +6,9 @@ const login = async (name: string, password: string) => {
     return response.data;
 };
 
-export default { login };
+const register = async (name: string, password: string) => {
+    const response = await axios.post(`${apiBaseUrl}/users`, { name, password });
+    return response.data;
+};
+
+export default { login, register };

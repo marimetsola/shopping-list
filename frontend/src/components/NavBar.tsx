@@ -2,6 +2,7 @@ import React from 'react';
 import ShoppingLists from './ShoppingLists';
 import { Menu, Container, Icon } from 'semantic-ui-react';
 import LogInOut from './LogInOut';
+import Register from './Register';
 import { useStateValue } from '../state';
 
 const NavBar: React.FC = () => {
@@ -19,6 +20,7 @@ const NavBar: React.FC = () => {
                 <Menu.Menu position='right'>
                     {user ? <ShoppingLists /> : null}
                     <LogInOut />
+                    <Register />
                 </Menu.Menu>
             </Container>
         </Menu>

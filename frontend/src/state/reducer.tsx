@@ -2,7 +2,7 @@ import React from 'react';
 import { State } from "./state";
 import { ItemList, ItemType, User } from "../types";
 import listService from '../services/lists';
-import loginService from '../services/login';
+import loginService from '../services/users';
 
 export type Action =
     | {
@@ -12,6 +12,9 @@ export type Action =
     | {
         type: "SET_ACTIVE_LIST";
         payload: ItemList;
+    }
+    | {
+        type: "CLEAR_ACTIVE_LIST";
     }
     | {
         type: "ADD_LIST";
@@ -59,10 +62,14 @@ export const reducer = (state: State, action: Action): State => {
                 lists: action.payload
             };
         case "SET_ACTIVE_LIST":
-            console.log(action.payload);
             return {
                 ...state,
                 activeList: action.payload
+            };
+        case "CLEAR_ACTIVE_LIST":
+            return {
+                ...state,
+                activeList: null
             };
         case "OPEN_LIST_MODAL":
             return {
@@ -251,6 +258,27 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
     const user = await loginService.login(name, password);
+    dispatch(
+        {
+            type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"
+        }
+    );
+    dispatch(
+        {
+            type: "SET_USER" as "SET_USER",
+            payload: { user }
+        }
+    );
+};
+
+export const register = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
+    await loginService.register(name, password);
+    const user = await loginService.login(name, password);
+    dispatch(
+        {
+            type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"
+        }
+    );
     dispatch(
         {
             type: "SET_USER" as "SET_USER",
