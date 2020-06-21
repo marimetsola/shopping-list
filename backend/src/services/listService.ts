@@ -162,5 +162,6 @@ export default {
     addItem,
     deleteItem,
     editItem,
-    updateList
+    updateList,
+    authUserToList
 };

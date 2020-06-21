@@ -10,7 +10,15 @@ const itemListSchema = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    invitedGuests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    guests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 });
 
 itemListSchema.set('toJSON', {

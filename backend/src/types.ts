@@ -11,6 +11,8 @@ export interface ItemListType extends Document {
     name: string;
     items: ItemType[];
     user: UserType;
+    invitedGuests: UserType[];
+    guests: UserType[];
 }
 
 export interface UserType extends Document {
@@ -18,4 +20,5 @@ export interface UserType extends Document {
     name: string;
     passwordHash: string;
     lists: ItemListType[];
+    listInvitations: ItemListType[];
 }

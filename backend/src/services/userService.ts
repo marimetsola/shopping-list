@@ -9,6 +9,10 @@ const getUser = async (id: string) => {
     return await User.findById(id).populate('lists');
 };
 
+const getUserByName = async (name: string) => {
+    return await User.findOne({ name });
+};
+
 const addUser = async (name: string, password: string) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -24,5 +28,6 @@ const addUser = async (name: string, password: string) => {
 export default {
     getAll,
     addUser,
-    getUser
+    getUser,
+    getUserByName
 };

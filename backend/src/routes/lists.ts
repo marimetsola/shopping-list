@@ -1,5 +1,6 @@
 import express from 'express';
 import listService from '../services/listService';
+import guestService from '../services/guestService';
 require('express-async-errors');
 
 const router = express.Router();
@@ -57,6 +58,12 @@ router.patch('/:id/edit-item', async (req, res) => {
 // Update list
 router.put('/:id/update', async (req, res) => {
     const updatedList = await listService.updateList(req);
+    res.send(updatedList);
+});
+
+// Invite guest
+router.post('/:id/invite-guest', async (req, res) => {
+    const updatedList = await guestService.addInvitation(req);
     res.send(updatedList);
 });
 
