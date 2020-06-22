@@ -67,4 +67,28 @@ router.post('/:id/invite-guest', async (req, res) => {
     res.send(updatedList);
 });
 
+// Remove guest invitation
+router.post('/:id/uninvite-guest', async (req, res) => {
+    const updatedList = await guestService.removeInvitation(req);
+    res.send(updatedList);
+});
+
+// Accept guest invitation
+router.post('/:id/accept-invite', async (req, res) => {
+    const updatedList = await guestService.acceptInvitation(req);
+    res.send(updatedList);
+});
+
+// Decline guest invitation
+router.post('/:id/decline-invite', async (req, res) => {
+    const updatedList = await guestService.declineInvitation(req);
+    res.send(updatedList);
+});
+
+// Remove guest
+router.post('/:id/remove-guest', async (req, res) => {
+    const updatedList = await guestService.removeGuest(req);
+    res.send(updatedList);
+});
+
 export default router;
