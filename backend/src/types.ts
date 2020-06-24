@@ -20,5 +20,6 @@ export interface UserType extends Document {
     name: string;
     passwordHash: string;
     lists: ItemListType[];
+    guestLists: ItemListType[];
     listInvitations: ItemListType[];
 }

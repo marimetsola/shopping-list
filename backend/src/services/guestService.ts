@@ -69,7 +69,7 @@ const acceptInvitation = async (req: express.Request) => {
 
     await user.updateOne({
         $pull: { listInvitations: list.id },
-        $push: { lists: list.id }
+        $push: { guestLists: list.id }
     }, { new: true });
 
     await user.save();
@@ -123,7 +123,7 @@ const removeGuest = async (req: express.Request) => {
 
     const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { guests: guest.id } }, { new: true });
 
-    await guest.updateOne({ $pull: { lists: list.id } });
+    await guest.updateOne({ $pull: { guestLists: list.id } });
 
     return updatedList;
 };

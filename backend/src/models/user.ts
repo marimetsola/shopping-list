@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
             type: Schema.Types.ObjectId, ref: 'ItemList'
         }
     ],
+    guestLists: [
+        {
+            type: Schema.Types.ObjectId, ref: 'ItemList'
+        }
+    ],
     listInvitations: [
         {
             type: Schema.Types.ObjectId,
