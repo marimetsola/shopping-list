@@ -1,5 +1,36 @@
 import User from '../models/user';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import express from 'express';
+import listService from './listService';
+
+const getUserFromToken = async (token: string | null) => {
+    if (!token) {
+        throw Error('token missing');
+    }
+
+    if (!process.env.JWT_SECRET) {
+        throw Error('jwt secret missing');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as any;
+    if (!decodedToken.id) {
+        throw Error('token invalid');
+    }
+    const user = await User.findById(decodedToken.id);
+    if (user) {
+        return user;
+    } else {
+        throw Error('user not found');
+    }
+};
+
+const getUserFromReq = async (req: express.Request) => {
+    const token = listService.getTokenFromReq(req);
+    const user = await getUserFromToken(token);
+    return user;
+};
 
 const getAll = async () => {
     return await User.find({});
@@ -26,6 +57,8 @@ const addUser = async (name: string, password: string) => {
 };
 
 export default {
+    getUserFromReq,
+    getUserFromToken,
     getAll,
     addUser,
     getUser,

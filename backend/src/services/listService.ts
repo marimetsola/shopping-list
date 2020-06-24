@@ -1,10 +1,9 @@
 import ItemList from '../models/itemList';
 import Item from '../models/item';
 import { ItemType } from '../types';
-import User from '../models/user';
-import jwt from 'jsonwebtoken';
 import express from 'express';
 import itemList from '../models/itemList';
+import userService from './userService';
 
 const getTokenFromReq = (req: express.Request) => {
     const authorization = req.get('authorization');
@@ -14,38 +13,10 @@ const getTokenFromReq = (req: express.Request) => {
     return null;
 };
 
-const getUserFromToken = async (token: string | null) => {
-    if (!token) {
-        throw Error('token missing');
-    }
-
-    if (!process.env.JWT_SECRET) {
-        throw Error('jwt secret missing');
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as any;
-    if (!decodedToken.id) {
-        throw Error('token invalid');
-    }
-    const user = await User.findById(decodedToken.id);
-    if (user) {
-        return user;
-    } else {
-        throw Error('user not found');
-    }
-};
-
-const getUserFromReq = async (req: express.Request) => {
-    const token = getTokenFromReq(req);
-    const user = await getUserFromToken(token);
-    return user;
-};
-
 const authUserToList = async (req: express.Request) => {
     const listId = req.params.id;
     const token = getTokenFromReq(req);
-    const user = await getUserFromToken(token);
+    const user = await userService.getUserFromToken(token);
     const list =
         await ItemList.findById(listId)
             .populate('user')
@@ -67,7 +38,7 @@ const authUserToList = async (req: express.Request) => {
 // };
 
 const getListsByUser = async (req: express.Request) => {
-    const user = await getUserFromReq(req);
+    const user = await userService.getUserFromReq(req);
     if (user) {
         const listsByUser = await itemList.find({ user: user }).populate('items');
         return listsByUser;
@@ -82,7 +53,7 @@ const findById = async (req: express.Request) => {
 
 const addList = async (req: express.Request) => {
     const name = req.body.name;
-    const user = await getUserFromReq(req);
+    const user = await userService.getUserFromReq(req);
 
     if (name) {
         const newList = new ItemList({ name, user: user.id });
@@ -155,6 +126,7 @@ const updateList = async (req: express.Request) => {
 };
 
 export default {
+    getTokenFromReq,
     getListsByUser,
     findById,
     addList,

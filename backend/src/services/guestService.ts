@@ -3,7 +3,7 @@ import listService from './listService';
 import userService from './userService';
 import itemList from '../models/itemList';
 
-// Add a user to the invitiations of a list and list to the users invitations
+// Add a user to the invitiations of a list and list to the user's invitations
 const addInvitation = async (req: express.Request) => {
     const { list } = await listService.authUserToList(req);
     const guestName: string = req.body.guestName;
@@ -45,55 +45,68 @@ const removeInvitation = async (req: express.Request) => {
 
 const acceptInvitation = async (req: express.Request) => {
 
-    const guest = await userService.getUser(req.body.guestId);
+    const token = listService.getTokenFromReq(req);
+    const user = await userService.getUserFromToken(token);
 
-    if (!guest) {
+    if (!user) {
         throw Error('no guest user found');
     }
 
-    const list = await itemList.findByIdAndUpdate(req.params.id, {
-        $pull: { invitedGuests: guest.id },
-        $addToSet: { guests: guest }
-    }, { new: true });
-
+    const list = await itemList.findById(req.params.id).populate('invitedGuests');
 
     if (!list) {
         throw Error('no list found');
     }
 
-    await guest.updateOne({
+    if (!(list.invitedGuests.map(g => g.id).includes(user.id))) {
+        throw Error('user not authorized');
+    }
+
+    const returnedList = await itemList.findByIdAndUpdate(req.params.id, {
+        $pull: { invitedGuests: user.id },
+        $addToSet: { guests: user }
+    }, { new: true });
+
+    await user.updateOne({
         $pull: { listInvitations: list.id },
         $push: { lists: list.id }
     }, { new: true });
 
-    await guest.save();
+    await user.save();
 
-    return await list.save();
+    return returnedList;
 };
 
 const declineInvitation = async (req: express.Request) => {
 
-    const guest = await userService.getUser(req.body.guestId);
+    const token = listService.getTokenFromReq(req);
+    const user = await userService.getUserFromToken(token);
 
-    if (!guest) {
+    if (!user) {
         throw Error('no guest user found');
     }
 
-    const list = await itemList.findByIdAndUpdate(req.params.id, {
-        $pull: { invitedGuests: guest.id }
-    }, { new: true });
+    const list = await itemList.findById(req.params.id).populate('invitedGuests');
 
     if (!list) {
         throw Error('no list found');
     }
 
-    await guest.updateOne({
+    if (!(list.invitedGuests.map(g => g.id).includes(user.id))) {
+        throw Error('user not authorized');
+    }
+
+    const returnedList = await itemList.findByIdAndUpdate(req.params.id, {
+        $pull: { invitedGuests: user.id }
+    }, { new: true });
+
+    await user.updateOne({
         $pull: { listInvitations: list.id }
     }, { new: true });
 
-    await guest.save();
+    await user.save();
 
-    return await list.save();
+    return returnedList;
 };
 
 const removeGuest = async (req: express.Request) => {
