@@ -375,6 +375,44 @@ describe('when there is initially one user at db', () => {
             });
         });
 
+        describe('when another user is added', () => {
+            let guestUser: UserType;
+            let guestToken;
+            beforeEach(async () => {
+                const passwordHash = await bcrypt.hash('passu123', 10);
+                guestUser = new User({ name: 'guest', passwordHash });
+                await guestUser.save();
+
+                const response = await api.post('/api/login')
+                    .send({
+                        name: 'guest',
+                        password: 'passu123'
+                    })
+                    .expect(200)
+                    .expect('Content-Type', /application\/json/);
+                guestToken = response.body.token;
+                console.log(guestToken);
+            });
+
+            test('invitation to list succeeds with valid user name', async () => {
+                const lists: ItemListType[] = await helper.listsInDb();
+                const id = lists[0].id;
+
+                await api
+                    .post(`/api/lists/${id}/invite-guest`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({ guestName: 'guest' })
+                    .expect(200);
+
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
+                const invitedGuests: string[] = response.body.invitedGuests;
+                expect(invitedGuests).toContain(guestUser.id);
+            });
+        });
+
         afterAll(() => {
             mongoose.connection.close();
         });
