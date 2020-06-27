@@ -377,7 +377,7 @@ describe('when there is initially one user at db', () => {
 
         describe('when another user is added', () => {
             let guestUser: UserType;
-            let guestToken;
+            let guestToken: string;
             beforeEach(async () => {
                 const passwordHash = await bcrypt.hash('passu123', 10);
                 guestUser = new User({ name: 'guest', passwordHash });
@@ -391,7 +391,6 @@ describe('when there is initially one user at db', () => {
                     .expect(200)
                     .expect('Content-Type', /application\/json/);
                 guestToken = response.body.token;
-                console.log(guestToken);
             });
 
             test('invitation to list succeeds with valid user name', async () => {
@@ -410,6 +409,111 @@ describe('when there is initially one user at db', () => {
                         .set('Authorization', `Bearer ${token}`);
                 const invitedGuests: string[] = response.body.invitedGuests;
                 expect(invitedGuests).toContain(guestUser.id);
+            });
+
+            test('invitation to list fails with invalid user name', async () => {
+                const lists: ItemListType[] = await helper.listsInDb();
+                const id = lists[0].id;
+
+                await api
+                    .post(`/api/lists/${id}/invite-guest`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({ guestName: 'invalidUser' })
+                    .expect(400);
+
+                const response =
+                    await api
+                        .get(`/api/lists/${id}`)
+                        .set('Authorization', `Bearer ${token}`);
+                const invitedGuests: string[] = response.body.invitedGuests;
+                expect(invitedGuests.length).toBe(0);
+            });
+
+            describe('when an invitation to list is sent', () => {
+                let id: string;
+                beforeEach(async () => {
+                    const lists: ItemListType[] = await helper.listsInDb();
+                    id = lists[0].id;
+                    await api
+                        .post(`/api/lists/${id}/invite-guest`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ guestName: 'guest' })
+                        .expect(200);
+                });
+
+                test('invitation can be cancelled', async () => {
+                    await api
+                        .post(`/api/lists/${id}/uninvite-guest`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ guestId: guestUser.id })
+                        .expect(200);
+
+                    const response =
+                        await api
+                            .get(`/api/lists/${id}`)
+                            .set('Authorization', `Bearer ${token}`);
+                    const invitedGuests: string[] = response.body.invitedGuests;
+                    expect(invitedGuests).not.toContain(guestUser.id);
+                });
+
+                test('invitation can be accepted', async () => {
+                    await api
+                        .post(`/api/lists/${id}/accept-invite`)
+                        .set('Authorization', `Bearer ${guestToken}`)
+                        .expect(200);
+
+                    const response =
+                        await api
+                            .get(`/api/lists/${id}`)
+                            .set('Authorization', `Bearer ${token}`);
+                    const invitedGuests: string[] = response.body.invitedGuests;
+                    expect(invitedGuests).not.toContain(guestUser.id);
+
+                    const guests: string[] = response.body.guests;
+                    expect(guests).toContain(guestUser.id);
+                });
+
+                test('invitation can be declined', async () => {
+                    await api
+                        .post(`/api/lists/${id}/decline-invite`)
+                        .set('Authorization', `Bearer ${guestToken}`)
+                        .expect(200);
+
+                    const response =
+                        await api
+                            .get(`/api/lists/${id}`)
+                            .set('Authorization', `Bearer ${token}`);
+                    const invitedGuests: string[] = response.body.invitedGuests;
+                    expect(invitedGuests).not.toContain(guestUser.id);
+
+                    const guests: string[] = response.body.guests;
+                    expect(guests).not.toContain(guestUser.id);
+                });
+
+                describe('when an invitation is accepted', () => {
+                    beforeEach(async () => {
+                        await api
+                            .post(`/api/lists/${id}/accept-invite`)
+                            .set('Authorization', `Bearer ${guestToken}`)
+                            .expect(200);
+                    });
+
+                    test('guest can be removed', async () => {
+                        await api
+                            .post(`/api/lists/${id}/remove-guest`)
+                            .set('Authorization', `Bearer ${token}`)
+                            .send({ guestId: guestUser.id })
+                            .expect(200);
+
+                        const response =
+                            await api
+                                .get(`/api/lists/${id}`)
+                                .set('Authorization', `Bearer ${token}`);
+
+                        const guests: string[] = response.body.guests;
+                        expect(guests).not.toContain(guestUser.id);
+                    });
+                });
             });
         });
 
