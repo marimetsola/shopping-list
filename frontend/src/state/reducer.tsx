@@ -258,17 +258,19 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
     const user = await loginService.login(name, password);
-    dispatch(
-        {
-            type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"
-        }
-    );
-    dispatch(
-        {
-            type: "SET_USER" as "SET_USER",
-            payload: { user }
-        }
-    );
+    if (user) {
+        dispatch(
+            {
+                type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"
+            }
+        );
+        dispatch(
+            {
+                type: "SET_USER" as "SET_USER",
+                payload: { user }
+            }
+        );
+    }
 };
 
 export const register = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
