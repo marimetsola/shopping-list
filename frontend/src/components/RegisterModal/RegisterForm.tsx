@@ -1,14 +1,15 @@
 import React from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Message } from "semantic-ui-react";
 import { Field, Formik, Form, } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
 
 interface Props {
     onSubmit: (values: { name: string; password: string }) => void;
     onCancel: () => void;
+    registerFailed: boolean;
 }
 
-export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFailed }) => {
     return (
         <Formik
             initialValues={{
@@ -44,6 +45,10 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                             name="password"
                             component={PasswordField}
                         />
+                        {registerFailed &&
+                            <Message negative>
+                                <p>Username already taken.</p>
+                            </Message>}
                         <Grid>
                             <Grid.Column floated="left" width={5}>
                                 <Button type="button" onClick={onCancel} color="red">

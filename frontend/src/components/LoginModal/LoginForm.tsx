@@ -47,7 +47,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                         />
                         {loginFailed &&
                             <Message negative>
-                                <p>Invalid user or password.</p>
+                                <p>Invalid username or password.</p>
                             </Message>}
                         <Grid>
                             <Grid.Column floated="left" width={5}>
