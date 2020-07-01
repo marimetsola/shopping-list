@@ -14,11 +14,14 @@ const NavBar: React.FC = () => {
                     <Icon name="list alternate outline" size="large" />
                     Shopping List
                 </Menu.Item>
-                {user ? <Menu.Item>
-                    Welcome, {user.name} !
-                </Menu.Item> : null}
                 <Menu.Menu position='right'>
-                    {user ? <ShoppingLists /> : null}
+                    {user && <ShoppingLists />}
+                    {user &&
+                        <Menu.Item type="button" onClick={() => console.log('test')} color="grey">
+                            <Icon name="user" size="large" />
+                            {user.name}
+                        </Menu.Item>
+                    }
                     <LogInOut />
                     <Register />
                 </Menu.Menu>

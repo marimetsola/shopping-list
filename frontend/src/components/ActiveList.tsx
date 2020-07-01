@@ -15,8 +15,6 @@ const ActiveList: React.FC = () => {
     const [addItemModalOpen, setAddItemModalOpen] = useState<boolean>(false);
     const [{ activeList }, dispatch] = useStateValue();
     const refContainer = useRef<Button>(null);
-    const [{ user }] = useStateValue();
-
 
     const focusAddButton = () => {
         if (refContainer && refContainer.current) {
@@ -77,21 +75,6 @@ const ActiveList: React.FC = () => {
 
 
     const contStyle = { padding: "0 4.6rem" };
-
-
-    const adviceStyle =
-    {
-        marginTop: "4rem",
-        textAlign: "center"
-    };
-
-    if (!user) {
-        return (
-            <Container style={contStyle}>
-                <Header as="h2" style={adviceStyle}>Please login to use the site.</Header>
-            </Container >
-        );
-    }
 
     if (!activeList) {
         return (
