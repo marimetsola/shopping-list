@@ -6,7 +6,7 @@ import { useStateValue } from './state';
 import { Container, Header } from 'semantic-ui-react';
 
 const App: React.FC = () => {
-    const [{ user }] = useStateValue();
+    const [{ user, activeList, profilePageOpen }] = useStateValue();
 
     const contStyle = { padding: "0 4.6rem" };
 
@@ -17,17 +17,27 @@ const App: React.FC = () => {
         textAlign: "center"
     };
 
+    const pageToRender = () => {
+        if (user) {
+            if (profilePageOpen) {
+                return <p>Profile page</p>;
+            } else if (activeList) {
+                return <ActiveList />;
+            }
+
+        }
+        return (
+            <Container style={contStyle}>
+                <Header as="h2" style={adviceStyle}>Please login to use the site.</Header>
+            </Container>
+        );
+    };
+
     return (
         <div>
             <NavBar />
             <Container>
-                {user ?
-                    <ActiveList />
-                    :
-                    <Container style={contStyle}>
-                        <Header as="h2" style={adviceStyle}>Please login to use the site.</Header>
-                    </Container >
-                }
+                {pageToRender()}
                 <AddListModal />
             </Container>
         </div >

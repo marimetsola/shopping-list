@@ -3,10 +3,10 @@ import ShoppingLists from './ShoppingLists';
 import { Menu, Container, Icon } from 'semantic-ui-react';
 import LogInOut from './LogInOut';
 import Register from './Register';
-import { useStateValue } from '../state';
+import { useStateValue, openProfilePage } from '../state';
 
 const NavBar: React.FC = () => {
-    const [{ user }] = useStateValue();
+    const [{ user }, dispatch] = useStateValue();
     return (
         <Menu borderless inverted size="massive">
             <Container>
@@ -17,7 +17,7 @@ const NavBar: React.FC = () => {
                 <Menu.Menu position='right'>
                     {user && <ShoppingLists />}
                     {user &&
-                        <Menu.Item type="button" onClick={() => console.log('test')} color="grey">
+                        <Menu.Item type="button" onClick={() => dispatch(openProfilePage())} color="grey">
                             <Icon name="user" size="large" />
                             {user.name}
                         </Menu.Item>

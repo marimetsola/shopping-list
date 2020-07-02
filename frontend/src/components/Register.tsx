@@ -4,11 +4,6 @@ import { Menu } from 'semantic-ui-react';
 
 import RegisterModal from './RegisterModal';
 
-interface Props {
-    onLogin: (values: { name: string; password: string }) => void;
-    onCancel: () => void;
-}
-
 const Register: React.FC = () => {
     const [{ user }] = useStateValue();
     const [registerModalOpen, setRegisterModalOpen] = useState(false);

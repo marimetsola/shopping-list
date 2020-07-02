@@ -61,10 +61,6 @@ const ActiveList: React.FC = () => {
             }
 
             try {
-                // await axios.put<ItemList>(
-                //     `${apiBaseUrl}/lists/${activeList.id}/update`, { items: newItems }
-                // );
-                // dispatch(editList(activeList));
                 editList(activeList, newItems, dispatch);
 
             } catch (e) {
@@ -77,10 +73,7 @@ const ActiveList: React.FC = () => {
     const contStyle = { padding: "0 4.6rem" };
 
     if (!activeList) {
-        return (
-            <Container style={contStyle}>
-            </Container>
-        );
+        return null;
     }
 
     return (

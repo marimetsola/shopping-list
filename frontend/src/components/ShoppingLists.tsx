@@ -21,7 +21,8 @@ const ShoppingLists: React.FC = () => {
     }, [dispatch]);
 
     const setActive = (list: ItemList) => {
-        dispatch(setActiveList(list));
+        // dispatch(setActiveList(list));
+        setActiveList(list, dispatch);
     };
 
     if (lists.length === 0) {

@@ -14,4 +14,5 @@ export interface User {
     name: string;
     token: string;
     listInvitations: ItemList[];
+    activeList: ItemList;
 }

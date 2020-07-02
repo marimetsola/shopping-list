@@ -52,6 +52,12 @@ export type Action =
     }
     | {
         type: "DISCARD_USER";
+    }
+    | {
+        type: "OPEN_PROFILE_PAGE";
+    }
+    | {
+        type: "CLOSE_PROFILE_PAGE";
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -64,7 +70,8 @@ export const reducer = (state: State, action: Action): State => {
         case "SET_ACTIVE_LIST":
             return {
                 ...state,
-                activeList: action.payload
+                activeList: action.payload,
+                profilePageOpen: false
             };
         case "CLEAR_ACTIVE_LIST":
             return {
@@ -127,6 +134,16 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 user: null
             };
+        case "OPEN_PROFILE_PAGE":
+            return {
+                ...state,
+                profilePageOpen: true
+            };
+        case "CLOSE_PROFILE_PAGE":
+            return {
+                ...state,
+                profilePageOpen: false
+            };
 
         default:
             return state;
@@ -142,8 +159,14 @@ export const setLists = (lists: ItemList[]) => {
     );
 };
 
-export const setActiveList = (list: ItemList) => {
-    return (
+export const setActiveList = async (list: ItemList, dispatch: React.Dispatch<Action>) => {
+    // return (
+    //     {
+    //         type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
+    //         payload: list
+    //     }
+    // );
+    dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
             payload: list
@@ -285,6 +308,22 @@ export const register = async (name: string, password: string, dispatch: React.D
         {
             type: "SET_USER" as "SET_USER",
             payload: { user }
+        }
+    );
+};
+
+export const openProfilePage = () => {
+    return (
+        {
+            type: "OPEN_PROFILE_PAGE" as "OPEN_PROFILE_PAGE"
+        }
+    );
+};
+
+export const closeProfilePage = () => {
+    return (
+        {
+            type: "CLOSE_PROFILE_PAGE" as "CLOSE_PROFILE_PAGE"
         }
     );
 };

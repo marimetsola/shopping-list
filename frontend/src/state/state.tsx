@@ -6,6 +6,7 @@ import { Action } from "./reducer";
 export type State = {
     lists: ItemList[];
     activeList: ItemList | null;
+    profilePageOpen: boolean;
     listModalOpen: boolean;
     user: null | User;
 };
@@ -13,6 +14,7 @@ export type State = {
 const initialState: State = {
     lists: [],
     activeList: null,
+    profilePageOpen: false,
     listModalOpen: false,
     user: null
 };
