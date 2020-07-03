@@ -56,11 +56,26 @@ const addUser = async (name: string, password: string) => {
     return await user.save();
 };
 
+const setActiveList = async (req: express.Request) => {
+    const { user, list } = await listService.authUserOrGuestToList(req);
+    user.activeList = list;
+    return user.save();
+};
+
+const clearActiveList = async (req: express.Request) => {
+    const { user } = await listService.authUserOrGuestToList(req);
+    // user.updateOne({ $unset: { activeList: "" } }, { new: true });
+    user.activeList = undefined;
+    return user.save();
+};
+
 export default {
     getUserFromReq,
     getUserFromToken,
     getAll,
     addUser,
     getUser,
-    getUserByName
+    getUserByName,
+    setActiveList,
+    clearActiveList
 };

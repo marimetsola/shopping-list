@@ -20,4 +20,14 @@ usersRouter.post('/', async (req, res) => {
     res.json(user);
 });
 
+usersRouter.patch('/:id/set-active-list', async (req, res) => {
+    const user = await userService.setActiveList(req);
+    res.json(user);
+});
+
+usersRouter.patch('/:id/clear-active-list', async (req, res) => {
+    const user = await userService.clearActiveList(req);
+    res.json(user);
+});
+
 export default usersRouter;

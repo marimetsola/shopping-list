@@ -51,6 +51,30 @@ const authGuestToList = async (req: express.Request) => {
     throw Error('user not authorized');
 };
 
+const authUserOrGuestToList = async (req: express.Request) => {
+    const listId = req.body.listId;
+    const token = getTokenFromReq(req);
+    const user = await userService.getUserFromToken(token);
+    const list =
+        await ItemList.findById(listId)
+            .populate('user')
+            .populate('items')
+            .populate('guests');
+    if (!list) {
+        throw Error('list not found');
+    }
+
+    if (user.id === list.user.id) {
+        return { user, list };
+    }
+
+    if (list.guests.map(g => g.id).includes(user.id)) {
+        return { user, list };
+    }
+
+    throw Error('user not authorized');
+};
+
 // const getAll = () => {
 //     const lists = ItemList.find({}).populate('items');
 //     return lists;
@@ -155,5 +179,6 @@ export default {
     editItem,
     updateList,
     authUserToList,
-    authGuestToList
+    authGuestToList,
+    authUserOrGuestToList
 };

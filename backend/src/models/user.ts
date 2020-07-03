@@ -25,7 +25,12 @@ const userSchema = new mongoose.Schema({
             type: Schema.Types.ObjectId,
             ref: 'ItemList'
         }
-    ]
+    ],
+    activeList:
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'ItemList'
+    }
 });
 
 userSchema.plugin(uniqueValidator);

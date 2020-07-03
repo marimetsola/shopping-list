@@ -22,4 +22,5 @@ export interface UserType extends Document {
     lists: ItemListType[];
     guestLists: ItemListType[];
     listInvitations: ItemListType[];
+    activeList: ItemListType | undefined;
 }

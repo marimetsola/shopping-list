@@ -18,7 +18,7 @@ describe('when there is initially one user at db', () => {
 
         const passwordHash = await bcrypt.hash('passu666', 10);
         rootUser = new User({ name: 'root', passwordHash });
-        await rootUser.save();
+        rootUser = await rootUser.save();
 
         const response = await api.post('/api/login')
             .send({
@@ -372,6 +372,39 @@ describe('when there is initially one user at db', () => {
                         .set('Authorization', `Bearer ${token}`);
                 const items: string[] = response.body.items.map((i: ItemType) => i.name);
                 expect(items).toEqual(['milk']);
+            });
+        });
+
+        describe('setting an active list', () => {
+            test('succeeds with proper authorization', async () => {
+                const lists: ItemListType[] = await helper.listsInDb();
+                const id = lists[0].id;
+
+                await api
+                    .patch(`/api/users/${rootUser.id}/set-active-list`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({ listId: id })
+                    .expect(200);
+
+                const response = await api
+                    .get(`/api/users/${rootUser.id}`)
+                    .expect(200);
+                expect(response.body.activeList).toBe(id);
+            });
+
+            test('fails without authorization', async () => {
+                const lists: ItemListType[] = await helper.listsInDb();
+                const id = lists[0].id;
+
+                await api
+                    .patch(`/api/users/${rootUser.id}/set-active-list`)
+                    .send({ listId: id })
+                    .expect(400);
+
+                const response = await api
+                    .get(`/api/users/${rootUser.id}`)
+                    .expect(200);
+                expect(response.body.activeList).not.toBe(id);
             });
         });
 
