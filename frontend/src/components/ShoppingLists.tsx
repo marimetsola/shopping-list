@@ -1,28 +1,36 @@
 import React, { useEffect } from 'react';
 import AddNewList from './AddNewList';
-import { useStateValue, setActiveList, setLists } from '../state';
+import { useStateValue, setActiveList, setLists, changeActiveList } from '../state';
 import { ItemList } from '../types';
 import { Dropdown } from 'semantic-ui-react';
 import listService from '../services/lists';
 
 const ShoppingLists: React.FC = () => {
-    const [{ lists, activeList }, dispatch] = useStateValue();
+    const [{ lists, activeList, user }, dispatch] = useStateValue();
 
     useEffect(() => {
         const fetchLists = async () => {
             try {
                 const listsFromApi = await listService.getListsByUser();
                 dispatch(setLists(listsFromApi));
+                if (user) {
+                    setActiveList(user, dispatch);
+                }
+
             } catch (e) {
                 console.error(e);
             }
         };
         fetchLists();
-    }, [dispatch]);
+    }, [dispatch, user]);
+
+
 
     const setActive = (list: ItemList) => {
         // dispatch(setActiveList(list));
-        setActiveList(list, dispatch);
+        if (user) {
+            changeActiveList(list, user, dispatch);
+        }
     };
 
     if (lists.length === 0) {

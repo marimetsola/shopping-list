@@ -2,7 +2,7 @@ import React from 'react';
 import { State } from "./state";
 import { ItemList, ItemType, User } from "../types";
 import listService from '../services/lists';
-import loginService from '../services/users';
+import userService from '../services/users';
 
 export type Action =
     | {
@@ -159,13 +159,25 @@ export const setLists = (lists: ItemList[]) => {
     );
 };
 
-export const setActiveList = async (list: ItemList, dispatch: React.Dispatch<Action>) => {
-    // return (
-    //     {
-    //         type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
-    //         payload: list
-    //     }
-    // );
+export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>) => {
+    const userFromApi: User = await userService.getUser(user.id);
+    const list = userFromApi.activeList;
+
+    if (list) {
+        dispatch(
+            {
+                type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
+                payload: list
+            }
+        );
+    }
+
+};
+
+export const changeActiveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
+    const userFromApi: User = await userService.getUser(user.id);
+    await userService.setActiveList(userFromApi.id, list.id);
+
     dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
@@ -190,8 +202,10 @@ export const closeListModal = () => {
     );
 };
 
-export const addList = async (name: string, dispatch: React.Dispatch<Action>) => {
+export const addList = async (name: string, user: User, dispatch: React.Dispatch<Action>) => {
     const addedList = await listService.addList(name);
+    const userFromApi: User = await userService.getUser(user.id);
+    await userService.setActiveList(userFromApi.id, addedList.id);
     dispatch(
         {
             type: "ADD_LIST" as "ADD_LIST",
@@ -280,7 +294,7 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
 };
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
-    const user = await loginService.login(name, password);
+    const user = await userService.login(name, password);
     if (user) {
         dispatch(
             {
@@ -297,8 +311,8 @@ export const login = async (name: string, password: string, dispatch: React.Disp
 };
 
 export const register = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
-    await loginService.register(name, password);
-    const user = await loginService.login(name, password);
+    await userService.register(name, password);
+    const user = await userService.login(name, password);
     dispatch(
         {
             type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"

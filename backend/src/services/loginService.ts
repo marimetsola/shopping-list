@@ -19,7 +19,7 @@ const loginUser = async (name: string, password: string) => {
 
     if (process.env.JWT_SECRET) {
         const token = jwt.sign(userForToken, process.env.JWT_SECRET);
-        return { name: user.name, token };
+        return { name: user.name, token, id: user.id };
     }
 
     throw new Error('error signing token');

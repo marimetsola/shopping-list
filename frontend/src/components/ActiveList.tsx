@@ -72,7 +72,7 @@ const ActiveList: React.FC = () => {
 
     const contStyle = { padding: "0 4.6rem" };
 
-    if (!activeList) {
+    if (!activeList || !activeList.items) {
         return null;
     }
 

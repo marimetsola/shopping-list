@@ -6,7 +6,7 @@ import { useStateValue } from './state';
 import { Container, Header } from 'semantic-ui-react';
 
 const App: React.FC = () => {
-    const [{ user, activeList, profilePageOpen }] = useStateValue();
+    const [{ user, profilePageOpen }] = useStateValue();
 
     const contStyle = { padding: "0 4.6rem" };
 
@@ -21,7 +21,7 @@ const App: React.FC = () => {
         if (user) {
             if (profilePageOpen) {
                 return <p>Profile page</p>;
-            } else if (activeList) {
+            } else {
                 return <ActiveList />;
             }
 

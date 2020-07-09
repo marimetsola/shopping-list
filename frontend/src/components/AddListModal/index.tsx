@@ -4,12 +4,14 @@ import AddListForm from './AddListForm';
 import { useStateValue, closeListModal, addList } from '../../state';
 
 const AddListModal: React.FC = () => {
-    const [{ listModalOpen }, dispatch] = useStateValue();
+    const [{ listModalOpen, user }, dispatch] = useStateValue();
 
     const addNewList = async (values: { name: string }) => {
         dispatch(closeListModal());
         try {
-            addList(values.name, dispatch);
+            if (user) {
+                addList(values.name, user, dispatch);
+            }
         } catch (e) {
             console.error(e);
         }

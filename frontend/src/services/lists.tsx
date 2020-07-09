@@ -55,4 +55,4 @@ const editItem = async (listID: string, item: ItemType) => {
     );
 };
 
-export default { setToken, getListsByUser, addList, addItem, deleteItem, editItem, deleteList, editList };
+export default { config, setToken, getListsByUser, addList, addItem, deleteItem, editItem, deleteList, editList };

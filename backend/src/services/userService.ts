@@ -37,7 +37,22 @@ const getAll = async () => {
 };
 
 const getUser = async (id: string) => {
-    return await User.findById(id).populate('lists');
+    const user = await User.findById(id)
+        .populate({
+            path: 'lists',
+            populate: {
+                path: 'items',
+                model: 'Item'
+            }
+        })
+        .populate({
+            path: 'activeList',
+            populate: {
+                path: 'items',
+                model: 'Item'
+            }
+        });
+    return user;
 };
 
 const getUserByName = async (name: string) => {
