@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Modal, Button, Grid, Icon } from 'semantic-ui-react';
-import { useStateValue, deleteList } from '../../state';
+import { Modal, Button, Icon, Divider } from 'semantic-ui-react';
+import { useStateValue, deleteList, inviteGuest } from '../../state';
 import { ItemList } from '../../types';
+import DeleteListModal from './DeleteListModal';
+import InviteGuestForm from './InviteGuestForm';
+import InvitedGuests from './InvitedGuests';
 
 interface Props {
     open: boolean;
@@ -22,13 +25,23 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
             console.log(error);
         }
     };
+    const addInvitation = async (values: { name: string }) => {
+        try {
+            inviteGuest(list, values.name, dispatch);
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     return (
         <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
             <Modal.Header>Edit list {list.name}</Modal.Header>
             <Modal.Content>
+                <InvitedGuests />
+                <InviteGuestForm onSubmit={addInvitation} />
+                <Divider />
                 <Button color="red" onClick={() => setDeleteModalOpen(true)}>
-                    <Icon name='delete' />Delete
+                    <Icon name='delete' />Delete list
                 </Button>
                 <DeleteListModal open={deleteModalOpen} list={list} onConfirm={removeList} onClose={() => setDeleteModalOpen(false)} />
             </Modal.Content>
@@ -37,29 +50,6 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
                     Cancel
                 </Button>
             </Modal.Actions>
-        </Modal>
-    );
-};
-
-const DeleteListModal: React.FC<{ open: boolean; list: ItemList; onConfirm: () => void; onClose: () => void }> = ({ open, onConfirm, onClose, list }) => {
-
-    return (
-        <Modal open={open} onClose={onClose} centered={false} size="tiny" closeIcon>
-            <Modal.Header>Really delete list {list.name}?</Modal.Header>
-            <Modal.Content>
-                <Grid>
-                    <Grid.Column floated="left" width={5}>
-                        <Button type="button" onClick={onConfirm} color="red">
-                            Yes
-                    </Button>
-                    </Grid.Column>
-                    <Grid.Column floated="right" width={5}>
-                        <Button floated="right" type="button" onClick={onClose} color="grey">
-                            No
-                    </Button>
-                    </Grid.Column>
-                </Grid>
-            </Modal.Content>
         </Modal>
     );
 };

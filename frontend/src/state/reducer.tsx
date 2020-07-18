@@ -58,6 +58,10 @@ export type Action =
     }
     | {
         type: "CLOSE_PROFILE_PAGE";
+    }
+    | {
+        type: "INVITE_GUEST";
+        payload: { list: ItemList };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -143,6 +147,11 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 profilePageOpen: false
+            };
+        case "INVITE_GUEST":
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
 
         default:
@@ -340,4 +349,19 @@ export const closeProfilePage = () => {
             type: "CLOSE_PROFILE_PAGE" as "CLOSE_PROFILE_PAGE"
         }
     );
+};
+
+export const inviteGuest = async (list: ItemList, guestName: string, dispatch: React.Dispatch<Action>) => {
+    // await userService.register(name, password);
+    // const user = await userService.login(name, password);
+
+    const editedList = await listService.inviteGuest(list.id, guestName);
+
+    dispatch(
+        {
+            type: "INVITE_GUEST" as "INVITE_GUEST",
+            payload: { list: editedList }
+        }
+    );
+
 };
