@@ -7,6 +7,9 @@ export interface ItemList {
     id: string;
     name: string;
     items: ItemType[];
+    user: User;
+    invitedGuests: User[];
+    guests: User[];
 }
 
 export interface User {

@@ -8,15 +8,15 @@ const itemListSchema = new Schema({
     },
     items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User'
     },
     invitedGuests: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User'
     }],
     guests: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User'
     }]
 });

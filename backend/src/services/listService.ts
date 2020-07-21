@@ -20,7 +20,9 @@ const authUserToList = async (req: express.Request) => {
     const list =
         await ItemList.findById(listId)
             .populate('user')
-            .populate('items');
+            .populate('items')
+            .populate('invitedGuests')
+            .populate('guests');
     if (!list) {
         throw Error('list not found');
     }
@@ -83,7 +85,9 @@ const authUserOrGuestToList = async (req: express.Request) => {
 const getListsByUser = async (req: express.Request) => {
     const user = await userService.getUserFromReq(req);
     if (user) {
-        const listsByUser = await itemList.find({ user: user }).populate('items');
+        const listsByUser = await itemList.find({ user: user })
+            .populate('items')
+            .populate('invitedGuests');
         return listsByUser;
     }
     return null;
