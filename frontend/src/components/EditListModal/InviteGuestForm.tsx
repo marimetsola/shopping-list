@@ -4,7 +4,7 @@ import { Field, Formik, Form, } from "formik";
 import { TextField } from '../FieldForm';
 
 interface Props {
-    onSubmit: (values: { name: string }) => void;
+    onSubmit: any;
 }
 
 export const InviteGuestForm: React.FC<Props> = ({ onSubmit }) => {

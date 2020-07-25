@@ -351,17 +351,14 @@ export const closeProfilePage = () => {
     );
 };
 
-export const inviteGuest = async (list: ItemList, guestName: string, dispatch: React.Dispatch<Action>) => {
+export const inviteGuest = (editedList: ItemList) => {
     // await userService.register(name, password);
     // const user = await userService.login(name, password);
-
-    const editedList = await listService.inviteGuest(list.id, guestName);
-
-    dispatch(
+    console.log("editedList:", editedList);
+    return (
         {
             type: "INVITE_GUEST" as "INVITE_GUEST",
             payload: { list: editedList }
         }
     );
-
 };

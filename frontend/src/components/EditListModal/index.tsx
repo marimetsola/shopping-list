@@ -5,6 +5,7 @@ import { ItemList } from '../../types';
 import DeleteListModal from './DeleteListModal';
 import InviteGuestForm from './InviteGuestForm';
 import InvitedGuests from './InvitedGuests';
+import listService from '../../services/lists';
 
 interface Props {
     open: boolean;
@@ -25,11 +26,13 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
             console.log(error);
         }
     };
-    const addInvitation = async (values: { name: string }) => {
+    const addInvitation = async (values: { name: string }, action: any) => {
+
         try {
-            inviteGuest(list, values.name, dispatch);
-        } catch (e) {
-            console.error(e);
+            const editedList = await listService.inviteGuest(list.id, values.name);
+            dispatch(inviteGuest(editedList));
+        } catch (error) {
+            action.setErrors({ name: "User does not exist." });
         }
     };
 

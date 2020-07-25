@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { ItemList } from '../../types';
 
 const InvitedGuests: React.FC<{ list: ItemList }> = ({ list }) => {
-    console.log(list.invitedGuests);
+    console.log("rendering invitedGuests", list.invitedGuests);
     return (
         <Fragment>
             <label style={{ fontWeight: 'bold' }}>Invitations</label>
