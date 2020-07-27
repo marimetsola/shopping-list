@@ -19,3 +19,8 @@ export interface User {
     listInvitations: ItemList[];
     activeList: ItemList;
 }
+
+export enum ModalType {
+    None,
+    TestModal
+}

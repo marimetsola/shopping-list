@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { ItemList, User } from "../types";
+import { ItemList, User, ModalType } from "../types";
 
 import { Action } from "./reducer";
 
@@ -9,6 +9,7 @@ export type State = {
     profilePageOpen: boolean;
     listModalOpen: boolean;
     user: null | User;
+    modalType: ModalType;
 };
 
 const initialState: State = {
@@ -16,7 +17,8 @@ const initialState: State = {
     activeList: null,
     profilePageOpen: false,
     listModalOpen: false,
-    user: null
+    user: null,
+    modalType: ModalType.None
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

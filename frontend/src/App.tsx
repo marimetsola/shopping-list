@@ -4,6 +4,7 @@ import ActiveList from './components/ActiveList';
 import AddListModal from './components/AddListModal';
 import { useStateValue } from './state';
 import { Container, Header } from 'semantic-ui-react';
+import ModalRoot from './components/ModalRoot';
 
 const App: React.FC = () => {
     const [{ user, profilePageOpen }] = useStateValue();
@@ -39,6 +40,7 @@ const App: React.FC = () => {
             <Container>
                 {pageToRender()}
                 <AddListModal />
+                <ModalRoot />
             </Container>
         </div >
     );
