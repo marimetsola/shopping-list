@@ -62,6 +62,10 @@ export type Action =
     | {
         type: "INVITE_GUEST";
         payload: { list: ItemList };
+    }
+    | {
+        type: "UNINVITE_GUEST";
+        payload: { list: ItemList };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -153,6 +157,11 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
+        case "UNINVITE_GUEST":
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
+            };
 
         default:
             return state;
@@ -186,7 +195,7 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
 export const changeActiveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
     const userFromApi: User = await userService.getUser(user.id);
     await userService.setActiveList(userFromApi.id, list.id);
-
+    console.log(list);
     dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
@@ -352,12 +361,18 @@ export const closeProfilePage = () => {
 };
 
 export const inviteGuest = (editedList: ItemList) => {
-    // await userService.register(name, password);
-    // const user = await userService.login(name, password);
-    console.log("editedList:", editedList);
     return (
         {
             type: "INVITE_GUEST" as "INVITE_GUEST",
+            payload: { list: editedList }
+        }
+    );
+};
+
+export const uninviteGuest = (editedList: ItemList) => {
+    return (
+        {
+            type: "UNINVITE_GUEST" as "UNINVITE_GUEST",
             payload: { list: editedList }
         }
     );

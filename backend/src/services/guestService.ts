@@ -17,7 +17,11 @@ const addInvitation = async (req: express.Request) => {
         throw Error('no guest user found');
     }
 
-    const updatedList = await itemList.findByIdAndUpdate(list.id, { $addToSet: { invitedGuests: guest } }, { new: true });
+    const updatedList = await itemList.findByIdAndUpdate(list.id, { $addToSet: { invitedGuests: guest } }, { new: true })
+        .populate('user')
+        .populate('items')
+        .populate('invitedGuests')
+        .populate('guests');
 
     await guest.updateOne({ $addToSet: { listInvitations: list } });
 
@@ -36,7 +40,11 @@ const removeInvitation = async (req: express.Request) => {
         throw Error('no guest user found');
     }
 
-    const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { invitedGuests: guest.id } }, { new: true });
+    const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { invitedGuests: guest.id } }, { new: true })
+        .populate('user')
+        .populate('items')
+        .populate('invitedGuests')
+        .populate('guests');
 
     await guest.updateOne({ $pull: { listInvitations: list.id } });
 

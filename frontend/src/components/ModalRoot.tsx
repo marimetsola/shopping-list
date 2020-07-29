@@ -11,7 +11,6 @@ const ModalRoot: React.FC = () => {
     const [{ modalType }] = useStateValue();
 
     if (modalType === ModalType.None) {
-        console.log('no modal');
         return null;
     }
 

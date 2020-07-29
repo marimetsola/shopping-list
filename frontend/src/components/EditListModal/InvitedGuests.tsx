@@ -1,13 +1,53 @@
 import React, { Fragment } from 'react';
 import { ItemList } from '../../types';
+import { Button, Segment, Grid } from "semantic-ui-react";
+import { User } from '../../types';
+import listService from '../../services/lists';
+import { uninviteGuest, changeActiveList, useStateValue } from '../../state';
 
 const InvitedGuests: React.FC<{ list: ItemList }> = ({ list }) => {
-    console.log("rendering invitedGuests", list.invitedGuests);
+    const [{ user }, dispatch] = useStateValue();
+
+    const removeInvitation = async (guest: User) => {
+        try {
+            const editedList = await listService.uninviteGuest(list.id, guest.id);
+            dispatch(uninviteGuest(editedList));
+            if (user) {
+                changeActiveList(editedList, user, dispatch);
+            }
+        } catch (error) {
+            // action.setErrors({ name: "User does not exist." });
+            console.log(error);
+        }
+    };
+    if (!list) {
+        return null;
+    }
+    // console.log("rendering invitedGuests", list.invitedGuests);
+
+    const contStyle = {
+        padding: "7px 7px 7px 14px",
+    };
     return (
         <Fragment>
             <label style={{ fontWeight: 'bold' }}>Invitations</label>
-            {list.invitedGuests.map(g => <li key={g.id}>{g.name}</li>)}
-        </Fragment>
+            {list.invitedGuests.map(g =>
+
+                <Segment key={g.id}>
+                    <Grid>
+                        <Grid.Column style={contStyle} floated="left" verticalAlign="middle" width={5}>
+                            <span>{g.name}</span>
+                        </Grid.Column>
+                        <Grid.Column style={contStyle} floated="right" width={5}>
+                            <Button floated="right" size="mini" color="red" onClick={() => removeInvitation(g)} icon="delete" />
+                        </Grid.Column>
+
+                    </Grid>
+
+                </Segment>
+            )
+            }
+        </Fragment >
     );
 };
 

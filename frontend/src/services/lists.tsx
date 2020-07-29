@@ -63,4 +63,12 @@ const inviteGuest = async (listID: string, guestName: string) => {
     return editedList;
 };
 
-export default { config, setToken, getListsByUser, addList, addItem, deleteItem, editItem, deleteList, editList, inviteGuest };
+const uninviteGuest = async (listID: string, guestId: string) => {
+    const { data: editedList } = await axios.post<ItemList>(
+        `${apiBaseUrl}/lists/${listID}/uninvite-guest`, { guestId }, config()
+    );
+
+    return editedList;
+};
+
+export default { config, setToken, getListsByUser, addList, addItem, deleteItem, editItem, deleteList, editList, inviteGuest, uninviteGuest };

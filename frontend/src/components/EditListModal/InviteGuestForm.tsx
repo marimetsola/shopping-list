@@ -14,14 +14,14 @@ export const InviteGuestForm: React.FC<Props> = ({ onSubmit }) => {
                 name: "",
             }}
             onSubmit={onSubmit}
-            validate={values => {
-                const requiredError = "Field is required";
-                const errors: { [field: string]: string } = {};
-                if (!values.name) {
-                    errors.name = requiredError;
-                }
-                return errors;
-            }}
+        // validate={values => {
+        //     const requiredError = "Field is required";
+        //     const errors: { [field: string]: string } = {};
+        //     if (!values.name) {
+        //         errors.name = requiredError;
+        //     }
+        //     return errors;
+        // }}
         >
             {({ isValid, dirty }) => {
                 return (

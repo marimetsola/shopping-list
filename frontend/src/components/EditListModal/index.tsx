@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Icon, Divider } from 'semantic-ui-react';
-import { useStateValue, deleteList, inviteGuest } from '../../state';
+import { useStateValue, deleteList, inviteGuest, changeActiveList } from '../../state';
 import { ItemList } from '../../types';
 import DeleteListModal from './DeleteListModal';
 import InviteGuestForm from './InviteGuestForm';
@@ -15,7 +15,7 @@ interface Props {
 
 const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-    const [, dispatch] = useStateValue();
+    const [{ user }, dispatch] = useStateValue();
 
     const removeList = async () => {
         setDeleteModalOpen(false);
@@ -31,6 +31,10 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         try {
             const editedList = await listService.inviteGuest(list.id, values.name);
             dispatch(inviteGuest(editedList));
+            if (user) {
+                changeActiveList(editedList, user, dispatch);
+            }
+            action.resetForm();
         } catch (error) {
             action.setErrors({ name: "User does not exist." });
         }
