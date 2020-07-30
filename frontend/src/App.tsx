@@ -5,6 +5,7 @@ import AddListModal from './components/AddListModal';
 import { useStateValue } from './state';
 import { Container, Header } from 'semantic-ui-react';
 import ModalRoot from './components/ModalRoot';
+import ProfilePage from './components/ProfilePage';
 
 const App: React.FC = () => {
     const [{ user, profilePageOpen }] = useStateValue();
@@ -21,7 +22,7 @@ const App: React.FC = () => {
     const pageToRender = () => {
         if (user) {
             if (profilePageOpen) {
-                return <p>Profile page</p>;
+                return <ProfilePage />;
             } else {
                 return <ActiveList />;
             }

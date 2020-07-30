@@ -360,6 +360,14 @@ export const closeProfilePage = () => {
     );
 };
 
+export const clearActiveList = () => {
+    return (
+        {
+            type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"
+        }
+    );
+};
+
 export const inviteGuest = (editedList: ItemList) => {
     return (
         {
