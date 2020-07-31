@@ -66,6 +66,10 @@ export type Action =
     | {
         type: "UNINVITE_GUEST";
         payload: { list: ItemList };
+    }
+    | {
+        type: "ACCEPT_INVITATION";
+        payload: { list: ItemList; user: User };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -162,6 +166,14 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
+        case "ACCEPT_INVITATION":
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
+                user: {
+                    ...state.user,
+                }
+            };
 
         default:
             return state;
@@ -195,7 +207,6 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
 export const changeActiveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
     const userFromApi: User = await userService.getUser(user.id);
     await userService.setActiveList(userFromApi.id, list.id);
-    console.log(list);
     dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
@@ -382,6 +393,17 @@ export const uninviteGuest = (editedList: ItemList) => {
         {
             type: "UNINVITE_GUEST" as "UNINVITE_GUEST",
             payload: { list: editedList }
+        }
+    );
+};
+
+export const acceptInvitation = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
+    const editedList = await listService.acceptInvitation(list.id, user.id);
+    const editedUser = await userService.getUser(user.id);
+    dispatch(
+        {
+            type: "ACCEPT_INVITATION" as "ACCEPT_INVITATION",
+            payload: { list: editedList, user: editedUser }
         }
     );
 };

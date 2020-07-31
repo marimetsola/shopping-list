@@ -58,6 +58,13 @@ const getUser = async (id: string) => {
                 path: 'invitedGuests',
                 model: 'User'
             }
+        })
+        .populate({
+            path: 'listInvitations',
+            populate: {
+                path: 'user',
+                model: 'User'
+            }
         });
     return user;
 };
