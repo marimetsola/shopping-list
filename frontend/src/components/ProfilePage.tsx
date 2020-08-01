@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStateValue, clearActiveList } from '../state';
+import { useStateValue, clearActiveList, acceptInvitation } from '../state';
 import { Container, Header, Icon, Divider, Table, Button } from 'semantic-ui-react';
 import { ItemList, User } from '../types';
 import userService from '../services/users';
@@ -27,8 +27,10 @@ const ProfilePage: React.FC = () => {
         getListInvitations();
     }, []);
 
-    const acceptInvitation = (list: ItemList) => {
-        console.log(list);
+    const acceptListInvitation = (list: ItemList) => {
+        if (user) {
+            acceptInvitation(list, user, dispatch);
+        }
     };
 
     if (!user) {
@@ -69,7 +71,7 @@ const ProfilePage: React.FC = () => {
                         <Table.Row key={inv.id}>
                             <Table.Cell>{inv.name} by {inv.user.name}</Table.Cell>
                             <Table.Cell textAlign='right'>
-                                <Button positive size="mini" onClick={() => acceptInvitation(inv)}>
+                                <Button positive size="mini" onClick={() => acceptListInvitation(inv)}>
                                     <Icon name='check' />Accept
                                 </Button>
                                 <Button negative size="mini" onClick={() => console.log('click decline')}>

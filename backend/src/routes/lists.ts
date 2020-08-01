@@ -10,7 +10,12 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     // const lists = await listService.getAll().populate('user');
     const lists = await listService.getListsByUser(req);
-    res.send(lists);
+    const guestLists = await listService.getGuestListsByUser(req);
+    if (lists && guestLists) {
+        console.log(lists.concat(guestLists));
+        res.send(lists.concat(guestLists));
+    }
+
 });
 
 // Get list with id

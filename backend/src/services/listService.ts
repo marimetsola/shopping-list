@@ -93,6 +93,14 @@ const getListsByUser = async (req: express.Request) => {
     return null;
 };
 
+const getGuestListsByUser = async (req: express.Request) => {
+    const user = await userService.getUserFromReq(req);
+    if (user) {
+        return user.guestLists;
+    }
+    return null;
+};
+
 const findById = async (req: express.Request) => {
     const { list } = await authUserToList(req);
     return list;
@@ -175,6 +183,7 @@ const updateList = async (req: express.Request) => {
 export default {
     getTokenFromReq,
     getListsByUser,
+    getGuestListsByUser,
     findById,
     addList,
     deleteList,

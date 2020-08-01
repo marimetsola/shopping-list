@@ -171,7 +171,8 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
                 user: {
-                    ...state.user,
+                    ...state.user as User,
+                    listInvitations: action.payload.user.listInvitations
                 }
             };
 
@@ -399,11 +400,18 @@ export const uninviteGuest = (editedList: ItemList) => {
 
 export const acceptInvitation = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
     const editedList = await listService.acceptInvitation(list.id, user.id);
-    const editedUser = await userService.getUser(user.id);
+    const editedUser: User = await userService.getUser(user.id);
+    const lists: ItemList[] = await listService.getListsByUser();
     dispatch(
         {
             type: "ACCEPT_INVITATION" as "ACCEPT_INVITATION",
             payload: { list: editedList, user: editedUser }
+        }
+    );
+    dispatch(
+        {
+            type: "SET_LISTS" as "SET_LISTS",
+            payload: lists
         }
     );
 };

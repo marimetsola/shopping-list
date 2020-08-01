@@ -18,7 +18,21 @@ const getUserFromToken = async (token: string | null) => {
     if (!decodedToken.id) {
         throw Error('token invalid');
     }
-    const user = await User.findById(decodedToken.id);
+    const user = await User.findById(decodedToken.id)
+        .populate({
+            path: 'lists',
+            populate: {
+                path: 'items',
+                model: 'Item'
+            }
+        })
+        .populate({
+            path: 'guestLists',
+            populate: {
+                path: 'items',
+                model: 'Item'
+            }
+        });
     if (user) {
         return user;
     } else {
