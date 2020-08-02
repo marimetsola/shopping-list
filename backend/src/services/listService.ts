@@ -53,8 +53,31 @@ const authGuestToList = async (req: express.Request) => {
     throw Error('user not authorized');
 };
 
+const authToList = async (req: express.Request, listId: string) => {
+    const token = getTokenFromReq(req);
+    const user = await userService.getUserFromToken(token);
+    const list =
+        await ItemList.findById(listId)
+            .populate('user')
+            .populate('items')
+            .populate('guests');
+    if (!list) {
+        throw Error('list not found');
+    }
+
+    if (user.id === list.user.id) {
+        return { user, list };
+    }
+
+    if (list.guests.map(g => g.id).includes(user.id)) {
+        return { user, list };
+    }
+
+    throw Error('user not authorized');
+};
+
 const authUserOrGuestToList = async (req: express.Request) => {
-    const listId = req.body.listId;
+    const listId = req.params.id;
     const token = getTokenFromReq(req);
     const user = await userService.getUserFromToken(token);
     const list =
@@ -132,7 +155,7 @@ const deleteList = async (req: express.Request) => {
 const addItem = async (req: express.Request) => {
     const itemName = req.body.name;
     if (!itemName) throw Error('item name not provided');
-    const { list } = await authUserToList(req);
+    const { list } = await authUserOrGuestToList(req);
 
     const newItem = new Item({ name: itemName });
     await newItem.save();
@@ -143,7 +166,7 @@ const addItem = async (req: express.Request) => {
 const deleteItem = async (req: express.Request) => {
     const itemId = req.params.itemId;
     // id: string, itemID: string
-    const { list } = await authUserToList(req);
+    const { list } = await authUserOrGuestToList(req);
     if (list) {
         await Item.findByIdAndRemove(itemId);
         ItemList.findByIdAndUpdate(list.id, { $pull: { "items": { id: itemId } } }, { new: true });
@@ -152,7 +175,7 @@ const deleteItem = async (req: express.Request) => {
 
 const editItem = async (req: express.Request) => {
     const item = req.body.item;
-    const { user } = await authUserToList(req);
+    const { user } = await authUserOrGuestToList(req);
     if (user) {
         return await Item.findByIdAndUpdate(item.id, { name: item.name }, { new: true });
     }
@@ -169,7 +192,7 @@ const updateList = async (req: express.Request) => {
         if (!i.name) throw new Error('item with no name provided');
     });
 
-    const { list } = await authUserToList(req);
+    const { list } = await authUserOrGuestToList(req);
 
     await Item.deleteMany({ list: list.id });
 
@@ -193,5 +216,6 @@ export default {
     updateList,
     authUserToList,
     authGuestToList,
-    authUserOrGuestToList
+    authUserOrGuestToList,
+    authToList
 };

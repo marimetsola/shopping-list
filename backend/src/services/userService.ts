@@ -100,7 +100,7 @@ const addUser = async (name: string, password: string) => {
 };
 
 const setActiveList = async (req: express.Request) => {
-    const { user, list } = await listService.authUserOrGuestToList(req);
+    const { user, list } = await listService.authToList(req, req.body.listId);
     user.activeList = list;
     return user.save();
 };
