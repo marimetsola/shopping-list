@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStateValue, clearActiveList, acceptInvitation } from '../state';
+import { useStateValue, clearActiveList, acceptInvitation, declineInvitation } from '../state';
 import { Container, Header, Icon, Divider, Table, Button } from 'semantic-ui-react';
 import { ItemList, User } from '../types';
 import userService from '../services/users';
@@ -30,6 +30,12 @@ const ProfilePage: React.FC = () => {
     const acceptListInvitation = (list: ItemList) => {
         if (user) {
             acceptInvitation(list, user, dispatch);
+        }
+    };
+
+    const declineListInvitation = (list: ItemList) => {
+        if (user) {
+            declineInvitation(list, user, dispatch);
         }
     };
 
@@ -74,7 +80,7 @@ const ProfilePage: React.FC = () => {
                                 <Button positive size="mini" onClick={() => acceptListInvitation(inv)}>
                                     <Icon name='check' />Accept
                                 </Button>
-                                <Button negative size="mini" onClick={() => console.log('click decline')}>
+                                <Button negative size="mini" onClick={() => declineListInvitation(inv)}>
                                     <Icon name='delete' />Decline
                                 </Button>
                             </Table.Cell>

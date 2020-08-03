@@ -111,7 +111,8 @@ const getListsByUser = async (req: express.Request) => {
         const listsByUser = await itemList.find({ user: user })
             .populate('items')
             .populate('invitedGuests')
-            .populate('user');
+            .populate('user')
+            .populate('guests');
         return listsByUser;
     }
     return null;

@@ -70,6 +70,10 @@ export type Action =
     | {
         type: "ACCEPT_INVITATION";
         payload: { list: ItemList; user: User };
+    }
+    | {
+        type: "DECLINE_INVITATION";
+        payload: { list: ItemList; user: User };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -167,6 +171,15 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
         case "ACCEPT_INVITATION":
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
+                user: {
+                    ...state.user as User,
+                    listInvitations: action.payload.user.listInvitations
+                }
+            };
+        case "DECLINE_INVITATION":
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
@@ -412,6 +425,17 @@ export const acceptInvitation = async (list: ItemList, user: User, dispatch: Rea
         {
             type: "SET_LISTS" as "SET_LISTS",
             payload: lists
+        }
+    );
+};
+
+export const declineInvitation = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
+    const editedList = await listService.declineInvitation(list.id, user.id);
+    const editedUser: User = await userService.getUser(user.id);
+    dispatch(
+        {
+            type: "DECLINE_INVITATION" as "DECLINE_INVITATION",
+            payload: { list: editedList, user: editedUser }
         }
     );
 };

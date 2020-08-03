@@ -27,7 +27,13 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         }
     };
     const addInvitation = async (values: { name: string }, action: any) => {
+        console.log(list);
+        if (list.guests.map(g => g.name).includes(values.name) ||
+            list.invitedGuests.map(g => g.name).includes(values.name)) {
+            return action.setErrors({ name: "User is already invited to the list." });
+        }
 
+        // console.log(list.guests.map(g => g.name), values.name);
         try {
             const editedList = await listService.inviteGuest(list.id, values.name);
             dispatch(inviteGuest(editedList));
