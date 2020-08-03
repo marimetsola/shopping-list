@@ -40,6 +40,16 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         }
     };
 
+
+
+    if (user) {
+        if (list.guests.map(g => g.id).includes(user.id)) {
+            console.log('guest logged');
+        } else if (list.user.id === user.id) {
+            console.log('user logged');
+        }
+    }
+
     return (
         <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
             <Modal.Header>Edit list {list.name}</Modal.Header>

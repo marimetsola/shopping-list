@@ -32,6 +32,13 @@ const getUserFromToken = async (token: string | null) => {
                 path: 'items',
                 model: 'Item'
             }
+        })
+        .populate({
+            path: 'guestLists',
+            populate: {
+                path: 'guests',
+                model: 'User'
+            }
         });
     if (user) {
         return user;
@@ -69,7 +76,21 @@ const getUser = async (id: string) => {
         .populate({
             path: 'activeList',
             populate: {
+                path: 'user',
+                model: 'User'
+            }
+        })
+        .populate({
+            path: 'activeList',
+            populate: {
                 path: 'invitedGuests',
+                model: 'User'
+            }
+        })
+        .populate({
+            path: 'activeList',
+            populate: {
+                path: 'guests',
                 model: 'User'
             }
         })

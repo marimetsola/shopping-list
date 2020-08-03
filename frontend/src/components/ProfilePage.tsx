@@ -15,7 +15,7 @@ const ProfilePage: React.FC = () => {
         if (profilePageOpen) {
             dispatch(clearActiveList());
         }
-    }, []);
+    }, [dispatch, profilePageOpen]);
 
     useEffect(() => {
         const getListInvitations = async () => {
@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
             }
         };
         getListInvitations();
-    }, []);
+    }, [user]);
 
     const acceptListInvitation = (list: ItemList) => {
         if (user) {
