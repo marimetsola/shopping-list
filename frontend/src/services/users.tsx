@@ -22,4 +22,9 @@ const setActiveList = async (userId: string, listId: string) => {
     return response.data;
 };
 
-export default { login, register, getUser, setActiveList };
+const clearActiveList = async (userId: string) => {
+    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/clear-active-list`, {}, listService.config());
+    return response.data;
+};
+
+export default { login, register, getUser, setActiveList, clearActiveList };

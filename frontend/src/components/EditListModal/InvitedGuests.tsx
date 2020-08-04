@@ -23,7 +23,6 @@ const InvitedGuests: React.FC<{ list: ItemList }> = ({ list }) => {
     if (!list) {
         return null;
     }
-    // console.log("rendering invitedGuests", list.invitedGuests);
 
     const contStyle = {
         padding: "7px 7px 7px 14px",

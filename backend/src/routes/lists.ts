@@ -96,4 +96,10 @@ router.post('/:id/remove-guest', async (req, res) => {
     res.send(updatedList);
 });
 
+// Remove guest
+router.post('/:id/leave-list', async (req, res) => {
+    const updatedList = await guestService.leaveList(req);
+    res.send(updatedList);
+});
+
 export default router;

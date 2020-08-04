@@ -41,7 +41,8 @@ const authGuestToList = async (req: express.Request) => {
     const list =
         await ItemList.findById(listId)
             .populate('user')
-            .populate('items');
+            .populate('items')
+            .populate('guests');
     if (!list) {
         throw Error('list not found');
     }

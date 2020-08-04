@@ -74,6 +74,10 @@ export type Action =
     | {
         type: "DECLINE_INVITATION";
         payload: { list: ItemList; user: User };
+    }
+    | {
+        type: "LEAVE_LIST";
+        payload: { list: ItemList; user: User };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -188,6 +192,15 @@ export const reducer = (state: State, action: Action): State => {
                     listInvitations: action.payload.user.listInvitations
                 }
             };
+        case "LEAVE_LIST":
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
+                // user: {
+                //     ...state.user as User,
+                //     activeList: null
+                // }
+            };
 
         default:
             return state;
@@ -208,12 +221,14 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
     const list = userFromApi.activeList;
 
     if (list) {
-        dispatch(
-            {
-                type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
-                payload: list
-            }
-        );
+        if (list.guests.map(g => g.id).includes(userFromApi.id) || list.user.id === userFromApi.id) {
+            dispatch(
+                {
+                    type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
+                    payload: list
+                }
+            );
+        }
     }
 
 };
@@ -393,6 +408,22 @@ export const clearActiveList = () => {
     );
 };
 
+export const resetActiveList = async (user: User, dispatch: React.Dispatch<Action>) => {
+    await userService.clearActiveList(user.id);
+    const lists = await listService.getListsByUser();
+    dispatch(
+        {
+            type: "CLEAR_ACTIVE_LIST" as "CLEAR_ACTIVE_LIST"
+        }
+    );
+    dispatch(
+        {
+            type: "SET_LISTS" as "SET_LISTS",
+            payload: lists
+        }
+    );
+};
+
 export const inviteGuest = (editedList: ItemList) => {
     return (
         {
@@ -427,6 +458,13 @@ export const acceptInvitation = async (list: ItemList, user: User, dispatch: Rea
             payload: lists
         }
     );
+    const activeList: ItemList = await userService.setActiveList(editedUser.id, editedList.id);
+    dispatch(
+        {
+            type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
+            payload: activeList
+        }
+    );
 };
 
 export const declineInvitation = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
@@ -435,6 +473,17 @@ export const declineInvitation = async (list: ItemList, user: User, dispatch: Re
     dispatch(
         {
             type: "DECLINE_INVITATION" as "DECLINE_INVITATION",
+            payload: { list: editedList, user: editedUser }
+        }
+    );
+};
+
+export const leaveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
+    const editedList = await listService.leaveList(list.id);
+    const editedUser: User = await userService.getUser(user.id);
+    dispatch(
+        {
+            type: "LEAVE_LIST" as "LEAVE_LIST",
             payload: { list: editedList, user: editedUser }
         }
     );

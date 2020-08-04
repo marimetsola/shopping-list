@@ -127,7 +127,7 @@ const setActiveList = async (req: express.Request) => {
 };
 
 const clearActiveList = async (req: express.Request) => {
-    const { user } = await listService.authUserOrGuestToList(req);
+    const user = await getUserFromReq(req);
     // user.updateOne({ $unset: { activeList: "" } }, { new: true });
     user.activeList = undefined;
     return user.save();

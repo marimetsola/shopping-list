@@ -88,7 +88,6 @@ const ProfilePage: React.FC = () => {
                 </Table.Body>
             </Table>
 
-            {console.log(listInvitations)}
         </Container >
     );
 };

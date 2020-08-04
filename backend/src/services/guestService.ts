@@ -136,10 +136,30 @@ const removeGuest = async (req: express.Request) => {
     return updatedList;
 };
 
+const leaveList = async (req: express.Request) => {
+    const { user, list } = await listService.authGuestToList(req);
+    // const guest = await userService.getUser(req.body.guestId);
+
+    if (!list) {
+        throw Error('no list found');
+    }
+
+    if (!user) {
+        throw Error('no guest user found');
+    }
+
+    const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { guests: user.id } }, { new: true });
+
+    await user.updateOne({ $pull: { guestLists: list.id } });
+
+    return updatedList;
+};
+
 export default {
     addInvitation,
     removeInvitation,
     acceptInvitation,
     declineInvitation,
-    removeGuest
+    removeGuest,
+    leaveList
 };

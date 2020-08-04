@@ -87,4 +87,27 @@ const declineInvitation = async (listID: string, user: string) => {
     return editedList;
 };
 
-export default { config, setToken, getListsByUser, addList, addItem, deleteItem, editItem, deleteList, editList, inviteGuest, uninviteGuest, acceptInvitation, declineInvitation };
+const leaveList = async (listID: string) => {
+    const { data: editedList } = await axios.post<ItemList>(
+        `${apiBaseUrl}/lists/${listID}/leave-list`, {}, config()
+    );
+
+    return editedList;
+};
+
+export default {
+    config,
+    setToken,
+    getListsByUser,
+    addList,
+    addItem,
+    deleteItem,
+    editItem,
+    deleteList,
+    editList,
+    inviteGuest,
+    uninviteGuest,
+    acceptInvitation,
+    declineInvitation,
+    leaveList
+};
