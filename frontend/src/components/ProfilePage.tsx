@@ -43,15 +43,29 @@ const ProfilePage: React.FC = () => {
         return null;
     }
 
+    const listInvTable = () => {
+        return (
+            <Table>
+                <Table.Body>
+                    {listInvitations && listInvitations.map((inv) =>
+                        <Table.Row key={inv.id}>
+                            <Table.Cell>{inv.name} by {inv.user.name}</Table.Cell>
+                            <Table.Cell textAlign='right'>
+                                <Button positive size="mini" onClick={() => acceptListInvitation(inv)}>
+                                    <Icon name='check' />Accept
+                            </Button>
+                                <Button negative size="mini" onClick={() => declineListInvitation(inv)}>
+                                    <Icon name='delete' />Decline
+                            </Button>
+                            </Table.Cell>
+                        </Table.Row>)}
+                </Table.Body>
+            </Table>
+        );
+    };
+
     return (
         <Container style={contStyle}>
-            {/* <Header as='h2'>
-                <Icon name='settings' />
-                <Header.Content>
-                    Account Settings
-                    <Header.Subheader>Manage your preferences</Header.Subheader>
-                </Header.Content>
-            </Header> */}
             <Divider style={dividerStyle} horizontal>
                 <Header as='h4'>
                     Account information
@@ -63,7 +77,6 @@ const ProfilePage: React.FC = () => {
                         <Table.Cell width={2}>Username</Table.Cell>
                         <Table.Cell>{user.name}</Table.Cell>
                     </Table.Row>
-
                 </Table.Body>
             </Table>
             <Divider style={dividerStyle} horizontal>
@@ -71,23 +84,12 @@ const ProfilePage: React.FC = () => {
                     List Invitations
                 </Header>
             </Divider>
-            <Table>
-                <Table.Body>
-                    {listInvitations && listInvitations.map((inv) =>
-                        <Table.Row key={inv.id}>
-                            <Table.Cell>{inv.name} by {inv.user.name}</Table.Cell>
-                            <Table.Cell textAlign='right'>
-                                <Button positive size="mini" onClick={() => acceptListInvitation(inv)}>
-                                    <Icon name='check' />Accept
-                                </Button>
-                                <Button negative size="mini" onClick={() => declineListInvitation(inv)}>
-                                    <Icon name='delete' />Decline
-                                </Button>
-                            </Table.Cell>
-                        </Table.Row>)}
-                </Table.Body>
-            </Table>
-
+            {listInvitations &&
+                (listInvitations.length === 0
+                    ?
+                    <p style={{ paddingBottom: "1.3rem" }}>No new invitations.</p>
+                    :
+                    listInvTable())}
         </Container >
     );
 };

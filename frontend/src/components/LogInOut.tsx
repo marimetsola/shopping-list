@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { useStateValue, setUser, discardUser } from '../state';
+import { useStateValue, setUser, discardUser, closeProfilePage } from '../state';
 import { Menu } from 'semantic-ui-react';
 
 import LoginModal from './LoginModal';
@@ -15,6 +15,7 @@ const LogInOut: React.FC = () => {
 
     const Logout = () => {
         discardUser(dispatch);
+        dispatch(closeProfilePage());
     };
 
     useEffect(() => {

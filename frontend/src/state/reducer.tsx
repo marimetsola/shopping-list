@@ -90,8 +90,7 @@ export const reducer = (state: State, action: Action): State => {
         case "SET_ACTIVE_LIST":
             return {
                 ...state,
-                activeList: action.payload,
-                profilePageOpen: false
+                activeList: action.payload
             };
         case "CLEAR_ACTIVE_LIST":
             return {
@@ -186,7 +185,7 @@ export const reducer = (state: State, action: Action): State => {
         case "DECLINE_INVITATION":
             return {
                 ...state,
-                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
+                // lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
                 user: {
                     ...state.user as User,
                     listInvitations: action.payload.user.listInvitations
