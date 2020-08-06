@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { Modal, Button, Icon, Divider } from 'semantic-ui-react';
+import React, { useState, Fragment } from 'react';
+import { Modal, Button, Icon, Divider, Grid, Segment } from 'semantic-ui-react';
 import { useStateValue, deleteList, inviteGuest, changeActiveList, leaveList, resetActiveList } from '../../state';
 import { ItemList } from '../../types';
 import DeleteListModal from './DeleteListModal';
 import InviteGuestForm from './InviteGuestForm';
 import InvitedGuests from './InvitedGuests';
+import Guests from './Guests';
 import listService from '../../services/lists';
 
 interface Props {
@@ -56,15 +57,44 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         }
     };
 
+    const usersModal = () => {
+        return (
+            <Fragment>
+                <label style={{ fontWeight: 'bold' }}>Owner of the list</label>
+                <Segment size="mini">
+                    <span style={{ fontSize: "1rem" }}>{list.user.name}</span>
+                </Segment>
+                <Divider />
+                <Guests list={list} />
+                <Divider />
+                <InvitedGuests list={list} />
+                <InviteGuestForm onSubmit={addInvitation} />
+                <Divider />
+            </Fragment>
+        );
+    };
+
+    const guestsModal = () => {
+        return (
+            <Fragment>
+                <label style={{ fontWeight: 'bold' }}>Owner of the list</label>
+                <Segment size="mini">
+                    <span style={{ fontSize: "1rem" }}>{list.user.name}</span>
+                </Segment>
+                <Divider />
+                <Guests list={list} />
+                <Divider />
+            </Fragment>
+        );
+    };
+
     if (user) {
         if (list.guests.map(g => g.id).includes(user.id)) {
             return (
                 <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
                     <Modal.Header>Edit list {list.name}</Modal.Header>
                     <Modal.Content>
-                        <label style={{ fontWeight: 'bold' }}>You are a guest on this list.</label>
-                        {/* List Members */}
-                        <Divider />
+                        {guestsModal()}
                         <Button color="orange" onClick={leaveGuestList}>
                             <Icon name='delete' />Leave list
                         </Button>
@@ -82,9 +112,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
                 <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
                     <Modal.Header>Edit list {list.name}</Modal.Header>
                     <Modal.Content>
-                        <InvitedGuests list={list} />
-                        <InviteGuestForm onSubmit={addInvitation} />
-                        <Divider />
+                        {usersModal()}
                         <Button color="red" onClick={() => setDeleteModalOpen(true)}>
                             <Icon name='delete' />Delete list
                         </Button>

@@ -233,12 +233,11 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
 };
 
 export const changeActiveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
-    const userFromApi: User = await userService.getUser(user.id);
-    await userService.setActiveList(userFromApi.id, list.id);
+    const userFromApi: User = await userService.setActiveList(user.id, list.id);
     dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
-            payload: list
+            payload: userFromApi.activeList
         }
     );
 };

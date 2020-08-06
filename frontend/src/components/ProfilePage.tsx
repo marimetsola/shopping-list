@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStateValue, clearActiveList, acceptInvitation, declineInvitation } from '../state';
+import { useStateValue, clearActiveList, acceptInvitation, declineInvitation, closeProfilePage } from '../state';
 import { Container, Header, Icon, Divider, Table, Button } from 'semantic-ui-react';
 import { ItemList, User } from '../types';
 import userService from '../services/users';
@@ -27,9 +27,10 @@ const ProfilePage: React.FC = () => {
         getListInvitations();
     }, [user]);
 
-    const acceptListInvitation = (list: ItemList) => {
+    const acceptListInvitation = async (list: ItemList) => {
         if (user) {
-            acceptInvitation(list, user, dispatch);
+            await acceptInvitation(list, user, dispatch);
+            dispatch(closeProfilePage());
         }
     };
 

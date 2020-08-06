@@ -39,7 +39,9 @@ const getUserFromToken = async (token: string | null) => {
                 path: 'guests',
                 model: 'User'
             }
-        });
+        })
+        .populate('invitedGuests')
+        .populate('activeList');
     if (user) {
         return user;
     } else {
