@@ -5,7 +5,7 @@ import { User } from '../../types';
 import listService from '../../services/lists';
 import { uninviteGuest, changeActiveList, useStateValue } from '../../state';
 
-const Guests: React.FC<{ list: ItemList }> = ({ list }) => {
+const Guests: React.FC<{ list: ItemList; isGuest: boolean }> = ({ list, isGuest }) => {
     const [{ user }, dispatch] = useStateValue();
 
     const removeGuest = async (guest: User) => {
@@ -28,6 +28,34 @@ const Guests: React.FC<{ list: ItemList }> = ({ list }) => {
     const contStyle = {
         padding: "7px 7px 7px 14px",
     };
+
+    const normalStyle = {
+        fontSize: "1rem"
+    };
+    const boldStyle = {
+        fontSize: "1rem",
+        fontWeight: "bold"
+    };
+
+    if (!user) {
+        return null;
+    }
+
+    if (isGuest) {
+        return (
+            <Fragment>
+                <label style={{ fontWeight: 'bold' }}>Guests</label>
+                {list.guests.map(g =>
+                    <Segment size="mini" key={g.id}>
+                        <span style={g.id === user.id ? boldStyle : normalStyle}>{g.name}</span>
+                    </Segment>
+                )
+                }
+            </Fragment >
+
+        );
+    }
+
     return (
         <Fragment>
             <label style={{ fontWeight: 'bold' }}>Guests</label>
@@ -47,7 +75,7 @@ const Guests: React.FC<{ list: ItemList }> = ({ list }) => {
                 </Segment>
             )
             }
-        </Fragment >
+        </Fragment>
     );
 };
 

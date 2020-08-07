@@ -60,12 +60,12 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
     const usersModal = () => {
         return (
             <Fragment>
-                <label style={{ fontWeight: 'bold' }}>Owner of the list</label>
+                <label style={{ fontWeight: "bold" }}>Owner of the list</label>
                 <Segment size="mini">
-                    <span style={{ fontSize: "1rem" }}>{list.user.name}</span>
+                    <span style={{ fontSize: "1rem", fontWeight: "bold" }}>{list.user.name}</span>
                 </Segment>
                 <Divider />
-                <Guests list={list} />
+                <Guests list={list} isGuest={false} />
                 <Divider />
                 <InvitedGuests list={list} />
                 <InviteGuestForm onSubmit={addInvitation} />
@@ -82,7 +82,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
                     <span style={{ fontSize: "1rem" }}>{list.user.name}</span>
                 </Segment>
                 <Divider />
-                <Guests list={list} />
+                <Guests list={list} isGuest={true} />
                 <Divider />
             </Fragment>
         );
@@ -127,6 +127,9 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
             );
         }
     }
+
+    console.log(user);
+    console.log(list);
 
     return (
         <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>

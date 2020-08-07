@@ -140,6 +140,7 @@ const addList = async (req: express.Request) => {
     if (name) {
         const newList = new ItemList({ name, user: user.id });
         const savedList = await newList.save();
+        savedList.populate('user').execPopulate();
         user.lists = user.lists.concat(savedList);
         await user.save();
         return savedList;
