@@ -27,6 +27,20 @@ const InvitedGuests: React.FC<{ list: ItemList }> = ({ list }) => {
     const contStyle = {
         padding: "7px 7px 7px 14px",
     };
+
+    const normalStyle = {
+        fontSize: "1rem"
+    };
+
+    if (list.invitedGuests.length === 0) {
+        return (
+            <Fragment>
+                <label style={{ fontWeight: 'bold' }}>Invitations</label>
+                <p style={normalStyle}>List has no pending invitations.</p>
+            </Fragment >
+
+        );
+    }
     return (
         <Fragment>
             <label style={{ fontWeight: 'bold' }}>Invitations</label>

@@ -95,6 +95,14 @@ const leaveList = async (listID: string) => {
     return editedList;
 };
 
+const removeGuest = async (listID: string, guestId: string) => {
+    const { data: editedList } = await axios.post<ItemList>(
+        `${apiBaseUrl}/lists/${listID}/remove-guest`, { guestId }, config()
+    );
+
+    return editedList;
+};
+
 export default {
     config,
     setToken,
@@ -109,5 +117,6 @@ export default {
     uninviteGuest,
     acceptInvitation,
     declineInvitation,
-    leaveList
+    leaveList,
+    removeGuest
 };

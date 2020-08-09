@@ -27,7 +27,7 @@ export const InviteGuestForm: React.FC<Props> = ({ onSubmit }) => {
                 return (
                     <Form className="form ui">
                         <Field
-                            label="Invite user to the list"
+                            label="Invite a user"
                             placeholder="Name"
                             name="name"
                             component={TextField}

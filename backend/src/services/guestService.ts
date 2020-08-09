@@ -129,7 +129,9 @@ const removeGuest = async (req: express.Request) => {
         throw Error('no guest user found');
     }
 
-    const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { guests: guest.id } }, { new: true });
+    const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { guests: guest.id } }, { new: true })
+        .populate('items')
+        .populate('user');
 
     await guest.updateOne({ $pull: { guestLists: list.id } });
 

@@ -2,25 +2,20 @@ import React, { Fragment } from 'react';
 import { ItemList } from '../../types';
 import { Button, Segment, Grid } from "semantic-ui-react";
 import { User } from '../../types';
-import listService from '../../services/lists';
-import { uninviteGuest, changeActiveList, useStateValue } from '../../state';
+import { removeGuest, useStateValue } from '../../state';
 
 const Guests: React.FC<{ list: ItemList; isGuest: boolean }> = ({ list, isGuest }) => {
     const [{ user }, dispatch] = useStateValue();
 
-    const removeGuest = async (guest: User) => {
-        // try {
-        //     const editedList = await listService.uninviteGuest(list.id, guest.id);
-        //     dispatch(uninviteGuest(editedList));
-        //     if (user) {
-        //         changeActiveList(editedList, user, dispatch);
-        //     }
-        // } catch (error) {
-        //     // action.setErrors({ name: "User does not exist." });
-        //     console.log(error);
-        // }
-        console.log('remove', guest);
+    const removeGuestUser = async (guest: User) => {
+        try {
+            removeGuest(list, guest, dispatch);
+        } catch (error) {
+            // action.setErrors({ name: "User does not exist." });
+            console.log(error);
+        }
     };
+
     if (!list) {
         return null;
     }
@@ -41,6 +36,17 @@ const Guests: React.FC<{ list: ItemList; isGuest: boolean }> = ({ list, isGuest 
         return null;
     }
 
+    if (list.guests.length === 0) {
+        return (
+            <Fragment>
+                <label style={{ fontWeight: 'bold' }}>Guests</label>
+                <p style={normalStyle}>List has no guest users.</p>
+            </Fragment >
+
+        );
+    }
+
+    // user is guest on the said list
     if (isGuest) {
         return (
             <Fragment>
@@ -67,7 +73,7 @@ const Guests: React.FC<{ list: ItemList; isGuest: boolean }> = ({ list, isGuest 
                             <span>{g.name}</span>
                         </Grid.Column>
                         <Grid.Column style={contStyle} floated="right" width={5}>
-                            <Button floated="right" size="mini" color="red" onClick={() => removeGuest(g)} icon="delete" />
+                            <Button floated="right" size="mini" color="red" onClick={() => removeGuestUser(g)} icon="delete" />
                         </Grid.Column>
 
                     </Grid>

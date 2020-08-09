@@ -47,7 +47,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         try {
 
             if (user) {
-                leaveList(list, user, dispatch);
+                leaveList(list, dispatch);
                 resetActiveList(user, dispatch);
                 onClose();
             }
@@ -68,6 +68,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
                 <Guests list={list} isGuest={false} />
                 <Divider />
                 <InvitedGuests list={list} />
+                <Divider />
                 <InviteGuestForm onSubmit={addInvitation} />
                 <Divider />
             </Fragment>
@@ -92,7 +93,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         if (list.guests.map(g => g.id).includes(user.id)) {
             return (
                 <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
-                    <Modal.Header>Edit list {list.name}</Modal.Header>
+                    <Modal.Header>Configure list {list.name}</Modal.Header>
                     <Modal.Content>
                         {guestsModal()}
                         <Button color="orange" onClick={leaveGuestList}>

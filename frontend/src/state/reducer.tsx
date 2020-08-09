@@ -77,7 +77,11 @@ export type Action =
     }
     | {
         type: "LEAVE_LIST";
-        payload: { list: ItemList; user: User };
+        payload: { list: ItemList };
+    }
+    | {
+        type: "REMOVE_GUEST";
+        payload: { list: ItemList };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -195,6 +199,16 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
+                // user: {
+                //     ...state.user as User,
+                //     activeList: null
+                // }
+            };
+        case "REMOVE_GUEST":
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
+                activeList: action.payload.list
                 // user: {
                 //     ...state.user as User,
                 //     activeList: null
@@ -476,13 +490,23 @@ export const declineInvitation = async (list: ItemList, user: User, dispatch: Re
     );
 };
 
-export const leaveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
+export const leaveList = async (list: ItemList, dispatch: React.Dispatch<Action>) => {
     const editedList = await listService.leaveList(list.id);
-    const editedUser: User = await userService.getUser(user.id);
+    // const editedUser: User = await userService.getUser(user.id);
     dispatch(
         {
             type: "LEAVE_LIST" as "LEAVE_LIST",
-            payload: { list: editedList, user: editedUser }
+            payload: { list: editedList }
+        }
+    );
+};
+
+export const removeGuest = async (list: ItemList, guest: User, dispatch: React.Dispatch<Action>) => {
+    const editedList = await listService.removeGuest(list.id, guest.id);
+    dispatch(
+        {
+            type: "REMOVE_GUEST" as "REMOVE_GUEST",
+            payload: { list: editedList }
         }
     );
 };
