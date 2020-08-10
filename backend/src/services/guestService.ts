@@ -131,7 +131,9 @@ const removeGuest = async (req: express.Request) => {
 
     const updatedList = await itemList.findByIdAndUpdate(list.id, { $pull: { guests: guest.id } }, { new: true })
         .populate('items')
-        .populate('user');
+        .populate('user')
+        .populate('guests')
+        .populate('invitedGuests');
 
     await guest.updateOne({ $pull: { guestLists: list.id } });
 

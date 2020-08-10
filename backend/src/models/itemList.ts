@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { ItemListType } from '../types';
+import Item from './item';
+import User from './user';
 
 const itemListSchema = new Schema({
     name: {
@@ -27,6 +29,14 @@ itemListSchema.set('toJSON', {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
+});
+
+itemListSchema.pre('remove', function (next) {
+    Item.deleteMany({ list: this._id }).exec();
+    User.update({ lists: { $in: this._id } }, { $pull: { lists: this._id } }).exec();
+    User.update({ guestLists: { $in: this._id } }, { $pull: { guestLists: this._id } }).exec();
+    User.update({ listInvitations: { $in: this._id } }, { $pull: { listInvitations: this._id } }).exec();
+    next();
 });
 
 export default mongoose.model<ItemListType>('ItemList', itemListSchema);

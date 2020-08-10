@@ -163,6 +163,7 @@ const addItem = async (req: express.Request) => {
     const { list } = await authUserOrGuestToList(req);
 
     const newItem = new Item({ name: itemName });
+    newItem.list = list.id;
     await newItem.save();
     await ItemList.findByIdAndUpdate(list.id, { $push: { "items": newItem } }, { new: true }).populate('items');
     return newItem;
