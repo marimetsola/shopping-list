@@ -41,9 +41,9 @@ itemListSchema.set('toJSON', {
 });
 itemListSchema.pre('remove', function (next) {
     item_1.default.deleteMany({ list: this._id }).exec();
-    user_1.default.update({ lists: { $in: this._id } }, { $pull: { lists: this._id } }).exec();
-    user_1.default.update({ guestLists: { $in: this._id } }, { $pull: { guestLists: this._id } }).exec();
-    user_1.default.update({ listInvitations: { $in: this._id } }, { $pull: { listInvitations: this._id } }).exec();
+    user_1.default.updateMany({ lists: { $in: this._id } }, { $pull: { lists: this._id } }).exec();
+    user_1.default.updateMany({ guestLists: { $in: this._id } }, { $pull: { guestLists: this._id } }).exec();
+    user_1.default.updateMany({ listInvitations: { $in: this._id } }, { $pull: { listInvitations: this._id } }).exec();
     next();
 });
 exports.default = mongoose_1.default.model('ItemList', itemListSchema);

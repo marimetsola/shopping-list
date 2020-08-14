@@ -26,7 +26,7 @@ usersRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 usersRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
-    const user = yield userService_1.default.addUser(body.name, body.password);
+    const user = yield userService_1.default.addUser(body.name, body.email, body.password);
     res.json(user);
 }));
 usersRouter.patch('/:id/set-active-list', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

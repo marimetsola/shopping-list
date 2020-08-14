@@ -405,7 +405,7 @@ describe('when there is initially one user at db', () => {
                 const response = await api
                     .get(`/api/users/${rootUser.id}`)
                     .expect(200);
-                expect(response.body.activeList.id).not.toBe(id);
+                expect(response.body.activeList).toBe(undefined);
             });
         });
 
@@ -441,7 +441,7 @@ describe('when there is initially one user at db', () => {
                     await api
                         .get(`/api/lists/${id}`)
                         .set('Authorization', `Bearer ${token}`);
-                const invitedGuests: string[] = response.body.invitedGuests;
+                const invitedGuests: string[] = response.body.invitedGuests.map((g: UserType) => g.id);
                 expect(invitedGuests).toContain(guestUser.id);
             });
 
@@ -486,7 +486,7 @@ describe('when there is initially one user at db', () => {
                         await api
                             .get(`/api/lists/${id}`)
                             .set('Authorization', `Bearer ${token}`);
-                    const invitedGuests: string[] = response.body.invitedGuests;
+                    const invitedGuests: string[] = response.body.invitedGuests.map((g: UserType) => g.id);
                     expect(invitedGuests).not.toContain(guestUser.id);
                 });
 
@@ -503,7 +503,7 @@ describe('when there is initially one user at db', () => {
                     const invitedGuests: string[] = response.body.invitedGuests;
                     expect(invitedGuests).not.toContain(guestUser.id);
 
-                    const guests: string[] = response.body.guests;
+                    const guests: string[] = response.body.guests.map((g: UserType) => g.id);
                     expect(guests).toContain(guestUser.id);
                 });
 

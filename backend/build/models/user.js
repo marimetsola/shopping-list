@@ -18,6 +18,12 @@ const userSchema = new mongoose_1.default.Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String,
+        index: true,
+        sparse: true,
+        unique: true
+    },
     passwordHash: String,
     lists: [
         {

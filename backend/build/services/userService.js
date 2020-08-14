@@ -116,13 +116,18 @@ const getUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const getUserByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
     return yield user_1.default.findOne({ name });
 });
-const addUser = (name, password) => __awaiter(void 0, void 0, void 0, function* () {
+const addUser = (name, email, password) => __awaiter(void 0, void 0, void 0, function* () {
     const saltRounds = 10;
     const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const user = new user_1.default({
         name,
         passwordHash
     });
+    const validatedEmail = emailRe.test(String(email).toLowerCase()) ? email : null;
+    if (validatedEmail) {
+        user.email = validatedEmail;
+    }
     return yield user.save();
 });
 const setActiveList = (req) => __awaiter(void 0, void 0, void 0, function* () {

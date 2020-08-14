@@ -33,9 +33,9 @@ itemListSchema.set('toJSON', {
 
 itemListSchema.pre('remove', function (next) {
     Item.deleteMany({ list: this._id }).exec();
-    User.update({ lists: { $in: this._id } }, { $pull: { lists: this._id } }).exec();
-    User.update({ guestLists: { $in: this._id } }, { $pull: { guestLists: this._id } }).exec();
-    User.update({ listInvitations: { $in: this._id } }, { $pull: { listInvitations: this._id } }).exec();
+    User.updateMany({ lists: { $in: this._id } }, { $pull: { lists: this._id } }).exec();
+    User.updateMany({ guestLists: { $in: this._id } }, { $pull: { guestLists: this._id } }).exec();
+    User.updateMany({ listInvitations: { $in: this._id } }, { $pull: { listInvitations: this._id } }).exec();
     next();
 });
 

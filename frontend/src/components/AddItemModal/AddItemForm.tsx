@@ -32,6 +32,7 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                             placeholder="Name"
                             name="name"
                             component={TextField}
+                            autoFocus={true}
                         />
                         <Grid>
                             <Grid.Column floated="left" width={5}>

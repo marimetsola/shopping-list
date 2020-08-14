@@ -326,7 +326,7 @@ describe('when there is initially one user at db', () => {
                 const response = yield api
                     .get(`/api/users/${rootUser.id}`)
                     .expect(200);
-                expect(response.body.activeList).toBe(id);
+                expect(response.body.activeList.id).toBe(id);
             }));
             test('fails without authorization', () => __awaiter(void 0, void 0, void 0, function* () {
                 const lists = yield test_helper_1.default.listsInDb();
@@ -338,7 +338,7 @@ describe('when there is initially one user at db', () => {
                 const response = yield api
                     .get(`/api/users/${rootUser.id}`)
                     .expect(200);
-                expect(response.body.activeList).not.toBe(id);
+                expect(response.body.activeList).toBe(undefined);
             }));
         });
         describe('when another user is added', () => {
@@ -368,7 +368,7 @@ describe('when there is initially one user at db', () => {
                 const response = yield api
                     .get(`/api/lists/${id}`)
                     .set('Authorization', `Bearer ${token}`);
-                const invitedGuests = response.body.invitedGuests;
+                const invitedGuests = response.body.invitedGuests.map((g) => g.id);
                 expect(invitedGuests).toContain(guestUser.id);
             }));
             test('invitation to list fails with invalid user name', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -405,7 +405,7 @@ describe('when there is initially one user at db', () => {
                     const response = yield api
                         .get(`/api/lists/${id}`)
                         .set('Authorization', `Bearer ${token}`);
-                    const invitedGuests = response.body.invitedGuests;
+                    const invitedGuests = response.body.invitedGuests.map((g) => g.id);
                     expect(invitedGuests).not.toContain(guestUser.id);
                 }));
                 test('invitation can be accepted', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -418,7 +418,7 @@ describe('when there is initially one user at db', () => {
                         .set('Authorization', `Bearer ${token}`);
                     const invitedGuests = response.body.invitedGuests;
                     expect(invitedGuests).not.toContain(guestUser.id);
-                    const guests = response.body.guests;
+                    const guests = response.body.guests.map((g) => g.id);
                     expect(guests).toContain(guestUser.id);
                 }));
                 test('invitation can be declined', () => __awaiter(void 0, void 0, void 0, function* () {
