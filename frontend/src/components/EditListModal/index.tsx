@@ -111,7 +111,7 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         } else if (list.user.id === user.id) {
             return (
                 <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
-                    <Modal.Header>Edit list {list.name}</Modal.Header>
+                    <Modal.Header>Configure list {list.name}</Modal.Header>
                     <Modal.Content>
                         {usersModal()}
                         <Button color="red" onClick={() => setDeleteModalOpen(true)}>

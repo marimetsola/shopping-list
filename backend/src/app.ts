@@ -47,6 +47,7 @@ if (url) {
     throw new Error('No mongodb url provided');
 }
 
+app.use(express.static('build'));
 app.use(cors());
 app.use(express.json());
 app.use('/api/lists', listRouter);
