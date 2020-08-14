@@ -7,8 +7,8 @@ const login = async (name: string, password: string) => {
     return response.data;
 };
 
-const register = async (name: string, password: string) => {
-    const response = await axios.post(`${apiBaseUrl}/users`, { name, password });
+const register = async (name: string, email: string, password: string) => {
+    const response = await axios.post(`${apiBaseUrl}/users`, { name, email, password });
     return response.data;
 };
 

@@ -110,14 +110,23 @@ const getUserByName = async (name: string) => {
     return await User.findOne({ name });
 };
 
-const addUser = async (name: string, password: string) => {
+const addUser = async (name: string, email: string, password: string) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
+
+
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     const user = new User({
         name,
         passwordHash
     });
+
+    const validatedEmail = emailRe.test(String(email).toLowerCase()) ? email : null;
+
+    if (validatedEmail) {
+        user.email = validatedEmail;
+    }
 
     return await user.save();
 };

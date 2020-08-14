@@ -389,7 +389,8 @@ describe('when there is initially one user at db', () => {
                 const response = await api
                     .get(`/api/users/${rootUser.id}`)
                     .expect(200);
-                expect(response.body.activeList).toBe(id);
+                expect(response.body.activeList.id).toBe(id);
+
             });
 
             test('fails without authorization', async () => {
@@ -404,7 +405,7 @@ describe('when there is initially one user at db', () => {
                 const response = await api
                     .get(`/api/users/${rootUser.id}`)
                     .expect(200);
-                expect(response.body.activeList).not.toBe(id);
+                expect(response.body.activeList.id).not.toBe(id);
             });
         });
 

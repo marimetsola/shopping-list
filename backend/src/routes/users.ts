@@ -15,7 +15,7 @@ usersRouter.get('/:id', async (req, res) => {
 
 usersRouter.post('/', async (req, res) => {
     const body = req.body;
-    const user = await userService.addUser(body.name, body.password);
+    const user = await userService.addUser(body.name, body.email, body.password);
 
     res.json(user);
 });

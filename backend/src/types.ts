@@ -18,6 +18,7 @@ export interface ItemListType extends Document {
 export interface UserType extends Document {
     id: string;
     name: string;
+    email: string;
     passwordHash: string;
     lists: ItemListType[];
     guestLists: ItemListType[];

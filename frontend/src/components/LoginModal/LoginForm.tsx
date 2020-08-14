@@ -37,7 +37,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                             placeholder="Username"
                             name="name"
                             component={TextField}
-                            autoFocus="true"
+                            autoFocus={true}
                         />
                         <Field
                             label="Password"

@@ -4,7 +4,7 @@ import { Field, Formik, Form, } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
 
 interface Props {
-    onSubmit: (values: { name: string; password: string }) => void;
+    onSubmit: (values: { name: string; email: string; password: string }) => void;
     onCancel: () => void;
     registerFailed: boolean;
 }
@@ -14,6 +14,7 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
         <Formik
             initialValues={{
                 name: "",
+                email: "",
                 password: ""
             }}
             onSubmit={onSubmit}
@@ -22,6 +23,9 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                 const errors: { [field: string]: string } = {};
                 if (!values.name) {
                     errors.name = requiredError;
+                }
+                if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                    errors.email = 'Invalid email address';
                 }
                 if (!values.password) {
                     errors.password = requiredError;
@@ -37,13 +41,19 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                             placeholder="Username"
                             name="name"
                             component={TextField}
-                            autoFocus="true"
+                            autoFocus={true}
                         />
                         <Field
                             label="Password"
                             placeholder="Password"
                             name="password"
                             component={PasswordField}
+                        />
+                        <Field
+                            label="Email"
+                            placeholder="Optional email adress. Can be added later in account settings"
+                            name="email"
+                            component={TextField}
                         />
                         {registerFailed &&
                             <Message negative>

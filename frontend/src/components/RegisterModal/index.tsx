@@ -17,9 +17,9 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
         setRegisterFailed(false);
     };
 
-    const Register = async (values: { name: string; password: string }) => {
+    const Register = async (values: { name: string; email: string; password: string }) => {
         try {
-            await register(values.name, values.password, dispatch);
+            await register(values.name, values.email, values.password, dispatch);
             onClose();
         } catch (error) {
             setRegisterFailed(true);

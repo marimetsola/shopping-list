@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { Modal, Button, Icon, Divider, Grid, Segment } from 'semantic-ui-react';
+import { Modal, Button, Icon, Divider, Segment } from 'semantic-ui-react';
 import { useStateValue, deleteList, inviteGuest, changeActiveList, leaveList, resetActiveList } from '../../state';
 import { ItemList } from '../../types';
 import DeleteListModal from './DeleteListModal';

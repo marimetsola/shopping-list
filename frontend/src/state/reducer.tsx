@@ -380,8 +380,8 @@ export const login = async (name: string, password: string, dispatch: React.Disp
     }
 };
 
-export const register = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
-    await userService.register(name, password);
+export const register = async (name: string, email: string, password: string, dispatch: React.Dispatch<Action>) => {
+    await userService.register(name, email, password);
     const user = await userService.login(name, password);
     dispatch(
         {
