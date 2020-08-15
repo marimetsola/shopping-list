@@ -116,15 +116,21 @@ const getUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const getUserByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
     return yield user_1.default.findOne({ name });
 });
+const validateEmail = (email) => {
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRe.test(String(email).toLowerCase())) {
+        return email;
+    }
+    return null;
+};
 const addUser = (name, email, password) => __awaiter(void 0, void 0, void 0, function* () {
     const saltRounds = 10;
     const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const user = new user_1.default({
         name,
         passwordHash
     });
-    const validatedEmail = emailRe.test(String(email).toLowerCase()) ? email : null;
+    const validatedEmail = validateEmail(email);
     if (validatedEmail) {
         user.email = validatedEmail;
     }
@@ -141,6 +147,34 @@ const clearActiveList = (req) => __awaiter(void 0, void 0, void 0, function* () 
     user.activeList = undefined;
     return user.save();
 });
+const changeName = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserFromReq(req);
+    const desiredName = req.body.name;
+    if (yield user_1.default.findOne({ name: desiredName })) {
+        throw Error(`user with the name ${desiredName} already exists`);
+    }
+    else {
+        user.name = desiredName;
+        return yield user.save();
+    }
+});
+const changeEmail = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserFromReq(req);
+    const desiredEmail = req.body.email;
+    if (yield user_1.default.findOne({ email: desiredEmail })) {
+        throw Error(`email adress ${desiredEmail} is already in use`);
+    }
+    else {
+        const validatedEmail = validateEmail(desiredEmail);
+        if (validatedEmail) {
+            user.email = desiredEmail;
+            return yield user.save();
+        }
+        else {
+            throw Error(`${desiredEmail} is not a proper email adress`);
+        }
+    }
+});
 exports.default = {
     getUserFromReq,
     getUserFromToken,
@@ -149,5 +183,7 @@ exports.default = {
     getUser,
     getUserByName,
     setActiveList,
-    clearActiveList
+    clearActiveList,
+    changeName,
+    changeEmail
 };

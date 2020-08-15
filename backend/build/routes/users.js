@@ -37,4 +37,12 @@ usersRouter.patch('/:id/clear-active-list', (req, res) => __awaiter(void 0, void
     const user = yield userService_1.default.clearActiveList(req);
     res.json(user);
 }));
+usersRouter.patch('/:id/change-name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userService_1.default.changeName(req);
+    res.json(user);
+}));
+usersRouter.patch('/:id/change-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userService_1.default.changeEmail(req);
+    res.json(user);
+}));
 exports.default = usersRouter;

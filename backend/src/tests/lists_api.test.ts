@@ -84,7 +84,6 @@ describe('when there is initially one user at db', () => {
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
     });
 
-
     describe('when there are initially some lists saved', () => {
 
         let initialLists: ItemListType[];
@@ -547,6 +546,67 @@ describe('when there is initially one user at db', () => {
                         const guests: string[] = response.body.guests;
                         expect(guests).not.toContain(guestUser.id);
                     });
+                });
+            });
+
+            describe('changing name', () => {
+                test('succeeds with an available name', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-name`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ name: "renamedRoot" })
+                        .expect(200)
+                        .expect('Content-Type', /application\/json/);
+
+                    const response = await api
+                        .get(`/api/users/${rootUser.id}`);
+
+                    expect(response.body.name).toBe('renamedRoot');
+                });
+
+                test('fails with a taken name', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-name`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ name: "guest" })
+                        .expect(400)
+                        .expect('Content-Type', /application\/json/);
+
+                    const response = await api
+                        .get(`/api/users/${rootUser.id}`);
+
+                    expect(response.body.name).toBe('root');
+                });
+            });
+
+            describe('changing email', () => {
+                test('succeeds with a proper email adress', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-email`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ email: "testi@email.com" })
+                        .expect(200)
+                        .expect('Content-Type', /application\/json/);
+
+                    const response = await api
+                        .get(`/api/users/${rootUser.id}`);
+
+                    expect(response.body.email).toBe('testi@email.com');
+                    console.log(response.body);
+                });
+
+                test('fails with an invalid email adress', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-email`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ email: "notanemail" })
+                        .expect(400)
+                        .expect('Content-Type', /application\/json/);
+
+                    const response = await api
+                        .get(`/api/users/${rootUser.id}`);
+
+                    expect(response.body.email).not.toBe('notanemail');
                 });
             });
         });

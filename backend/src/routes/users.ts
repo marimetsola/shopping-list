@@ -30,4 +30,14 @@ usersRouter.patch('/:id/clear-active-list', async (req, res) => {
     res.json(user);
 });
 
+usersRouter.patch('/:id/change-name', async (req, res) => {
+    const user = await userService.changeName(req);
+    res.json(user);
+});
+
+usersRouter.patch('/:id/change-email', async (req, res) => {
+    const user = await userService.changeEmail(req);
+    res.json(user);
+});
+
 export default usersRouter;

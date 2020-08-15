@@ -110,19 +110,25 @@ const getUserByName = async (name: string) => {
     return await User.findOne({ name });
 };
 
+const validateEmail = (email: string) => {
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (emailRe.test(String(email).toLowerCase())) {
+        return email;
+    }
+    return null;
+};
+
 const addUser = async (name: string, email: string, password: string) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
-
-
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     const user = new User({
         name,
         passwordHash
     });
 
-    const validatedEmail = emailRe.test(String(email).toLowerCase()) ? email : null;
+    const validatedEmail = validateEmail(email);
 
     if (validatedEmail) {
         user.email = validatedEmail;
@@ -144,6 +150,33 @@ const clearActiveList = async (req: express.Request) => {
     return user.save();
 };
 
+const changeName = async (req: express.Request) => {
+    const user = await getUserFromReq(req);
+    const desiredName = req.body.name;
+    if (await User.findOne({ name: desiredName })) {
+        throw Error(`user with the name ${desiredName} already exists`);
+    } else {
+        user.name = desiredName;
+        return await user.save();
+    }
+};
+
+const changeEmail = async (req: express.Request) => {
+    const user = await getUserFromReq(req);
+    const desiredEmail = req.body.email;
+    if (await User.findOne({ email: desiredEmail })) {
+        throw Error(`email adress ${desiredEmail} is already in use`);
+    } else {
+        const validatedEmail = validateEmail(desiredEmail);
+        if (validatedEmail) {
+            user.email = desiredEmail;
+            return await user.save();
+        } else {
+            throw Error(`${desiredEmail} is not a proper email adress`);
+        }
+    }
+};
+
 export default {
     getUserFromReq,
     getUserFromToken,
@@ -152,5 +185,7 @@ export default {
     getUser,
     getUserByName,
     setActiveList,
-    clearActiveList
+    clearActiveList,
+    changeName,
+    changeEmail
 };
