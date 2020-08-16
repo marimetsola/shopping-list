@@ -82,6 +82,10 @@ export type Action =
     | {
         type: "REMOVE_GUEST";
         payload: { list: ItemList };
+    }
+    | {
+        type: "CHANGE_USER_NAME";
+        payload: { user: User };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -189,7 +193,6 @@ export const reducer = (state: State, action: Action): State => {
         case "DECLINE_INVITATION":
             return {
                 ...state,
-                // lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
                 user: {
                     ...state.user as User,
                     listInvitations: action.payload.user.listInvitations
@@ -199,20 +202,18 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
-                // user: {
-                //     ...state.user as User,
-                //     activeList: null
-                // }
             };
         case "REMOVE_GUEST":
             return {
                 ...state,
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
                 activeList: action.payload.list
-                // user: {
-                //     ...state.user as User,
-                //     activeList: null
-                // }
+            };
+
+        case "CHANGE_USER_NAME":
+            return {
+                ...state,
+                user: action.payload.user
             };
 
         default:
@@ -507,6 +508,16 @@ export const removeGuest = async (list: ItemList, guest: User, dispatch: React.D
         {
             type: "REMOVE_GUEST" as "REMOVE_GUEST",
             payload: { list: editedList }
+        }
+    );
+};
+
+export const changeUserName = async (user: User, newName: string, dispatch: React.Dispatch<Action>) => {
+    const editedUser = await userService.changeName(user.id, newName);
+    dispatch(
+        {
+            type: "CHANGE_USER_NAME" as "CHANGE_USER_NAME",
+            payload: { user: editedUser }
         }
     );
 };

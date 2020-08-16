@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useStateValue, clearActiveList, acceptInvitation, declineInvitation, closeProfilePage } from '../state';
+import { useStateValue, clearActiveList, acceptInvitation, declineInvitation, closeProfilePage, changeUserName } from '../state';
 import { Container, Header, Icon, Divider, Table, Button } from 'semantic-ui-react';
 import { ItemList, User } from '../types';
 import userService from '../services/users';
+import PromptModal from './PromptModal';
 
 const ProfilePage: React.FC = () => {
     const [{ user, profilePageOpen }, dispatch] = useStateValue();
     const [listInvitations, setListInvitations] = useState<ItemList[]>();
+    const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
 
     const contStyle = { padding: "0 4.6rem" };
     const dividerStyle = { padding: "1rem 0 1rem 0" };
@@ -37,6 +39,13 @@ const ProfilePage: React.FC = () => {
     const declineListInvitation = (list: ItemList) => {
         if (user) {
             declineInvitation(list, user, dispatch);
+        }
+    };
+
+    const changeName = (values: { name: string }) => {
+        if (user) {
+            changeUserName(user, values.name, dispatch);
+            setNameModalOpen(false);
         }
     };
 
@@ -77,6 +86,11 @@ const ProfilePage: React.FC = () => {
                     <Table.Row>
                         <Table.Cell width={2}>Username</Table.Cell>
                         <Table.Cell>{user.name}</Table.Cell>
+                        <Table.Cell textAlign='right'>
+                            <Button color="olive" size="mini" onClick={() => setNameModalOpen(true)}>
+                                <Icon name='edit' />Change
+                            </Button>
+                        </Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table>
@@ -91,6 +105,7 @@ const ProfilePage: React.FC = () => {
                     <p style={{ paddingBottom: "1.3rem" }}>No new invitations.</p>
                     :
                     listInvTable())}
+            <PromptModal open={nameModalOpen} onSubmit={changeName} onClose={() => setNameModalOpen(false)} label="Enter new name" placeHolder="Name" />
         </Container >
     );
 };
