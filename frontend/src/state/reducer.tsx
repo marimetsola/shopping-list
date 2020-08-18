@@ -520,4 +520,19 @@ export const changeUserName = async (user: User, newName: string, dispatch: Reac
             payload: { user: editedUser }
         }
     );
+
+    const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
+    if (loggedUserJSON) {
+        const storedUser = JSON.parse(loggedUserJSON);
+        storedUser.name = editedUser.name;
+        window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(storedUser));
+        dispatch(
+            {
+                type: "SET_USER" as "SET_USER",
+                payload: { user: storedUser }
+            }
+        );
+    }
+
 };
+
