@@ -42,10 +42,16 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    const changeName = (values: { name: string }) => {
+    const changeName = async (values: { name: string }, action: any) => {
         if (user) {
-            changeUserName(user, values.name, dispatch);
-            setNameModalOpen(false);
+            try {
+                const editedUser = await userService.changeName(user.id, values.name);
+                changeUserName(editedUser, dispatch);
+                // action.resetForm();
+                setNameModalOpen(false);
+            } catch (error) {
+                action.setErrors({ name: "Username already taken." });
+            }
         }
     };
 
@@ -105,7 +111,7 @@ const ProfilePage: React.FC = () => {
                     <p style={{ paddingBottom: "1.3rem" }}>No new invitations.</p>
                     :
                     listInvTable())}
-            <PromptModal open={nameModalOpen} onSubmit={changeName} onClose={() => setNameModalOpen(false)} label="Enter new name" placeHolder="Name" />
+            <PromptModal open={nameModalOpen} onSubmit={changeName} onClose={() => setNameModalOpen(false)} label="Enter new name" header="Change username" placeHolder="Name" />
         </Container >
     );
 };

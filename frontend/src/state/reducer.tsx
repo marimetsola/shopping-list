@@ -512,8 +512,7 @@ export const removeGuest = async (list: ItemList, guest: User, dispatch: React.D
     );
 };
 
-export const changeUserName = async (user: User, newName: string, dispatch: React.Dispatch<Action>) => {
-    const editedUser = await userService.changeName(user.id, newName);
+export const changeUserName = async (editedUser: User, dispatch: React.Dispatch<Action>) => {
     dispatch(
         {
             type: "CHANGE_USER_NAME" as "CHANGE_USER_NAME",

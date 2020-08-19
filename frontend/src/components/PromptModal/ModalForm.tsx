@@ -4,7 +4,7 @@ import { Field, Formik, Form, } from "formik";
 import { TextField } from '../FieldForm';
 
 interface Props {
-    onSubmit: (values: { name: string }) => void;
+    onSubmit: (values: { name: string }, action: any) => void;
     onCancel: () => void;
     label: string;
     placeHolder: string;
@@ -17,14 +17,14 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeH
                 name: "",
             }}
             onSubmit={onSubmit}
-            validate={values => {
-                const requiredError = "Field is required";
-                const errors: { [field: string]: string } = {};
-                if (!values.name) {
-                    errors.name = requiredError;
-                }
-                return errors;
-            }}
+        // validate={values => {
+        //     const requiredError = "Field is required";
+        //     const errors: { [field: string]: string } = {};
+        //     if (!values.name) {
+        //         errors.name = requiredError;
+        //     }
+        //     return errors;
+        // }}
         >
             {({ isValid, dirty }) => {
                 return (
