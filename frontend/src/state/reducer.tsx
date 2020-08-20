@@ -86,6 +86,10 @@ export type Action =
     | {
         type: "CHANGE_USER_NAME";
         payload: { user: User };
+    }
+    | {
+        type: "CHANGE_USER_EMAIL";
+        payload: { user: User };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -209,8 +213,12 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l),
                 activeList: action.payload.list
             };
-
         case "CHANGE_USER_NAME":
+            return {
+                ...state,
+                user: action.payload.user
+            };
+        case "CHANGE_USER_EMAIL":
             return {
                 ...state,
                 user: action.payload.user
@@ -524,6 +532,29 @@ export const changeUserName = async (editedUser: User, dispatch: React.Dispatch<
     if (loggedUserJSON) {
         const storedUser = JSON.parse(loggedUserJSON);
         storedUser.name = editedUser.name;
+        window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(storedUser));
+        dispatch(
+            {
+                type: "SET_USER" as "SET_USER",
+                payload: { user: storedUser }
+            }
+        );
+    }
+
+};
+
+export const changeUserEmail = async (editedUser: User, dispatch: React.Dispatch<Action>) => {
+    dispatch(
+        {
+            type: "CHANGE_USER_EMAIL" as "CHANGE_USER_EMAIL",
+            payload: { user: editedUser }
+        }
+    );
+
+    const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
+    if (loggedUserJSON) {
+        const storedUser = JSON.parse(loggedUserJSON);
+        storedUser.email = editedUser.email;
         window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(storedUser));
         dispatch(
             {

@@ -1,30 +1,24 @@
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
-import { Field, Formik, Form, } from "formik";
+import { Field, Formik, Form, FormikHelpers } from "formik";
 import { TextField } from '../FieldForm';
 
 interface Props {
-    onSubmit: (values: { name: string }, action: any) => void;
+    onSubmit: (values: { name: string }, action: FormikHelpers<{ name: string }>) => void;
     onCancel: () => void;
     label: string;
     placeHolder: string;
+    validate: any;
 }
 
-export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeHolder }) => {
+export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeHolder, validate }) => {
     return (
         <Formik
             initialValues={{
                 name: "",
             }}
             onSubmit={onSubmit}
-        // validate={values => {
-        //     const requiredError = "Field is required";
-        //     const errors: { [field: string]: string } = {};
-        //     if (!values.name) {
-        //         errors.name = requiredError;
-        //     }
-        //     return errors;
-        // }}
+            validate={validate}
         >
             {({ isValid, dirty }) => {
                 return (

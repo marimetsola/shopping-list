@@ -32,4 +32,9 @@ const changeName = async (userId: string, name: string) => {
     return response.data;
 };
 
-export default { login, register, getUser, setActiveList, clearActiveList, changeName };
+const changeEmail = async (userId: string, email: string) => {
+    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-email`, { email }, listService.config());
+    return response.data;
+};
+
+export default { login, register, getUser, setActiveList, clearActiveList, changeName, changeEmail };

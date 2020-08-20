@@ -15,6 +15,7 @@ export interface ItemList {
 export interface User {
     id: string;
     name: string;
+    email: string | null;
     token: string;
     listInvitations: ItemList[];
     activeList: ItemList;
