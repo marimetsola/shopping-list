@@ -38,8 +38,8 @@ const Name: React.FC<Props> = ({ user }) => {
             <Table.Cell>{user.name}</Table.Cell>
             <Table.Cell textAlign='right'>
                 <Button color="olive" size="mini" onClick={() => setNameModalOpen(true)}>
-                    <Icon name='edit' />Change
-                            </Button>
+                    <Icon name='edit' />Edit
+                </Button>
             </Table.Cell>
             <PromptModal open={nameModalOpen}
                 onSubmit={changeName}
@@ -48,6 +48,7 @@ const Name: React.FC<Props> = ({ user }) => {
                 header="Change username"
                 placeHolder="Name"
                 validate={undefined}
+                initialValue={user.name}
             />
         </Table.Row>
     );

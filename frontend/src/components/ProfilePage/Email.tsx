@@ -42,20 +42,21 @@ const Email: React.FC<Props> = ({ user }) => {
     return (
         <Table.Row>
             <Table.Cell width={2}>Email</Table.Cell>
-            <Table.Cell>{user.email ? user.email : "No email entered"}</Table.Cell>
+            <Table.Cell>{user.email ? user.email : ""}</Table.Cell>
             <Table.Cell textAlign='right'>
                 <Button color="olive" size="mini" onClick={() => setEmailModalOpen(true)}>
-                    <Icon name='edit' />Change
-                            </Button>
+                    <Icon name='edit' />Edit
+                </Button>
             </Table.Cell>
             <PromptModal
                 open={emailModalOpen}
                 onSubmit={changeEmail}
                 onClose={() => setEmailModalOpen(false)}
-                label="Enter new email"
+                label="Email adress"
                 header="Change email"
                 placeHolder="Email"
                 validate={validate}
+                initialValue={user.email ? user.email : ""}
             />
         </Table.Row>
     );

@@ -9,13 +9,14 @@ interface Props {
     label: string;
     placeHolder: string;
     validate: any;
+    initialValue: string;
 }
 
-export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeHolder, validate }) => {
+export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeHolder, validate, initialValue }) => {
     return (
         <Formik
             initialValues={{
-                name: "",
+                name: initialValue,
             }}
             onSubmit={onSubmit}
             validate={validate}

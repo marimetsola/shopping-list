@@ -11,15 +11,16 @@ interface Props {
     header: string;
     placeHolder: string;
     validate: any;
+    initialValue: string;
 }
 
-const PromptModal: React.FC<Props> = ({ open, onSubmit, onClose, label, header, placeHolder, validate }) => {
+const PromptModal: React.FC<Props> = ({ open, onSubmit, onClose, label, header, placeHolder, validate, initialValue }) => {
 
     return (
         <Modal open={open} onClose={onClose} centered={false} size="tiny" closeIcon>
             <Modal.Header>{header}</Modal.Header>
             <Modal.Content>
-                <ModalForm onSubmit={onSubmit} onCancel={onClose} label={label} placeHolder={placeHolder} validate={validate} />
+                <ModalForm onSubmit={onSubmit} onCancel={onClose} label={label} placeHolder={placeHolder} validate={validate} initialValue={initialValue} />
             </Modal.Content>
         </Modal >
     );

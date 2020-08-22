@@ -163,7 +163,7 @@ const changeName = async (req: express.Request) => {
 
 const changeEmail = async (req: express.Request) => {
     const user = await getUserFromReq(req);
-    const desiredEmail = req.body.email;
+    const desiredEmail = req.body.email.toLowerCase();
     if (await User.findOne({ email: desiredEmail })) {
         throw Error(`email adress ${desiredEmail} is already in use`);
     } else {
