@@ -6,6 +6,10 @@ import userService from '../services/users';
 
 export type Action =
     | {
+        type: "SET_DEVICE_TO_DESKTOP";
+        payload: boolean;
+    }
+    | {
         type: "SET_LISTS";
         payload: ItemList[];
     }
@@ -94,6 +98,11 @@ export type Action =
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case "SET_DEVICE_TO_DESKTOP":
+            return {
+                ...state,
+                isDesktop: action.payload
+            };
         case "SET_LISTS":
             return {
                 ...state,
@@ -227,6 +236,15 @@ export const reducer = (state: State, action: Action): State => {
         default:
             return state;
     }
+};
+
+export const setDesktop = (desktop: boolean) => {
+    return (
+        {
+            type: "SET_DEVICE_TO_DESKTOP" as "SET_DEVICE_TO_DESKTOP",
+            payload: desktop
+        }
+    );
 };
 
 export const setLists = (lists: ItemList[]) => {

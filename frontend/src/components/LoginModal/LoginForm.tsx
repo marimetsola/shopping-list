@@ -62,7 +62,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                                     color="green"
                                     disabled={!dirty || !isValid}
                                 >
-                                    Confirm
+                                    Login
                                 </Button>
                             </Grid.Column>
                         </Grid>

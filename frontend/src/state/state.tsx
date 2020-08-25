@@ -10,6 +10,7 @@ export type State = {
     listModalOpen: boolean;
     user: null | User;
     modalType: ModalType;
+    isDesktop: boolean;
 };
 
 const initialState: State = {
@@ -18,7 +19,8 @@ const initialState: State = {
     profilePageOpen: false,
     listModalOpen: false,
     user: null,
-    modalType: ModalType.None
+    modalType: ModalType.None,
+    isDesktop: true
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

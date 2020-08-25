@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import NavBar from './components/NavBar';
 import ActiveList from './components/ActiveList';
 import AddListModal from './components/AddListModal';
-import { useStateValue } from './state';
+import { useStateValue, setDesktop } from './state';
 import { Container, Header } from 'semantic-ui-react';
-import ModalRoot from './components/ModalRoot';
 import ProfilePage from './components/ProfilePage';
 
 const App: React.FC = () => {
-    const [{ user, profilePageOpen }] = useStateValue();
+    const [{ user, profilePageOpen }, dispatch] = useStateValue();
+
+    const handleMediaQueryChange = (matches: boolean) => {
+        dispatch(setDesktop(matches));
+    };
+
+    const isDesktop = useMediaQuery({ minDeviceWidth: 900 }, undefined, handleMediaQueryChange);
+
+    useEffect(() => {
+        dispatch(setDesktop(isDesktop));
+    }, []);
 
     const contStyle = { padding: "0 4.6rem" };
-
 
     const adviceStyle =
     {
@@ -41,7 +50,6 @@ const App: React.FC = () => {
             <Container>
                 {pageToRender()}
                 <AddListModal />
-                <ModalRoot />
             </Container>
         </div >
     );

@@ -1,14 +1,16 @@
 import React from 'react';
 import ShoppingLists from './ShoppingLists';
-import { Menu, Container, Icon } from 'semantic-ui-react';
+import { Menu, Container, Icon, Dropdown } from 'semantic-ui-react';
 import LogInOut from './LogInOut';
 import Register from './Register';
 import { useStateValue, openProfilePage } from '../state';
 
 const NavBar: React.FC = () => {
-    const [{ user }, dispatch] = useStateValue();
+    const [{ user, isDesktop }, dispatch] = useStateValue();
+
     return (
         <Menu borderless inverted size="massive">
+            {isDesktop ? console.log('NavBar is Desktop') : console.log('NavBar is not Desktop')}
             <Container>
                 <Menu.Item position='left' header>
                     <Icon name="list alternate outline" size="large" />
