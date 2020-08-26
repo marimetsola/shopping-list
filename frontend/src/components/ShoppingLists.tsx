@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import AddNewList from './AddNewList';
 import { useStateValue, setActiveList, setLists, changeActiveList, closeProfilePage } from '../state';
 import { ItemList } from '../types';
@@ -6,7 +6,7 @@ import { Dropdown } from 'semantic-ui-react';
 import listService from '../services/lists';
 
 const ShoppingLists: React.FC = () => {
-    const [{ lists, activeList, user, profilePageOpen }, dispatch] = useStateValue();
+    const [{ lists, activeList, user, profilePageOpen, isDesktop }, dispatch] = useStateValue();
 
     useEffect(() => {
         const fetchLists = async () => {
@@ -37,17 +37,31 @@ const ShoppingLists: React.FC = () => {
         return <AddNewList />;
     }
 
-    return (
-        <Dropdown item text={(activeList && !profilePageOpen) ? activeList.name : 'Select list'} style={{ minWidth: "11rem" }}>
-            <Dropdown.Menu>
+    if (isDesktop) {
+        return (
+            <Dropdown item text={(activeList && !profilePageOpen) ? activeList.name : 'Select list'} style={{ minWidth: "11rem" }}>
+                <Dropdown.Menu>
+                    {lists.map(list => (
+                        <Dropdown.Item key={list.id} onClick={() => setActive(list)}>{list.name}</Dropdown.Item>
+                    ))}
+                    <Dropdown.Divider />
+                    <AddNewList />
+                </Dropdown.Menu>
+            </Dropdown >
+        );
+    } else {
+        return (
+            <Fragment>
+                <Dropdown.Header item text={'Lists'} style={{ minWidth: "11rem" }}>Lists</Dropdown.Header>
+
                 {lists.map(list => (
                     <Dropdown.Item key={list.id} onClick={() => setActive(list)}>{list.name}</Dropdown.Item>
                 ))}
-                <Dropdown.Divider />
                 <AddNewList />
-            </Dropdown.Menu>
-        </Dropdown >
-    );
+                <Dropdown.Divider />
+            </Fragment>
+        );
+    }
 };
 
 export default ShoppingLists;

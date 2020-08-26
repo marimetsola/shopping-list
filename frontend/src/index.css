@@ -1,7 +1,14 @@
-.left-nav-part {
+* {
+    max-width: 100%;
+}
+
+.mobile-logo {
     width: 50%;
 }
 
-.right-nav-part {
+.mobile-menu {
     width: 50%;
+    max-width: 20rem;
+    display: flexbox;
+    justify-self: right;
 }
