@@ -18,7 +18,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         dispatch(setDesktop(isDesktop));
-    }, []);
+    }, [dispatch, isDesktop]);
 
     const contStyle = { padding: "0 4.6rem" };
 

@@ -13,7 +13,7 @@ const ActiveList: React.FC = () => {
     const [editListModalOpen, setEditListModalOpen] = useState<boolean>(false);
     const [editedItem, setEditedItem] = useState<ItemType | null>(null);
     const [addItemModalOpen, setAddItemModalOpen] = useState<boolean>(false);
-    const [{ activeList }, dispatch] = useStateValue();
+    const [{ activeList, isDesktop }, dispatch] = useStateValue();
     const refContainer = useRef<Button>(null);
 
     const focusAddButton = () => {
@@ -70,14 +70,12 @@ const ActiveList: React.FC = () => {
     };
 
 
-    const contStyle = { padding: "0 4.6rem" };
-
     if (!activeList || !activeList.items) {
         return null;
     }
 
     return (
-        <Container style={contStyle}>
+        <Container className={isDesktop ? "cont-style" : "cont-style-mobile"}>
             {<Header as="h3" style={{ paddingRight: "1rem", marginBottom: 0 }}>{activeList.name}</Header>}
             <Divider />
             {activeList.items.length === 0 ? 'List has no items' :

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Icon, Segment, Grid } from 'semantic-ui-react';
 import { Draggable } from 'react-beautiful-dnd';
 import { ItemType } from '../types';
+import { useStateValue } from '../state';
 
 interface Props {
     item: ItemType;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const Item: React.FC<Props> = ({ item, onRemove, onEdit, index }) => {
+    const [{ isDesktop }] = useStateValue();
     return (
         <Draggable draggableId={item.id} index={index} >
             {(provided) => (
@@ -23,7 +25,7 @@ const Item: React.FC<Props> = ({ item, onRemove, onEdit, index }) => {
                             <Grid.Column floated="left" verticalAlign="middle" width={5}>
                                 <span>{item.name}</span>
                             </Grid.Column>
-                            <Grid.Column floated="right" width={5}>
+                            <Grid.Column floated="right" width={10} className={!isDesktop ? "item-button-container-mobile" : ""}>
                                 <Button floated="right" size="tiny" color="red" onClick={onRemove} icon>
                                     <Icon name="delete" />
                                 </Button>
