@@ -160,7 +160,7 @@ const changeName = (req) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const changeEmail = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield getUserFromReq(req);
-    const desiredEmail = req.body.email;
+    const desiredEmail = req.body.email.toLowerCase();
     if (yield user_1.default.findOne({ email: desiredEmail })) {
         throw Error(`email adress ${desiredEmail} is already in use`);
     }
