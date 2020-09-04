@@ -29,7 +29,7 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                     <Form className="form ui">
                         <Field
                             label="Name of the item"
-                            placeholder="Name"
+                            placeholder="Item"
                             name="name"
                             component={TextField}
                             autoFocus={true}
