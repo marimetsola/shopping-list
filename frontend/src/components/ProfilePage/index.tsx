@@ -8,9 +8,8 @@ import userService from '../../services/users';
 import { User } from '../../types';
 
 const ProfilePage: React.FC = () => {
-    const [{ user, profilePageOpen }, dispatch] = useStateValue();
+    const [{ user, profilePageOpen, isDesktop }, dispatch] = useStateValue();
     const [userProp, setUserProp] = useState<User>();
-    const contStyle = { padding: "0 4.6rem" };
     const dividerStyle = { padding: "1rem 0 1rem 0" };
 
     useEffect(() => {
@@ -34,7 +33,7 @@ const ProfilePage: React.FC = () => {
     }
 
     return (
-        <Container style={contStyle}>
+        <Container className={isDesktop ? "cont-style" : "cont-style-mobile"}>
             <Divider style={dividerStyle} horizontal>
                 <Header as='h4'>
                     Account information
