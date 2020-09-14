@@ -102,10 +102,10 @@ const ActiveList: React.FC = () => {
             <AddItemModal open={addItemModalOpen} onClose={() => { setAddItemModalOpen(false); focusAddButton(); }} list={activeList} />
             <EditItemModal open={editedItem ? true : false} onClose={() => setEditedItem(null)} list={activeList} item={editedItem} />
             <Divider />
-            <Button floated="left" color='olive' onClick={() => setEditListModalOpen(true)}>
+            <Button style={{ marginBottom: "1rem" }} floated="left" color='olive' onClick={() => setEditListModalOpen(true)}>
                 <Icon name='edit' />Edit
             </Button>
-            <Button color="green" floated="right" onClick={() => setAddItemModalOpen(true)} ref={refContainer}>
+            <Button style={{ marginBottom: "1rem" }} color="green" floated="right" onClick={() => setAddItemModalOpen(true)} ref={refContainer}>
                 <Icon name="add" />Add Item
             </Button>
         </Container>
