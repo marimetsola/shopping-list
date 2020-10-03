@@ -2,6 +2,7 @@ import React from "react";
 import { Grid, Button, Message } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
+import ButtonLink from '../ButtonLink';
 
 interface Props {
     onSubmit: (values: { name: string; password: string }) => void;
@@ -17,6 +18,8 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                 password: ""
             }}
             onSubmit={onSubmit}
+            validateOnChange={false}
+            validateOnBlur={false}
             validate={values => {
                 const requiredError = "Field is required";
                 const errors: { [field: string]: string } = {};
@@ -49,6 +52,13 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                             <Message negative>
                                 <p>Invalid username or password.</p>
                             </Message>}
+                        <div style={{ marginBottom: "1rem" }}>
+                            <ButtonLink
+                                onClick={(onCancel)}>
+                                Forgot username or password?
+                            </ButtonLink>
+                        </div>
+
                         <Grid>
                             <Grid.Column floated="left" width={5}>
                                 <Button type="button" onClick={onCancel} color="red">
@@ -69,7 +79,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                     </Form>
                 );
             }}
-        </Formik>
+        </Formik >
     );
 };
 

@@ -7,7 +7,8 @@
 }
 
 .cont-style-mobile {
-    padding: 0
+    padding: 0;
+    margin-bottom: 1rem;
 }
 
 .mobile-logo {
@@ -24,3 +25,8 @@
 .item-button-container-mobile {
     margin: 0;
 }
+
+.ui.button.basic.link, .ui.button.basic.link:hover, .ui.button.basic.link:focus {
+    box-shadow: 0 0 !important;
+    padding: unset;
+  }
