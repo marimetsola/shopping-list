@@ -3,14 +3,15 @@ import { useMediaQuery } from 'react-responsive';
 import NavBar from './components/NavBar';
 import ActiveList from './components/ActiveList';
 import AddListModal from './components/AddListModal';
-import { useStateValue, setDesktop } from './state';
+import { useStateValue, setDesktop, setOpenModalType } from './state';
 import { Container, Header, Button, Segment } from 'semantic-ui-react';
 import ProfilePage from './components/ProfilePage';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
+import { ModalType } from './types';
 
 const App: React.FC = () => {
-    const [{ user, profilePageOpen }, dispatch] = useStateValue();
+    const [{ user, profilePageOpen, modalType }, dispatch] = useStateValue();
     const [loginModalOpen, setLoginModalOpen] = useState(false);
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
 
@@ -47,11 +48,11 @@ const App: React.FC = () => {
                 <Container style={contStyle}>
                     <Header as="h2" style={adviceStyle}>Please login or register to use the site.</Header>
                     <Segment basic textAlign={"center"}>
-                        <Button style={{ marginRight: "1rem" }} secondary content="Login" onClick={() => setLoginModalOpen(true)} />
+                        <Button style={{ marginRight: "1rem" }} secondary content="Login" onClick={() => dispatch(setOpenModalType(ModalType.LoginModal))} />
                         <Button style={{ marginLeft: "1rem" }} secondary content="Register" onClick={() => setRegisterModalOpen(true)} />
                     </Segment>
 
-                    <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+                    <LoginModal open={modalType === ModalType.LoginModal} onClose={() => dispatch(setOpenModalType(ModalType.None))} />
                     <RegisterModal open={registerModalOpen} onClose={() => setRegisterModalOpen(false)} />
                 </Container>
             );

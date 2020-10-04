@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { useStateValue, register } from '../../state';
-import LoginForm from './RegisterForm';
+import RegisterForm from './RegisterForm';
+import LoginModal from '../LoginModal';
 
 interface Props {
     open: boolean;
@@ -11,6 +12,7 @@ interface Props {
 const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
     const [, dispatch] = useStateValue();
     const [registerFailed, setRegisterFailed] = useState(false);
+    const [loginModalOpen, setLoginModalOpen] = useState(false);
 
     const closeModal = () => {
         onClose();
@@ -25,15 +27,15 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
             setRegisterFailed(true);
         }
     };
-
     return (
         <Modal open={open} onClose={closeModal} centered={false} size="tiny" closeIcon>
             <Modal.Header>Register</Modal.Header>
             <Modal.Content>
-                <LoginForm onSubmit={Register} onCancel={closeModal} registerFailed={registerFailed} />
+                <RegisterForm onSubmit={Register} onCancel={closeModal} onLoginClick={() => setLoginModalOpen(true)} registerFailed={registerFailed} />
             </Modal.Content>
         </Modal >
     );
+
 };
 
 export default RegisterModal;

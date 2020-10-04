@@ -3,6 +3,7 @@ import { State } from "./state";
 import { ItemList, ItemType, User } from "../types";
 import listService from '../services/lists';
 import userService from '../services/users';
+import { ModalType } from '../types';
 
 export type Action =
     | {
@@ -94,6 +95,9 @@ export type Action =
     | {
         type: "CHANGE_USER_EMAIL";
         payload: { user: User };
+    } | {
+        type: "SET_OPEN_MODAL_TYPE";
+        payload: { modal: ModalType };
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -231,6 +235,11 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 user: action.payload.user
+            };
+        case "SET_OPEN_MODAL_TYPE":
+            return {
+                ...state,
+                modalType: action.payload.modal
             };
 
         default:
@@ -584,3 +593,11 @@ export const changeUserEmail = async (editedUser: User, dispatch: React.Dispatch
 
 };
 
+export const setOpenModalType = (modalType: ModalType) => {
+    return (
+        {
+            type: "SET_OPEN_MODAL_TYPE" as "SET_OPEN_MODAL_TYPE",
+            payload: { modal: modalType }
+        }
+    );
+};

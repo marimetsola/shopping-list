@@ -23,5 +23,6 @@ export interface User {
 
 export enum ModalType {
     None,
-    TestModal
+    TestModal,
+    LoginModal
 }

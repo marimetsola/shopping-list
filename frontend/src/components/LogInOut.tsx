@@ -4,10 +4,10 @@ import { Menu } from 'semantic-ui-react';
 
 import LoginModal from './LoginModal';
 
-interface Props {
-    onLogin: (values: { name: string; password: string }) => void;
-    onCancel: () => void;
-}
+// interface Props {
+//     onLogin: (values: { name: string; password: string }) => void;
+//     onCancel: () => void;
+// }
 
 const LogInOut: React.FC = () => {
     const [{ user }, dispatch] = useStateValue();
