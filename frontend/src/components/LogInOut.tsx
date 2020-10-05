@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { useStateValue, setUser, discardUser, closeProfilePage } from '../state';
+import { useStateValue, setUser, discardUser, closeProfilePage, setOpenModalType } from '../state';
 import { Menu } from 'semantic-ui-react';
 
 import LoginModal from './LoginModal';
+import { ModalType } from '../types';
 
 // interface Props {
 //     onLogin: (values: { name: string; password: string }) => void;
@@ -10,8 +11,7 @@ import LoginModal from './LoginModal';
 // }
 
 const LogInOut: React.FC = () => {
-    const [{ user }, dispatch] = useStateValue();
-    const [loginModalOpen, setLoginModalOpen] = useState(false);
+    const [{ user, modalType }, dispatch] = useStateValue();
 
     const Logout = () => {
         discardUser(dispatch);
@@ -30,13 +30,11 @@ const LogInOut: React.FC = () => {
                     Logout
                 </Menu.Item>
                 :
-                <Menu.Item type="button" onClick={() => setLoginModalOpen(true)} color="grey">
+                <Menu.Item type="button" onClick={() => dispatch(setOpenModalType(ModalType.LoginModal))} color="grey">
                     Login
                 </Menu.Item>
             }
-
-            <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
-        </Fragment>
+        </Fragment >
     );
 };
 

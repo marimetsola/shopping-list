@@ -12,7 +12,6 @@ interface Props {
 const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
     const [, dispatch] = useStateValue();
     const [registerFailed, setRegisterFailed] = useState(false);
-    const [loginModalOpen, setLoginModalOpen] = useState(false);
 
     const closeModal = () => {
         onClose();
@@ -31,7 +30,7 @@ const RegisterModal: React.FC<Props> = ({ open, onClose }) => {
         <Modal open={open} onClose={closeModal} centered={false} size="tiny" closeIcon>
             <Modal.Header>Register</Modal.Header>
             <Modal.Content>
-                <RegisterForm onSubmit={Register} onCancel={closeModal} onLoginClick={() => setLoginModalOpen(true)} registerFailed={registerFailed} />
+                <RegisterForm onSubmit={Register} onCancel={closeModal} registerFailed={registerFailed} />
             </Modal.Content>
         </Modal >
     );

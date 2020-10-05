@@ -1,1 +1,0 @@
-fix list removal, id lingers in user's array

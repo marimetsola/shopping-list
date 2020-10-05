@@ -2,11 +2,15 @@ import React from 'react';
 import { useStateValue } from '../state';
 import ModalTest from './ModalTest';
 import LoginModal from './LoginModal';
+import RegisterModal from './RegisterModal';
+import RecoveryModal from './RecoveryModal';
 import { ModalType } from '../types';
 
 const MODAL_COMPONENTS = {
     [ModalType.TestModal]: ModalTest,
     [ModalType.LoginModal]: LoginModal,
+    [ModalType.RegisterModal]: RegisterModal,
+    [ModalType.RecoveryModal]: RecoveryModal
 };
 
 interface Props {

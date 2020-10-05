@@ -3,6 +3,8 @@ import { Grid, Button, Message } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
 import ButtonLink from '../ButtonLink';
+import { setOpenModalType, useStateValue } from '../../state';
+import { ModalType } from "../../types";
 
 interface Props {
     onSubmit: (values: { name: string; password: string }) => void;
@@ -11,6 +13,7 @@ interface Props {
 }
 
 export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) => {
+    const [, dispatch] = useStateValue();
     return (
         <Formik
             initialValues={{
@@ -54,7 +57,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                             </Message>}
                         <div style={{ marginBottom: "1rem" }}>
                             <ButtonLink
-                                onClick={(onCancel)}>
+                                onClick={() => dispatch(setOpenModalType(ModalType.RecoveryModal))}>
                                 Forgot username or password?
                             </ButtonLink>
                         </div>

@@ -1,24 +1,19 @@
 import React from "react";
 import { Grid, Button, Message } from "semantic-ui-react";
-import { Field, Formik, Form, } from "formik";
+import { Field, Formik, Form } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
-import ButtonLink from '../ButtonLink';
-import { setOpenModalType, useStateValue } from '../../state';
-import { ModalType } from "../../types";
 
 interface Props {
-    onSubmit: (values: { name: string; email: string; password: string }) => void;
+    onSubmit: (values: { name: string; password: string }) => void;
     onCancel: () => void;
-    registerFailed: boolean;
+    loginFailed: boolean;
 }
 
-export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFailed }) => {
-    const [, dispatch] = useStateValue();
+export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) => {
     return (
         <Formik
             initialValues={{
                 name: "",
-                email: "",
                 password: ""
             }}
             onSubmit={onSubmit}
@@ -29,9 +24,6 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                 const errors: { [field: string]: string } = {};
                 if (!values.name) {
                     errors.name = requiredError;
-                }
-                if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                    errors.email = 'Invalid email address';
                 }
                 if (!values.password) {
                     errors.password = requiredError;
@@ -55,22 +47,13 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                             name="password"
                             component={PasswordField}
                         />
-                        <Field
-                            label="Email"
-                            placeholder="Optional email adress. Can be added later in account settings"
-                            name="email"
-                            component={TextField}
-                        />
-                        {registerFailed &&
+                        {loginFailed &&
                             <Message negative>
-                                <p>Username already taken.</p>
+                                <p>Invalid username or password.</p>
                             </Message>}
                         <div style={{ marginBottom: "1rem" }}>
-                            <ButtonLink
-                                onClick={() => dispatch(setOpenModalType(ModalType.LoginModal))}>
-                                Already have an account? Click here to login.
-                            </ButtonLink>
                         </div>
+
                         <Grid>
                             <Grid.Column floated="left" width={5}>
                                 <Button type="button" onClick={onCancel} color="red">
@@ -84,15 +67,15 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                                     color="green"
                                     disabled={!dirty || !isValid}
                                 >
-                                    Confirm
+                                    Login
                                 </Button>
                             </Grid.Column>
                         </Grid>
                     </Form>
                 );
             }}
-        </Formik>
+        </Formik >
     );
 };
 
-export default RegisterForm;
+export default RecoveryForm;
