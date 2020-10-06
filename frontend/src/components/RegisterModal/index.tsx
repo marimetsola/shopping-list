@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { useStateValue, register } from '../../state';
 import RegisterForm from './RegisterForm';
-import LoginModal from '../LoginModal';
 
 interface Props {
     open: boolean;

@@ -1,17 +1,11 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useStateValue, setUser, discardUser, closeProfilePage, setOpenModalType } from '../state';
 import { Menu } from 'semantic-ui-react';
 
-import LoginModal from './LoginModal';
 import { ModalType } from '../types';
 
-// interface Props {
-//     onLogin: (values: { name: string; password: string }) => void;
-//     onCancel: () => void;
-// }
-
 const LogInOut: React.FC = () => {
-    const [{ user, modalType }, dispatch] = useStateValue();
+    const [{ user }, dispatch] = useStateValue();
 
     const Logout = () => {
         discardUser(dispatch);

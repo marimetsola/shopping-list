@@ -1,13 +1,10 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { useStateValue, setOpenModalType } from '../state';
 import { Menu } from 'semantic-ui-react';
-
-import RegisterModal from './RegisterModal';
 import { ModalType } from '../types';
 
 const Register: React.FC = () => {
-    const [{ user, modalType }, dispatch] = useStateValue();
-    const [registerModalOpen, setRegisterModalOpen] = useState(false);
+    const [{ user }, dispatch] = useStateValue();
 
     return (
         <Fragment>

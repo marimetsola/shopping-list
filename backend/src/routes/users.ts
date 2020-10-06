@@ -9,8 +9,13 @@ usersRouter.get('/', async (_req, res) => {
 });
 
 usersRouter.get('/:id', async (req, res) => {
-    const users = await userService.getUser(req.params.id);
-    res.json(users);
+    const user = await userService.getUser(req.params.id);
+    res.json(user);
+});
+
+usersRouter.get('/find-email/:email', async (req, res) => {
+    const user = await userService.getUserByEmail(req.params.email);
+    res.json(user);
 });
 
 usersRouter.post('/', async (req, res) => {
@@ -38,6 +43,10 @@ usersRouter.patch('/:id/change-name', async (req, res) => {
 usersRouter.patch('/:id/change-email', async (req, res) => {
     const user = await userService.changeEmail(req);
     res.json(user);
+});
+
+usersRouter.post('reset-password', async (req, res) => {
+    res.json(await userService.resetPassword(req));
 });
 
 export default usersRouter;

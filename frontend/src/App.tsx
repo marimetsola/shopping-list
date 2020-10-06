@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import NavBar from './components/NavBar';
 import ActiveList from './components/ActiveList';
 import AddListModal from './components/AddListModal';
 import { useStateValue, setDesktop, setOpenModalType } from './state';
-import { Container, Header, Button, Segment, Modal } from 'semantic-ui-react';
+import { Container, Header, Button, Segment } from 'semantic-ui-react';
 import ProfilePage from './components/ProfilePage';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';

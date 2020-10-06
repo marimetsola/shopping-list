@@ -1,32 +1,31 @@
 import React from "react";
 import { Grid, Button, Message } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
-import { TextField, PasswordField } from '../FieldForm';
+import { TextField } from '../FieldForm';
+import ButtonLink from '../ButtonLink';
 
 interface Props {
-    onSubmit: (values: { name: string; password: string }) => void;
+    onSubmit: (values: { email: string }) => void;
     onCancel: () => void;
-    loginFailed: boolean;
+    onOpenResetModal: () => void;
+    emailNotFound: boolean;
 }
 
-export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) => {
+export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenResetModal, emailNotFound }) => {
     return (
         <Formik
             initialValues={{
-                name: "",
-                password: ""
+                email: "",
             }}
             onSubmit={onSubmit}
-            validateOnChange={false}
+            validateOnChange={true}
             validateOnBlur={false}
             validate={values => {
-                const requiredError = "Field is required";
                 const errors: { [field: string]: string } = {};
-                if (!values.name) {
-                    errors.name = requiredError;
-                }
-                if (!values.password) {
-                    errors.password = requiredError;
+                if (!values.email) {
+                    errors.email = "Field is required";
+                } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                    errors.email = "Invalid email address";
                 }
                 return errors;
             }}
@@ -35,21 +34,21 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed 
                 return (
                     <Form className="form ui">
                         <Field
-                            label="Username"
-                            placeholder="Username"
-                            name="name"
+                            label="Email"
+                            placeholder="Email"
+                            name="email"
                             component={TextField}
                             autoFocus={true}
                         />
-                        <Field
-                            label="Password"
-                            placeholder="Password"
-                            name="password"
-                            component={PasswordField}
-                        />
-                        {loginFailed &&
+                        {emailNotFound &&
                             <Message negative>
-                                <p>Invalid username or password.</p>
+                                <p>Email is not in use.</p>
+                                {/* <div className="center-container">
+                                    <ButtonLink
+                                        onClick={onOpenLogin}>
+                                        Click here to login.
+                                    </ButtonLink>
+                                </div> */}
                             </Message>}
                         <div style={{ marginBottom: "1rem" }}>
                         </div>

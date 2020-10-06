@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Modal } from 'semantic-ui-react';
-import { useStateValue, login } from '../../state';
+import { useStateValue, setOpenModalType } from '../../state';
+import { ModalType } from '../../types';
 import RecoveryForm from './RecoveryForm';
+import userService from '../../services/users';
 
 interface Props {
     open: boolean;
@@ -10,19 +12,29 @@ interface Props {
 
 const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
     const [, dispatch] = useStateValue();
-    const [loginFailed, setLoginFailed] = useState(false);
+    const [emailNotFound, setEmailNotFound] = useState(false);
 
     const closeModal = () => {
         onClose();
-        setLoginFailed(false);
+        setEmailNotFound(false);
     };
 
-    const Login = async (values: { name: string; password: string }) => {
+    const openResetModal = () => {
+        closeModal();
+        dispatch(setOpenModalType(ModalType.LoginModal));
+    };
+
+    const sendMail = async (values: { email: string }) => {
         try {
-            await login(values.name, values.password, dispatch);
-            closeModal();
+            const response = await userService.getUserByEmail(values.email);
+            console.log(response);
+            if (response) {
+                // Open password reset modal
+            } else {
+                setEmailNotFound(true);
+            }
         } catch (error) {
-            setLoginFailed(true);
+            setEmailNotFound(true);
         }
     };
 
@@ -30,7 +42,7 @@ const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
         <Modal open={open} onClose={closeModal} centered={false} size="tiny" closeIcon>
             <Modal.Header>Recover account information</Modal.Header>
             <Modal.Content>
-                <RecoveryForm onSubmit={Login} onCancel={closeModal} loginFailed={loginFailed} />
+                <RecoveryForm onSubmit={sendMail} onCancel={closeModal} onOpenResetModal={openResetModal} emailNotFound={emailNotFound} />
             </Modal.Content>
         </Modal >
     );

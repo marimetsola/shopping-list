@@ -13,14 +13,14 @@ const LoginModal: React.FC<Props> = ({ open, onClose }) => {
     const [loginFailed, setLoginFailed] = useState(false);
 
     const closeModal = () => {
-        onClose();
         setLoginFailed(false);
+        onClose();
     };
 
     const Login = async (values: { name: string; password: string }) => {
         try {
-            await login(values.name, values.password, dispatch);
             closeModal();
+            await login(values.name, values.password, dispatch);
         } catch (error) {
             setLoginFailed(true);
         }
