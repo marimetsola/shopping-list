@@ -7,11 +7,13 @@ import ButtonLink from '../ButtonLink';
 interface Props {
     onSubmit: (values: { email: string }) => void;
     onCancel: () => void;
-    onOpenResetModal: () => void;
+    onOpenLoginModal: () => void;
+    emailFound: boolean;
     emailNotFound: boolean;
+    resetMessage: () => void;
 }
 
-export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenResetModal, emailNotFound }) => {
+export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenLoginModal, emailFound, emailNotFound, resetMessage }) => {
     return (
         <Formik
             initialValues={{
@@ -27,6 +29,7 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenResetM
                 } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                     errors.email = "Invalid email address";
                 }
+                resetMessage();
                 return errors;
             }}
         >
@@ -40,6 +43,16 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenResetM
                             component={TextField}
                             autoFocus={true}
                         />
+                        {emailFound &&
+                            <Message info>
+                                <p style={{ textAlign: "center" }}>Password reset email successfully sent.</p>
+                                <div className="center-container">
+                                    <ButtonLink
+                                        onClick={onOpenLoginModal}>
+                                        Click here to login.
+                                    </ButtonLink>
+                                </div>
+                            </Message>}
                         {emailNotFound &&
                             <Message negative>
                                 <p>Email is not in use.</p>

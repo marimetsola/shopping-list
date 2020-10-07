@@ -12,6 +12,7 @@ interface Props {
 
 const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
     const [, dispatch] = useStateValue();
+    const [emailFound, setEmailFound] = useState(false);
     const [emailNotFound, setEmailNotFound] = useState(false);
 
     const closeModal = () => {
@@ -19,7 +20,7 @@ const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
         setEmailNotFound(false);
     };
 
-    const openResetModal = () => {
+    const openLoginModal = () => {
         closeModal();
         dispatch(setOpenModalType(ModalType.LoginModal));
     };
@@ -29,8 +30,10 @@ const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
             const response = await userService.getUserByEmail(values.email);
             console.log(response);
             if (response) {
-                // Open password reset modal
+                setEmailNotFound(false);
+                setEmailFound(true);
             } else {
+                setEmailFound(false);
                 setEmailNotFound(true);
             }
         } catch (error) {
@@ -38,11 +41,22 @@ const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
         }
     };
 
+    const resetMessage = () => {
+        setEmailFound(false);
+        setEmailNotFound(false);
+    };
+
     return (
         <Modal open={open} onClose={closeModal} centered={false} size="tiny" closeIcon>
             <Modal.Header>Recover account information</Modal.Header>
             <Modal.Content>
-                <RecoveryForm onSubmit={sendMail} onCancel={closeModal} onOpenResetModal={openResetModal} emailNotFound={emailNotFound} />
+                <RecoveryForm
+                    onSubmit={sendMail}
+                    onCancel={closeModal}
+                    onOpenLoginModal={openLoginModal}
+                    emailFound={emailFound}
+                    emailNotFound={emailNotFound}
+                    resetMessage={resetMessage} />
             </Modal.Content>
         </Modal >
     );

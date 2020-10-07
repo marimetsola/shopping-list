@@ -183,19 +183,19 @@ const changeEmail = async (req: express.Request) => {
 };
 
 const resetPassword = async (req: express.Request) => {
-    const user = await getUserFromReq(req);
-    const desiredEmail = req.body.email.toLowerCase();
-    if (await User.findOne({ email: desiredEmail })) {
-        throw Error(`email adress ${desiredEmail} is already in use`);
-    } else {
-        const validatedEmail = validateEmail(desiredEmail);
-        if (validatedEmail) {
-            user.email = desiredEmail;
-            return await user.save();
-        } else {
-            throw Error(`${desiredEmail} is not a proper email adress`);
-        }
-    }
+    // const user = await getUserFromReq(req);
+    // const desiredEmail = req.body.email.toLowerCase();
+    // if (await User.findOne({ email: desiredEmail })) {
+    //     throw Error(`email adress ${desiredEmail} is already in use`);
+    // } else {
+    //     const validatedEmail = validateEmail(desiredEmail);
+    //     if (validatedEmail) {
+    //         user.email = desiredEmail;
+    //         return await user.save();
+    //     } else {
+    //         throw Error(`${desiredEmail} is not a proper email adress`);
+    //     }
+    // }
 };
 
 export default {
