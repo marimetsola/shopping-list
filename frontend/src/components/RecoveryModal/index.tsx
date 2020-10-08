@@ -48,7 +48,7 @@ const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
 
     return (
         <Modal open={open} onClose={closeModal} centered={false} size="tiny" closeIcon>
-            <Modal.Header>Recover account information</Modal.Header>
+            <Modal.Header>Request a password reset</Modal.Header>
             <Modal.Content>
                 <RecoveryForm
                     onSubmit={sendMail}

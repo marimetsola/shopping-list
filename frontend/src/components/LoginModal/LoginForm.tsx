@@ -39,8 +39,8 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                 return (
                     <Form className="form ui">
                         <Field
-                            label="Username"
-                            placeholder="Username"
+                            label="Username or email"
+                            placeholder="Username / email"
                             name="name"
                             component={TextField}
                             autoFocus={true}
@@ -58,7 +58,7 @@ export const LoginForm: React.FC<Props> = ({ onSubmit, onCancel, loginFailed }) 
                         <div style={{ marginBottom: "1rem" }}>
                             <ButtonLink
                                 onClick={() => dispatch(setOpenModalType(ModalType.RecoveryModal))}>
-                                Forgot username or password?
+                                Forgot password?
                             </ButtonLink>
                         </div>
 
