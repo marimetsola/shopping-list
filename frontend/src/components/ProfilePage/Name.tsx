@@ -48,6 +48,7 @@ const Name: React.FC<Props> = ({ user }) => {
                     label="Enter new name"
                     header="Change username"
                     placeHolder="Name"
+                    type="name"
                     validate={undefined}
                     initialValue={user.name}
                 />
@@ -71,6 +72,7 @@ const Name: React.FC<Props> = ({ user }) => {
                     label="Enter new name"
                     header="Change username"
                     placeHolder="Name"
+                    type="name"
                     validate={undefined}
                     initialValue={user.name}
                 />

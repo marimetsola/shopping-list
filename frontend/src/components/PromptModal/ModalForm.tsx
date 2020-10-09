@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form, FormikHelpers } from "formik";
-import { TextField } from '../FieldForm';
+import { TextField, PasswordField } from '../FieldForm';
 
 interface Props {
     onSubmit: (values: { name: string }, action: FormikHelpers<{ name: string }>) => void;
@@ -10,9 +10,10 @@ interface Props {
     placeHolder: string;
     validate: any;
     initialValue: string;
+    type: string;
 }
 
-export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeHolder, validate, initialValue }) => {
+export const ModalForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeHolder, validate, initialValue, type }) => {
     return (
         <Formik
             initialValues={{
@@ -20,6 +21,7 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeH
             }}
             onSubmit={onSubmit}
             validate={validate}
+            validateOnChange={true}
         >
             {({ isValid, dirty }) => {
                 return (
@@ -28,7 +30,8 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeH
                             label={label}
                             placeholder={placeHolder}
                             name="name"
-                            component={TextField}
+                            type={type}
+                            component={type === 'password' ? PasswordField : TextField}
                             autoFocus={true}
                         />
                         <Grid>
@@ -55,4 +58,4 @@ export const AddItemForm: React.FC<Props> = ({ onSubmit, onCancel, label, placeH
     );
 };
 
-export default AddItemForm;
+export default ModalForm;

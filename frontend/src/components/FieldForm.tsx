@@ -26,11 +26,12 @@ export const TextField: React.FC<TextProps> = ({
 export const PasswordField: React.FC<TextProps> = ({
     field,
     label,
-    placeholder
+    placeholder,
+    autoFocus
 }) => (
         <UIForm.Field>
             <label>{label}</label>
-            <Field type="password" placeholder={placeholder} {...field} autoFocus={false} />
+            <Field type="password" placeholder={placeholder} {...field} autoFocus={autoFocus} />
             <div style={{ color: 'red' }}>
                 <ErrorMessage name={field.name} />
             </div>

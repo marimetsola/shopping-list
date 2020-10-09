@@ -54,6 +54,7 @@ const Email: React.FC<Props> = ({ user }) => {
                     onSubmit={changeEmail}
                     onClose={() => setEmailModalOpen(false)}
                     label="Email adress"
+                    type="email"
                     header="Change email"
                     placeHolder="Email"
                     validate={validate}
@@ -80,6 +81,7 @@ const Email: React.FC<Props> = ({ user }) => {
                     onSubmit={changeEmail}
                     onClose={() => setEmailModalOpen(false)}
                     label="Email adress"
+                    type="email"
                     header="Change email"
                     placeHolder="Email"
                     validate={validate}

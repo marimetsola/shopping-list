@@ -182,6 +182,22 @@ const changeEmail = async (req: express.Request) => {
     }
 };
 
+const changePassword = async (req: express.Request) => {
+    const user = await getUserFromReq(req);
+    const password = req.body.password;
+
+    if (password.length < 5) {
+        throw Error(`Password is too short. Use at least 5 characters`);
+    }
+
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    user.passwordHash = passwordHash;
+
+    return await user.save();
+};
+
 const resetPassword = async (req: express.Request) => {
     // const user = await getUserFromReq(req);
     // const desiredEmail = req.body.email.toLowerCase();
@@ -210,5 +226,6 @@ export default {
     clearActiveList,
     changeName,
     changeEmail,
+    changePassword,
     resetPassword
 };

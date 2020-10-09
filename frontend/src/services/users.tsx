@@ -42,9 +42,14 @@ const changeEmail = async (userId: string, email: string) => {
     return response.data;
 };
 
+const changePassword = async (userId: string, password: string) => {
+    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-password`, { password }, listService.config());
+    return response.data;
+};
+
 const resetPassword = async (email: string) => {
     const response = await axios.patch(`${apiBaseUrl}/users/reset-password`, { email }, listService.config());
     return response.data;
 };
 
-export default { login, register, getUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, resetPassword };
+export default { login, register, getUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, changePassword, resetPassword };

@@ -3,6 +3,7 @@ import { useStateValue, clearActiveList } from '../../state';
 import { Container, Header, Divider, Table } from 'semantic-ui-react';
 import Name from './Name';
 import Email from './Email';
+import Password from './Password';
 import ListInvitations from './ListInvitations';
 import userService from '../../services/users';
 import { User } from '../../types';
@@ -42,6 +43,7 @@ const ProfilePage: React.FC = () => {
                 <Table.Body>
                     <Name user={userProp} />
                     <Email user={userProp} />
+                    <Password user={userProp} />
                 </Table.Body>
             </Table>
             <ListInvitations user={userProp} />
