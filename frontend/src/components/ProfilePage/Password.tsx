@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useStateValue, changeUserName } from '../../state';
+import { useStateValue } from '../../state';
 import { Icon, Table, Button } from 'semantic-ui-react';
 import { FormikHelpers } from "formik";
 import userService from '../../services/users';
-import PromptModal from '../PromptModal';
+import PasswordChangeModal from '../PasswordChangeModal';
 import { User } from '../../types';
 
 interface Props {
@@ -15,23 +15,27 @@ const Password: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
 
-    const changePassword = async (values: { name: string }, action: FormikHelpers<{ name: string }>) => {
+    const changePassword = async (values: { oldPassword: string; newPassword0: string; newPassword1: string },
+        action: FormikHelpers<{ oldPassword: string; newPassword0: string; newPassword1: string }>) => {
+        if (values.newPassword0 !== values.newPassword1) {
+            return action.setErrors({ newPassword1: "Passwords must match!" });
+        }
         if (user) {
             try {
-                await userService.changePassword(user.id, values.name);
+                await userService.changePassword(user.id, values.oldPassword, values.newPassword0);
                 // const editedUser = await userService.changePassword(user.id, values.name);
                 // changeUserName(editedUser, dispatch);
 
                 setPasswordModalOpen(false);
             } catch (error) {
-                action.setErrors({ name: "Password is too short. Please use at least 5 characters." });
+                action.setErrors({ newPassword1: "Password is too short. Please use at least 5 characters." });
             }
         }
     };
 
-    const validatePassword = (values: { name: string }, action: FormikHelpers<{ name: string }>) => {
+    const validatePassword = (values: { newPassword0: string; newPassword1: string }) => {
         const errors: { [field: string]: string } = {};
-        if (values.name.length < 5) {
+        if (values.newPassword0.length < 5 && values.newPassword1.length < 5) {
             errors.name = "Password is too short. Please use at least 5 characters.";
         }
         console.log(errors);
@@ -52,13 +56,10 @@ const Password: React.FC<Props> = ({ user }) => {
                         <Icon name='edit' />Edit
                 </Button>
                 </Table.Cell>
-                <PromptModal open={passwordModalOpen}
+                <PasswordChangeModal open={passwordModalOpen}
                     onSubmit={changePassword}
                     onClose={() => setPasswordModalOpen(false)}
-                    label="Enter new password"
                     header="Change password"
-                    placeHolder="Password"
-                    type="password"
                     validate={validatePassword}
                     initialValue={""}
                 />
@@ -76,14 +77,11 @@ const Password: React.FC<Props> = ({ user }) => {
                     </Button>
                     </div>
                 </Table.Cell>
-                <PromptModal open={passwordModalOpen}
+                <PasswordChangeModal open={passwordModalOpen}
                     onSubmit={changePassword}
                     onClose={() => setPasswordModalOpen(false)}
-                    label="Enter new password"
                     header="Change password"
-                    placeHolder="Password"
-                    type="password"
-                    validate={undefined}
+                    validate={validatePassword}
                     initialValue={""}
                 />
             </Table.Row >

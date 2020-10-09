@@ -42,8 +42,8 @@ const changeEmail = async (userId: string, email: string) => {
     return response.data;
 };
 
-const changePassword = async (userId: string, password: string) => {
-    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-password`, { password }, listService.config());
+const changePassword = async (userId: string, oldPassword: string, newPassword: string) => {
+    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-password`, { oldPassword, newPassword }, listService.config());
     return response.data;
 };
 
