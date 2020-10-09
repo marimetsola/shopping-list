@@ -1,36 +1,34 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Modal } from 'semantic-ui-react';
-import { useStateValue, login } from '../../state';
+import { useStateValue, login, setOpenModalType } from '../../state';
 import LoginForm from './LoginForm';
+import { ModalType } from '../../types';
 
 interface Props {
     open: boolean;
-    onClose: () => void;
 }
 
-const LoginModal: React.FC<Props> = ({ open, onClose }) => {
+const LoginModal: React.FC<Props> = ({ open }) => {
     const [, dispatch] = useStateValue();
     const [loginFailed, setLoginFailed] = useState(false);
+    const history = useHistory();
 
-    const closeModal = () => {
-        setLoginFailed(false);
-        onClose();
-    };
 
     const Login = async (values: { name: string; password: string }) => {
         try {
-            closeModal();
             await login(values.name, values.password, dispatch);
+            history.push('/list');
         } catch (error) {
             setLoginFailed(true);
         }
     };
 
     return (
-        <Modal open={open} onClose={closeModal} centered={false} size="tiny" closeIcon>
+        <Modal open={open} onClose={() => dispatch(setOpenModalType(ModalType.None))} centered={false} size="tiny" closeIcon>
             <Modal.Header>Login</Modal.Header>
             <Modal.Content>
-                <LoginForm onSubmit={Login} onCancel={closeModal} loginFailed={loginFailed} />
+                <LoginForm onSubmit={Login} onCancel={() => dispatch(setOpenModalType(ModalType.None))} loginFailed={loginFailed} />
             </Modal.Content>
         </Modal >
     );

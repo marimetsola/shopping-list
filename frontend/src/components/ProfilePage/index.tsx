@@ -8,15 +8,14 @@ import userService from '../../services/users';
 import { User } from '../../types';
 
 const ProfilePage: React.FC = () => {
-    const [{ user, profilePageOpen, isDesktop }, dispatch] = useStateValue();
+    const [{ user, isDesktop }, dispatch] = useStateValue();
     const [userProp, setUserProp] = useState<User>();
     const dividerStyle = { padding: "1rem 0 1rem 0" };
 
     useEffect(() => {
-        if (profilePageOpen) {
-            dispatch(clearActiveList());
-        }
-    }, [dispatch, profilePageOpen]);
+        dispatch(clearActiveList());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, user?.listInvitations]);
 
     useEffect(() => {
         const getUser = async () => {

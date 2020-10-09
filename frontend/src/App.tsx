@@ -1,21 +1,18 @@
 import React, { useEffect } from 'react';
 import {
-    BrowserRouter as Router, Switch, Route, Link
+    BrowserRouter as Router, Switch, Route
 } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import NavBar from './components/NavBar';
 import ActiveList from './components/ActiveList';
 import AddListModal from './components/AddListModal';
-import { useStateValue, setDesktop, setOpenModalType } from './state';
-import { Container, Header, Button, Segment } from 'semantic-ui-react';
+import { useStateValue, setDesktop } from './state';
+import { Container } from 'semantic-ui-react';
 import ProfilePage from './components/ProfilePage';
-import LoginModal from './components/LoginModal';
-import RegisterModal from './components/RegisterModal';
-import RecoveryModal from './components/RecoveryModal';
-import { ModalType } from './types';
+import Home from './components/Home';
 
 const App: React.FC = () => {
-    const [{ user, profilePageOpen, modalType }, dispatch] = useStateValue();
+    const [, dispatch] = useStateValue();
 
     const handleMediaQueryChange = (matches: boolean) => {
         dispatch(setDesktop(matches));
@@ -27,63 +24,40 @@ const App: React.FC = () => {
         dispatch(setDesktop(isDesktop));
     }, [dispatch, isDesktop]);
 
-    const contStyle = { padding: "0 4.6rem" };
+    // const pageToRender = () => {
+    //     if (user) {
+    //         if (profilePageOpen) {
+    //             return <ProfilePage />;
+    //         } else {
+    //             return <ActiveList />;
+    //         }
+    //     }
 
-    const adviceStyle =
-    {
-        marginTop: "4rem",
-        textAlign: "center"
-    };
-
-    const loginButtonStyle = () => {
-        if (isDesktop) {
-            return { marginRight: "1rem" };
-        } else {
-            return { marginBottom: "1rem" };
-        }
-    };
-
-    const registerButtonStyle = () => {
-        if (isDesktop) {
-            return { marginLeft: "1rem" };
-        } else {
-            return null;
-        }
-    };
-
-    const pageToRender = () => {
-        if (user) {
-            if (profilePageOpen) {
-                return <ProfilePage />;
-            } else {
-                return <ActiveList />;
-            }
-
-        }
-
-        return (
-            <Container style={contStyle}>
-                <Header as="h2" style={adviceStyle}>Please login or register to use the site.</Header>
-                <Segment basic textAlign={"center"}>
-                    <Button style={loginButtonStyle()} secondary content="Login" onClick={() => dispatch(setOpenModalType(ModalType.LoginModal))} />
-                    <Button style={registerButtonStyle()} secondary content="Register" onClick={() => dispatch(setOpenModalType(ModalType.RegisterModal))} />
-                </Segment>
-
-                <LoginModal open={modalType === ModalType.LoginModal} onClose={() => dispatch(setOpenModalType(ModalType.None))} />
-                <RegisterModal open={modalType === ModalType.RegisterModal} onClose={() => dispatch(setOpenModalType(ModalType.None))} />
-                <RecoveryModal open={modalType === ModalType.RecoveryModal} onClose={() => dispatch(setOpenModalType(ModalType.None))} />
-            </Container>
-        );
-    };
+    //     return (
+    //         <Home />
+    //     );
+    // };
 
     return (
-        <div>
-            <NavBar />
-            <Container>
-                {pageToRender()}
-                <AddListModal />
-            </Container>
-        </div >
+        <Router>
+            <div>
+                <NavBar />
+                <Container>
+                    <Switch>
+                        <Route path="/profile">
+                            <ProfilePage />
+                        </Route>
+                        <Route path="/list">
+                            <ActiveList />
+                        </Route>
+                        <Route path="/">
+                            <Home />
+                        </Route>
+                    </Switch>
+                    <AddListModal />
+                </Container>
+            </div >
+        </Router>
     );
 };
 

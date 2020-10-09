@@ -69,8 +69,23 @@ const ActiveList: React.FC = () => {
         }
     };
 
+    const contStyle = { padding: "0 4.6rem" };
 
-    if (!activeList || !activeList.items) {
+    const adviceStyle =
+    {
+        marginTop: "4rem",
+        textAlign: "center"
+    };
+
+    console.log(activeList);
+
+    if (!activeList) {
+        return (
+            <Container style={contStyle}>
+                <Header as="h2" style={adviceStyle}>Create or select a list at the top to start using the app.</Header>
+            </Container>
+        );
+    } else if ((!activeList.items)) {
         return null;
     }
 

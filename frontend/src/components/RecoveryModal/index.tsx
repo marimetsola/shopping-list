@@ -7,17 +7,16 @@ import userService from '../../services/users';
 
 interface Props {
     open: boolean;
-    onClose: () => void;
 }
 
-const RecoveryModal: React.FC<Props> = ({ open, onClose }) => {
+const RecoveryModal: React.FC<Props> = ({ open }) => {
     const [, dispatch] = useStateValue();
     const [emailFound, setEmailFound] = useState(false);
     const [emailNotFound, setEmailNotFound] = useState(false);
 
     const closeModal = () => {
-        onClose();
         setEmailNotFound(false);
+        dispatch(setOpenModalType(ModalType.None));
     };
 
     const openLoginModal = () => {

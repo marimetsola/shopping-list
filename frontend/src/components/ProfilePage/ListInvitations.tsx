@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { useStateValue, acceptInvitation, declineInvitation, closeProfilePage } from '../../state';
+import { useHistory } from 'react-router-dom';
+import { useStateValue, acceptInvitation, declineInvitation } from '../../state';
 import { Icon, Table, Button, Divider, Header } from 'semantic-ui-react';
 import { ItemList, User } from '../../types';
 
@@ -10,6 +11,7 @@ interface Props {
 const ListInvitations: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [listInvitations, setListInvitations] = useState<ItemList[]>();
+    const history = useHistory();
 
     useEffect(() => {
         setListInvitations(user.listInvitations);
@@ -19,7 +21,7 @@ const ListInvitations: React.FC<Props> = ({ user }) => {
     const acceptListInvitation = async (list: ItemList) => {
         if (user) {
             await acceptInvitation(list, user, dispatch);
-            dispatch(closeProfilePage());
+            history.push('/list');
         }
     };
 

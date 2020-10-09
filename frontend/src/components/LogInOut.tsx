@@ -1,15 +1,18 @@
 import React, { Fragment, useEffect } from 'react';
-import { useStateValue, setUser, discardUser, closeProfilePage, setOpenModalType } from '../state';
+import { useHistory } from 'react-router-dom';
+import { useStateValue, setUser, discardUser, setOpenModalType } from '../state';
 import { Menu } from 'semantic-ui-react';
 
 import { ModalType } from '../types';
 
 const LogInOut: React.FC = () => {
     const [{ user }, dispatch] = useStateValue();
+    const history = useHistory();
 
     const Logout = () => {
         discardUser(dispatch);
-        dispatch(closeProfilePage());
+        dispatch(setOpenModalType(ModalType.None));
+        history.push('/');
     };
 
     useEffect(() => {

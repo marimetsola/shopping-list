@@ -18,7 +18,7 @@ interface Props {
     onClose: () => void;
 }
 
-const ModalRoot: React.FC<Props> = ({ open, onClose }) => {
+const ModalRoot: React.FC<Props> = ({ open }) => {
     const [{ modalType }] = useStateValue();
 
     if (modalType === ModalType.None) {
@@ -26,7 +26,7 @@ const ModalRoot: React.FC<Props> = ({ open, onClose }) => {
     }
 
     const SpecificModal = MODAL_COMPONENTS[modalType];
-    return <SpecificModal open={open} onClose={onClose} />;
+    return <SpecificModal open={open} />;
 };
 
 export default ModalRoot;

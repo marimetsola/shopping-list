@@ -1,12 +1,15 @@
 import React, { useEffect, Fragment } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import AddNewList from './AddNewList';
-import { useStateValue, setActiveList, setLists, changeActiveList, closeProfilePage } from '../state';
+import { useStateValue, setActiveList, setLists, changeActiveList } from '../state';
 import { ItemList } from '../types';
 import { Dropdown, Icon } from 'semantic-ui-react';
 import listService from '../services/lists';
 
 const ShoppingLists: React.FC = () => {
-    const [{ lists, activeList, user, profilePageOpen, isDesktop }, dispatch] = useStateValue();
+    const [{ lists, activeList, user, isDesktop }, dispatch] = useStateValue();
+    const history = useHistory();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchLists = async () => {
@@ -22,14 +25,15 @@ const ShoppingLists: React.FC = () => {
             }
         };
         fetchLists();
-    }, [dispatch, user]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
 
 
 
     const setActive = (list: ItemList) => {
         if (user) {
             changeActiveList(list, user, dispatch);
-            dispatch(closeProfilePage());
+            history.push('/list');
         }
     };
 
@@ -37,12 +41,30 @@ const ShoppingLists: React.FC = () => {
         return <AddNewList />;
     }
 
+    const showActiveList = () => {
+        if (location.pathname === '/profile' || !activeList) {
+            return false;
+        }
+        return true;
+    };
+
+
+
     if (isDesktop) {
         return (
-            <Dropdown item text={(activeList && !profilePageOpen) ? activeList.name : 'Select list'} style={{ minWidth: "11rem" }}>
+            <Dropdown item text={(showActiveList()) ? activeList?.name : 'Select list'} style={{ minWidth: "11rem" }}>
                 <Dropdown.Menu>
                     {lists.map(list => (
-                        <Dropdown.Item key={list.id} onClick={() => setActive(list)}>{list.name}</Dropdown.Item>
+                        <Dropdown.Item key={list.id} onClick={() => setActive(list)}>
+
+                            {activeList && activeList.id === list.id ?
+                                <Icon name="selected radio" size="mini" />
+                                :
+                                <Icon name="circle outline" size="mini" />
+                            }
+
+                            {list.name}
+                        </Dropdown.Item>
                     ))}
                     <Dropdown.Divider />
                     <AddNewList />

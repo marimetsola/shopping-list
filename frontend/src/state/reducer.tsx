@@ -59,12 +59,6 @@ export type Action =
         type: "DISCARD_USER";
     }
     | {
-        type: "OPEN_PROFILE_PAGE";
-    }
-    | {
-        type: "CLOSE_PROFILE_PAGE";
-    }
-    | {
         type: "INVITE_GUEST";
         payload: { list: ItemList };
     }
@@ -177,16 +171,6 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 user: null
-            };
-        case "OPEN_PROFILE_PAGE":
-            return {
-                ...state,
-                profilePageOpen: true
-            };
-        case "CLOSE_PROFILE_PAGE":
-            return {
-                ...state,
-                profilePageOpen: false
             };
         case "INVITE_GUEST":
             return {
@@ -492,12 +476,12 @@ export const uninviteGuest = (editedList: ItemList) => {
 
 export const acceptInvitation = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
     const editedList = await listService.acceptInvitation(list.id, user.id);
-    const editedUser: User = await userService.getUser(user.id);
+    // const editedUser: User = await userService.getUser(user.id);
     const lists: ItemList[] = await listService.getListsByUser();
     dispatch(
         {
             type: "ACCEPT_INVITATION" as "ACCEPT_INVITATION",
-            payload: { list: editedList, user: editedUser }
+            payload: { list: editedList, user }
         }
     );
     dispatch(
@@ -506,11 +490,11 @@ export const acceptInvitation = async (list: ItemList, user: User, dispatch: Rea
             payload: lists
         }
     );
-    const activeList: ItemList = await userService.setActiveList(editedUser.id, editedList.id);
+    const editedUser: User = await userService.setActiveList(user.id, editedList.id);
     dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
-            payload: activeList
+            payload: editedUser.activeList
         }
     );
 };
