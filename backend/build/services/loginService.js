@@ -16,7 +16,13 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = __importDefault(require("../models/user"));
 const loginUser = (name, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_1.default.findOne({ name });
+    let user;
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(name)) {
+        user = yield user_1.default.findOne({ name });
+    }
+    else {
+        user = yield user_1.default.findOne({ email: name });
+    }
     const passwordCorrect = user === null
         ? false
         : yield bcrypt_1.default.compare(password, user.passwordHash);

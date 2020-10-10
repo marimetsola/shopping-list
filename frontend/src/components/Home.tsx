@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { useStateValue, setOpenModalType } from '../state';
 import { Container, Header, Button, Segment } from 'semantic-ui-react';
 import LoginModal from './LoginModal';
@@ -7,8 +8,7 @@ import RecoveryModal from './RecoveryModal';
 import { ModalType } from '../types';
 
 const Home: React.FC = () => {
-    const [{ user, isDesktop, modalType }, dispatch] = useStateValue();
-
+    const [{ user, isDesktop, modalType, activeList, isLoadingList }, dispatch] = useStateValue();
     const contStyle = { padding: "0 4.6rem" };
 
     const adviceStyle =
@@ -33,15 +33,14 @@ const Home: React.FC = () => {
         }
     };
 
-    if (user) {
-
-        return (
-            <Container style={contStyle}>
-                <Header as="h2" style={adviceStyle}>Create or select a list.</Header>
-            </Container>
-        );
+    if (user && activeList) {
+        return <Redirect to="/list" />;
+        // return (
+        //     <Container style={contStyle}>
+        //         <Header as="h2" style={adviceStyle}>Create or select a list. *home*</Header>
+        //     </Container>
+        // );
     }
-
 
     return (
         <Container style={contStyle}>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import { useStateValue, deleteItem, editList } from '../state';
 import { Container, Header, Divider, Button, Icon } from 'semantic-ui-react';
 import EditListModal from './EditListModal';
@@ -13,7 +14,7 @@ const ActiveList: React.FC = () => {
     const [editListModalOpen, setEditListModalOpen] = useState<boolean>(false);
     const [editedItem, setEditedItem] = useState<ItemType | null>(null);
     const [addItemModalOpen, setAddItemModalOpen] = useState<boolean>(false);
-    const [{ activeList, isDesktop }, dispatch] = useStateValue();
+    const [{ activeList, isDesktop, user, isLoadingList }, dispatch] = useStateValue();
     const refContainer = useRef<Button>(null);
 
     const focusAddButton = () => {
@@ -77,14 +78,25 @@ const ActiveList: React.FC = () => {
         textAlign: "center"
     };
 
+    if (!user) {
+        return <Redirect to="/" />;
+    }
+
+    if (isLoadingList) {
+        return null;
+    }
+
+    console.log(isLoadingList);
+
     if (!activeList) {
+
         return (
             <Container style={contStyle}>
-                <Header as="h2" style={adviceStyle}>Create or select a list at the top to start using the app.</Header>
+                <Header as="h2" style={adviceStyle}>Create or select a list.</Header>
             </Container>
         );
-    } else if ((!activeList.items)) {
-        return null;
+        // } else if ((!activeList.items)) {
+        //     return null;
     }
 
     return (

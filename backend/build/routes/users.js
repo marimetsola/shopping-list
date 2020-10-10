@@ -21,13 +21,22 @@ usersRouter.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.json(users);
 }));
 usersRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield userService_1.default.getUser(req.params.id);
-    res.json(users);
+    const user = yield userService_1.default.getUser(req.params.id);
+    res.json(user);
+}));
+usersRouter.get('/find-email/:email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userService_1.default.getUserByEmail(req.params.email);
+    res.json(user);
 }));
 usersRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
-    const user = yield userService_1.default.addUser(body.name, body.email, body.password);
-    res.json(user);
+    try {
+        const user = yield userService_1.default.addUser(body.name, body.email, body.password);
+        res.json(user);
+    }
+    catch (error) {
+        res.status(400).send(error.message);
+    }
 }));
 usersRouter.patch('/:id/set-active-list', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.setActiveList(req);
@@ -44,5 +53,11 @@ usersRouter.patch('/:id/change-name', (req, res) => __awaiter(void 0, void 0, vo
 usersRouter.patch('/:id/change-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.changeEmail(req);
     res.json(user);
+}));
+usersRouter.patch('/:id/change-password', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json(yield userService_1.default.changePassword(req));
+}));
+usersRouter.post('reset-password', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json(yield userService_1.default.resetPassword(req));
 }));
 exports.default = usersRouter;

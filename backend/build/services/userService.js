@@ -16,6 +16,7 @@ const user_1 = __importDefault(require("../models/user"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const listService_1 = __importDefault(require("./listService"));
+// import nodemailer from 'nodemailer';
 const getUserFromToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     if (!token) {
         throw Error('token missing');
@@ -116,6 +117,9 @@ const getUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const getUserByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
     return yield user_1.default.findOne({ name });
 });
+const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield user_1.default.findOne({ email });
+});
 const validateEmail = (email) => {
     const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (emailRe.test(String(email).toLowerCase())) {
@@ -124,6 +128,9 @@ const validateEmail = (email) => {
     return null;
 };
 const addUser = (name, email, password) => __awaiter(void 0, void 0, void 0, function* () {
+    if (password.length < 5) {
+        throw Error(`Password is too short. Please use at least 5 characters`);
+    }
     const saltRounds = 10;
     const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
     const user = new user_1.default({
@@ -175,6 +182,28 @@ const changeEmail = (req) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
 });
+const changePassword = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserFromReq(req);
+    const password = req.body.password;
+    if (password.length < 5) {
+        throw Error(`Password is too short. Use at least 5 characters`);
+    }
+    const saltRounds = 10;
+    const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
+    user.passwordHash = passwordHash;
+    return yield user.save();
+});
+const resetPassword = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserFromReq(req);
+    const password = req.body.password;
+    if (password.length < 5) {
+        throw Error(`Password is too short. Use at least 5 characters`);
+    }
+    const saltRounds = 10;
+    const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
+    user.passwordHash = passwordHash;
+    return yield user.save();
+});
 exports.default = {
     getUserFromReq,
     getUserFromToken,
@@ -182,8 +211,11 @@ exports.default = {
     addUser,
     getUser,
     getUserByName,
+    getUserByEmail,
     setActiveList,
     clearActiveList,
     changeName,
-    changeEmail
+    changeEmail,
+    changePassword,
+    resetPassword
 };

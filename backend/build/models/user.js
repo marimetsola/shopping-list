@@ -49,6 +49,19 @@ const userSchema = new mongoose_1.default.Schema({
     }
 });
 userSchema.plugin(mongoose_unique_validator_1.default);
+userSchema.post('save', (error, _doc, next) => {
+    if (error.name === 'ValidationError') {
+        if (error.errors['name']) {
+            next(new Error('Username is already taken.'));
+        }
+        else if (error.errors['email']) {
+            next(new Error('Email adress is already in use.'));
+        }
+    }
+    else {
+        next();
+    }
+});
 userSchema.set('toJSON', {
     transform: (_document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString();

@@ -11,6 +11,10 @@ export type Action =
         payload: boolean;
     }
     | {
+        type: "SET_IS_LOADING_LIST";
+        payload: boolean;
+    }
+    | {
         type: "SET_LISTS";
         payload: ItemList[];
     }
@@ -100,6 +104,11 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 isDesktop: action.payload
+            };
+        case "SET_IS_LOADING_LIST":
+            return {
+                ...state,
+                isLoadingList: action.payload
             };
         case "SET_LISTS":
             return {
@@ -261,6 +270,12 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
                     payload: list
                 }
             );
+            dispatch(
+                {
+                    type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
+                    payload: false
+                }
+            );
         }
     }
 
@@ -395,6 +410,12 @@ export const login = async (name: string, password: string, dispatch: React.Disp
             {
                 type: "SET_USER" as "SET_USER",
                 payload: { user }
+            }
+        );
+        dispatch(
+            {
+                type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
+                payload: false
             }
         );
     }

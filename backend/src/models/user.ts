@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(uniqueValidator);
 
-userSchema.post('save', (error: any, doc: any, next: any) => {
+userSchema.post('save', (error: any, _doc: any, next: any) => {
     if (error.name === 'ValidationError') {
         if (error.errors['name']) {
             next(new Error('Username is already taken.'));

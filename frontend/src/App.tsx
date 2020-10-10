@@ -24,20 +24,6 @@ const App: React.FC = () => {
         dispatch(setDesktop(isDesktop));
     }, [dispatch, isDesktop]);
 
-    // const pageToRender = () => {
-    //     if (user) {
-    //         if (profilePageOpen) {
-    //             return <ProfilePage />;
-    //         } else {
-    //             return <ActiveList />;
-    //         }
-    //     }
-
-    //     return (
-    //         <Home />
-    //     );
-    // };
-
     return (
         <Router>
             <div>
