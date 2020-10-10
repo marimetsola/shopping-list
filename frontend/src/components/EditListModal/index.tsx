@@ -129,9 +129,6 @@ const EditListModal: React.FC<Props> = ({ open, onClose, list }) => {
         }
     }
 
-    console.log(user);
-    console.log(list);
-
     return (
         <Modal open={open} onClose={onClose} centered={false} size="small" closeIcon>
             <Modal.Header>Login to edit the list</Modal.Header>

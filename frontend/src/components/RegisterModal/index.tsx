@@ -11,11 +11,11 @@ interface Props {
 
 const RegisterModal: React.FC<Props> = ({ open }) => {
     const [, dispatch] = useStateValue();
-    const [registerFailed, setRegisterFailed] = useState(false);
+    const [registerFailed, setRegisterFailed] = useState('');
     const history = useHistory();
 
     const closeModal = () => {
-        setRegisterFailed(false);
+        setRegisterFailed('');
         dispatch(setOpenModalType(ModalType.None));
     };
 
@@ -24,7 +24,7 @@ const RegisterModal: React.FC<Props> = ({ open }) => {
             await register(values.name, values.email, values.password, dispatch);
             history.push('/list');
         } catch (error) {
-            setRegisterFailed(true);
+            setRegisterFailed(error.response.data);
         }
     };
     return (

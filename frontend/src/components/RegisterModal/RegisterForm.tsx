@@ -9,7 +9,7 @@ import { ModalType } from "../../types";
 interface Props {
     onSubmit: (values: { name: string; email: string; password: string }) => void;
     onCancel: () => void;
-    registerFailed: boolean;
+    registerFailed: string;
 }
 
 export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFailed }) => {
@@ -63,7 +63,7 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                         />
                         {registerFailed &&
                             <Message negative>
-                                <p>Username already taken.</p>
+                                <p>{registerFailed}</p>
                             </Message>}
                         <div style={{ marginBottom: "1rem" }}>
                             <ButtonLink

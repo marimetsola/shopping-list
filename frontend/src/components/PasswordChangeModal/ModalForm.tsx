@@ -1,26 +1,25 @@
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form, FormikHelpers } from "formik";
-import { TextField, PasswordField } from '../FieldForm';
+import { TextField, PasswordField, Checkbox } from '../FieldForm';
 
 interface Props {
-    onSubmit: (values: { oldPassword: string; newPassword0: string; newPassword1: string },
-        action: FormikHelpers<{ oldPassword: string; newPassword0: string; newPassword1: string }>) => void;
+    onSubmit: (values: { oldPassword: string; newPassword: string },
+        action: FormikHelpers<{ oldPassword: string; newPassword: string }>) => void;
     onCancel: () => void;
+    showPassword: boolean;
+    toggleShowPassword: () => void;
     validate: any;
 }
 
-export const ModalForm: React.FC<Props> = ({ onSubmit, onCancel, validate }) => {
+export const ModalForm: React.FC<Props> = ({ onSubmit, onCancel, showPassword, toggleShowPassword, validate }) => {
     return (
         <Formik
             initialValues={{
                 oldPassword: "",
-                newPassword0: "",
-                newPassword1: ""
+                newPassword: "",
             }}
             onSubmit={onSubmit}
-            validate={validate}
-            validateOnChange={true}
         >
             {({ isValid, dirty }) => {
                 return (
@@ -35,18 +34,21 @@ export const ModalForm: React.FC<Props> = ({ onSubmit, onCancel, validate }) => 
                         <Field
                             label="New password"
                             placeholder="Password"
-                            name="newPassword0"
-                            component={PasswordField}
+                            name="newPassword"
+                            component={showPassword ? TextField : PasswordField}
                             autoFocus={false}
+                            validate={validate}
+                            validateOnChange={true}
+                            validateOnBlur={true}
                         />
                         <Field
-                            label="New password again"
-                            placeholder="Password"
-                            name="newPassword1"
-                            component={PasswordField}
-                            autoFocus={false}
+                            name="Show password"
+                            type="checkbox"
+                            checked={showPassword}
+                            component={Checkbox}
+                            onChange={toggleShowPassword}
                         />
-                        <Grid>
+                        <Grid style={{ paddingTop: "1rem" }}>
                             <Grid.Column floated="left" width={5}>
                                 <Button type="button" onClick={onCancel} color="red">
                                     Cancel

@@ -15,31 +15,36 @@ const Password: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
 
-    const changePassword = async (values: { oldPassword: string; newPassword0: string; newPassword1: string },
-        action: FormikHelpers<{ oldPassword: string; newPassword0: string; newPassword1: string }>) => {
-        if (values.newPassword0 !== values.newPassword1) {
-            return action.setErrors({ newPassword1: "Passwords must match!" });
-        }
+    const changePassword = async (values: { oldPassword: string; newPassword: string },
+        action: FormikHelpers<{ oldPassword: string; newPassword: string }>) => {
+
         if (user) {
             try {
-                await userService.changePassword(user.id, values.oldPassword, values.newPassword0);
+                await userService.changePassword(user.id, values.oldPassword, values.newPassword);
                 // const editedUser = await userService.changePassword(user.id, values.name);
                 // changeUserName(editedUser, dispatch);
 
                 setPasswordModalOpen(false);
             } catch (error) {
-                action.setErrors({ newPassword1: "Password is too short. Please use at least 5 characters." });
+                action.setErrors({ newPassword: "Password is too short. Please use at least 5 characters." });
             }
         }
     };
 
-    const validatePassword = (values: { newPassword0: string; newPassword1: string }) => {
-        const errors: { [field: string]: string } = {};
-        if (values.newPassword0.length < 5 && values.newPassword1.length < 5) {
-            errors.name = "Password is too short. Please use at least 5 characters.";
+    // const validatePassword = (values: { newPassword0: string; newPassword: string }) => {
+    //     const errors: { [field: string]: string } = {};
+    //     console.log(errors);
+    //     // if (values.newPassword.length < 5) {
+    //     //     errors.newPassword = "Password is too short. Please use at least 5 characters.";
+    //     // }
+    //     return errors;
+    // };
+
+    const validatePassword = (password: string) => {
+        console.log(password);
+        if (password.length < 5) {
+            return "Password is too short. Please use at least 5 characters.";
         }
-        console.log(errors);
-        return errors;
     };
 
     if (!user) {

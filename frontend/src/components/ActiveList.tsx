@@ -77,8 +77,6 @@ const ActiveList: React.FC = () => {
         textAlign: "center"
     };
 
-    console.log(activeList);
-
     if (!activeList) {
         return (
             <Container style={contStyle}>

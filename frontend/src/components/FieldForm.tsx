@@ -32,8 +32,27 @@ export const PasswordField: React.FC<TextProps> = ({
         <UIForm.Field>
             <label>{label}</label>
             <Field type="password" placeholder={placeholder} {...field} autoFocus={autoFocus} />
+            {/* <div style={{ color: 'red', minHeight: "1.3571rem" }}></div> */}
             <div style={{ color: 'red' }}>
                 <ErrorMessage name={field.name} />
             </div>
         </UIForm.Field>
     );
+
+interface CheckboxProps extends FieldProps {
+    label: string;
+    placeholder: string;
+    type: string;
+    checked: boolean;
+    onChange: () => void;
+}
+
+export const Checkbox: React.FC<CheckboxProps> = ({ field, type, checked, onChange }) => {
+    return (
+        <label>
+            {/* remove {...field} to see changes not propagated */}
+            <input {...field} type={type} checked={checked} onChange={onChange} />
+            {field.name}
+        </label>
+    );
+};

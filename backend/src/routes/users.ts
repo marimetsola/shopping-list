@@ -20,9 +20,14 @@ usersRouter.get('/find-email/:email', async (req, res) => {
 
 usersRouter.post('/', async (req, res) => {
     const body = req.body;
-    const user = await userService.addUser(body.name, body.email, body.password);
+    try {
+        const user = await userService.addUser(body.name, body.email, body.password);
 
-    res.json(user);
+        res.json(user);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+
 });
 
 usersRouter.patch('/:id/set-active-list', async (req, res) => {

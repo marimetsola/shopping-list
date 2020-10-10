@@ -125,6 +125,11 @@ const validateEmail = (email: string) => {
 };
 
 const addUser = async (name: string, email: string, password: string) => {
+
+    if (password.length < 5) {
+        throw Error(`Password is too short. Please use at least 5 characters`);
+    }
+
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
