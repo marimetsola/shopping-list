@@ -270,15 +270,15 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
                     payload: list
                 }
             );
-            dispatch(
-                {
-                    type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
-                    payload: false
-                }
-            );
         }
     }
 
+    dispatch(
+        {
+            type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
+            payload: false
+        }
+    );
 };
 
 export const changeActiveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
@@ -395,7 +395,12 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
             type: "DISCARD_USER" as "DISCARD_USER"
         }
     );
-
+    dispatch(
+        {
+            type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
+            payload: true
+        }
+    );
 };
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
@@ -412,12 +417,12 @@ export const login = async (name: string, password: string, dispatch: React.Disp
                 payload: { user }
             }
         );
-        dispatch(
-            {
-                type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
-                payload: false
-            }
-        );
+        // dispatch(
+        //     {
+        //         type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
+        //         payload: false
+        //     }
+        // );
     }
 };
 

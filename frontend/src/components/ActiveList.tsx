@@ -82,11 +82,10 @@ const ActiveList: React.FC = () => {
         return <Redirect to="/" />;
     }
 
+    console.log(isLoadingList);
     if (isLoadingList) {
         return null;
     }
-
-    console.log(isLoadingList);
 
     if (!activeList) {
 

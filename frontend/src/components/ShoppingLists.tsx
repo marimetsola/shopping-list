@@ -7,7 +7,7 @@ import { Dropdown, Icon } from 'semantic-ui-react';
 import listService from '../services/lists';
 
 const ShoppingLists: React.FC = () => {
-    const [{ lists, activeList, user, isDesktop }, dispatch] = useStateValue();
+    const [{ lists, activeList, user, isDesktop, isLoadingList }, dispatch] = useStateValue();
     const history = useHistory();
     const location = useLocation();
 
@@ -37,10 +37,6 @@ const ShoppingLists: React.FC = () => {
         }
     };
 
-    if (lists.length === 0) {
-        return <AddNewList />;
-    }
-
     const showActiveList = () => {
         if (location.pathname === '/profile' || !activeList) {
             return false;
@@ -48,7 +44,15 @@ const ShoppingLists: React.FC = () => {
         return true;
     };
 
+    if (isLoadingList) {
+        return (
+            <Dropdown item text={(showActiveList()) ? activeList?.name : 'Select list'} style={{ minWidth: "11rem" }}></Dropdown >
+        );
+    }
 
+    if (lists.length === 0) {
+        return <AddNewList />;
+    }
 
     if (isDesktop) {
         return (

@@ -33,7 +33,7 @@ const Home: React.FC = () => {
         }
     };
 
-    if (user && activeList) {
+    if (user) {
         return <Redirect to="/list" />;
         // return (
         //     <Container style={contStyle}>
