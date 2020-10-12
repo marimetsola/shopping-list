@@ -11,9 +11,13 @@ import { Container } from 'semantic-ui-react';
 import ProfilePage from './components/ProfilePage';
 import ResetPassword from './components/ResetPassword';
 import Home from './components/Home';
+import LoginModal from './components/LoginModal';
+import RegisterModal from './components/RegisterModal';
+import RecoveryModal from './components/RecoveryModal';
+import { ModalType } from './types';
 
 const App: React.FC = () => {
-    const [, dispatch] = useStateValue();
+    const [{ modalType }, dispatch] = useStateValue();
 
     const handleMediaQueryChange = (matches: boolean) => {
         dispatch(setDesktop(matches));
@@ -37,7 +41,7 @@ const App: React.FC = () => {
                         <Route path="/list">
                             <ActiveList />
                         </Route>
-                        <Route path="/users/reset-password">
+                        <Route path="/users/reset-password/:token">
                             <ResetPassword />
                         </Route>
                         <Route path="/">
@@ -45,6 +49,9 @@ const App: React.FC = () => {
                         </Route>
                     </Switch>
                     <AddListModal />
+                    <LoginModal open={modalType === ModalType.LoginModal} />
+                    <RegisterModal open={modalType === ModalType.RegisterModal} />
+                    <RecoveryModal open={modalType === ModalType.RecoveryModal} />
                 </Container>
             </div >
         </Router>

@@ -23,6 +23,7 @@ const RegisterModal: React.FC<Props> = ({ open }) => {
         try {
             await register(values.name, values.email, values.password, dispatch);
             history.push('/list');
+            dispatch(setOpenModalType(ModalType.None));
         } catch (error) {
             setRegisterFailed(error.response.data);
         }

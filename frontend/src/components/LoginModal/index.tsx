@@ -18,6 +18,7 @@ const LoginModal: React.FC<Props> = ({ open }) => {
     const Login = async (values: { name: string; password: string }) => {
         try {
             await login(values.name, values.password, dispatch);
+            dispatch(setOpenModalType(ModalType.None));
             history.push('/list');
         } catch (error) {
             setLoginFailed(true);

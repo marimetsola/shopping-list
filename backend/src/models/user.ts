@@ -37,7 +37,9 @@ const userSchema = new mongoose.Schema({
     {
         type: Schema.Types.ObjectId,
         ref: 'ItemList'
-    }
+    },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Number }
 });
 
 userSchema.plugin(uniqueValidator);

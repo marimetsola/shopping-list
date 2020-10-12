@@ -26,7 +26,7 @@ const RecoveryModal: React.FC<Props> = ({ open }) => {
     };
 
     const sendMail = async (values: { email: string }) => {
-        const response = await userService.resetPassword(values.email);
+        const response = await userService.requestReset(values.email);
         console.log(response);
         if (response.status === 200) {
             setEmailNotFound(false);

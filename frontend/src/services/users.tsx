@@ -47,15 +47,31 @@ const changePassword = async (userId: string, oldPassword: string, newPassword: 
     return response.data;
 };
 
-const resetPassword = async (email: string) => {
+const validateToken = async (token: string) => {
+    try {
+        const response = await axios.post(`${apiBaseUrl}/users/validate-token`, { token }, listService.config());
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+};
+
+const requestReset = async (email: string) => {
     try {
         const response = await axios.post(`${apiBaseUrl}/users/send-reset-email`, { email }, listService.config());
         return response;
     } catch (error) {
         return error.response;
     }
-
-
 };
 
-export default { login, register, getUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, changePassword, resetPassword };
+const resetPassword = async (id: string, password: string) => {
+    try {
+        const response = await axios.post(`${apiBaseUrl}/users/reset-password`, { id, password }, listService.config());
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+};
+
+export default { login, register, getUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, changePassword, requestReset, validateToken, resetPassword };

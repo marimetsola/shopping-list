@@ -2,9 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useStateValue, setOpenModalType } from '../state';
 import { Container, Header, Button, Segment } from 'semantic-ui-react';
-import LoginModal from './LoginModal';
-import RegisterModal from './RegisterModal';
-import RecoveryModal from './RecoveryModal';
+
 import { ModalType } from '../types';
 
 const Home: React.FC = () => {
@@ -49,10 +47,6 @@ const Home: React.FC = () => {
                 <Button style={loginButtonStyle()} secondary content="Login" onClick={() => dispatch(setOpenModalType(ModalType.LoginModal))} />
                 <Button style={registerButtonStyle()} secondary content="Register" onClick={() => dispatch(setOpenModalType(ModalType.RegisterModal))} />
             </Segment>
-
-            <LoginModal open={modalType === ModalType.LoginModal} />
-            <RegisterModal open={modalType === ModalType.RegisterModal} />
-            <RecoveryModal open={modalType === ModalType.RecoveryModal} />
         </Container>
     );
 

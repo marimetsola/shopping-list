@@ -205,7 +205,7 @@ const changePassword = async (req: express.Request) => {
     return await user.save();
 };
 
-const resetPassword = async (req: express.Request) => {
+const sendResetPasswordMail = async (req: express.Request) => {
 
     const email = req.body.email;
     console.log(email);
@@ -220,6 +220,7 @@ const resetPassword = async (req: express.Request) => {
 
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000;
+        await user.save();
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -252,7 +253,42 @@ const resetPassword = async (req: express.Request) => {
         throw Error("email not in use");
     }
 
+};
 
+
+const validateToken = async (req: express.Request) => {
+    console.log(req.body.token);
+    const token = req.body.token;
+    const user = await User.findOne({ resetPasswordToken: token });
+    console.log(user);
+
+    if (user) {
+        return user.id;
+    }
+    return null;
+
+};
+
+const resetPassword = async (req: express.Request) => {
+    const user = await User.findById(req.body.id);
+    const password = req.body.password;
+
+    // console.log(user?.resetPasswordExpires, Date.now());
+
+    if (user && user.resetPasswordExpires && user.resetPasswordExpires > Date.now()) {
+        console.log(user.name, password);
+
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(password, saltRounds);
+
+        user.passwordHash = passwordHash;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        return await user.save();
+    } else {
+        // token expired
+    }
 };
 
 export default {
@@ -268,5 +304,7 @@ export default {
     changeName,
     changeEmail,
     changePassword,
+    sendResetPasswordMail,
+    validateToken,
     resetPassword
 };

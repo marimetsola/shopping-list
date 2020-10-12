@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStateValue, setOpenModalType } from '../../state';
+import { useParams } from 'react-router-dom';
 import { ModalType } from '../../types';
 import ResetForm from './ResetForm';
 import userService from '../../services/users';
 import { Container, Header } from 'semantic-ui-react';
 
-// interface Props {
-//     open: boolean;
-// }
-
 const ResetPassword: React.FC<{}> = () => {
     const [{ isDesktop }, dispatch] = useStateValue();
+    const { token } = useParams<{ token: string }>();
+    const [userId, setUserId] = useState<string>();
 
+    useEffect(() => {
+
+        const validateUser = async () => {
+            const response = await userService.validateToken(token);
+            setUserId(response.data);
+        };
+
+        validateUser();
+    }, [token]);
 
     const resetPassword = async (values: { password: string }) => {
-        console.log(values.password);
-    };
+        console.log(userId, values.password);
+        if (userId) {
+            userService.resetPassword(userId, values.password);
+        } else {
+            // Add error telling about no user found
+        }
 
+    };
 
     const adviceStyle =
     {
@@ -41,7 +54,7 @@ const ResetPassword: React.FC<{}> = () => {
             />
         </Container>;
     }
-
 };
+
 
 export default ResetPassword;
