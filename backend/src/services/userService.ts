@@ -1,5 +1,7 @@
 import User from '../models/user';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import express from 'express';
 import listService from './listService';
@@ -204,19 +206,53 @@ const changePassword = async (req: express.Request) => {
 };
 
 const resetPassword = async (req: express.Request) => {
-    const user = await getUserFromReq(req);
-    const password = req.body.password;
 
-    if (password.length < 5) {
-        throw Error(`Password is too short. Use at least 5 characters`);
+    const email = req.body.email;
+    console.log(email);
+    if (!email) {
+        throw Error("email not found");
     }
 
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    const user = await User.findOne({ email });
 
-    user.passwordHash = passwordHash;
+    if (user) {
+        const token = crypto.randomBytes(20).toString('hex');
 
-    return await user.save();
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000;
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: `${process.env.EMAIL_USER}`,
+                pass: `${process.env.EMAIL_PASSWORD}`,
+            }
+        });
+
+        const mailOptions = {
+            from: 'Kauppalappu app',
+            to: `${user.email}`,
+            subject: 'Link to reset password',
+            text:
+                'You are receiving this because you (or someone else) have requested the reset of the password for your Kauppalappu app account.\n\n'
+                + 'Please click the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
+                + `http://localhost:3000/users/reset-password/${token} \n\n`
+                + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+        };
+
+        transporter.sendMail(mailOptions, (err, res) => {
+            if (err) {
+                console.error('there was an error sending mail: ', err);
+            } else {
+                // console.log('mail sent: ', res);
+                return res.status(200).json('recovery email sent');
+            }
+        });
+    } else {
+        throw Error("email not in use");
+    }
+
+
 };
 
 export default {

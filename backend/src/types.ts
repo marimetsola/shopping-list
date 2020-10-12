@@ -24,4 +24,6 @@ export interface UserType extends Document {
     guestLists: ItemListType[];
     listInvitations: ItemListType[];
     activeList: ItemListType | undefined;
+    resetPasswordToken: string;
+    resetPasswordExpires: number;
 }

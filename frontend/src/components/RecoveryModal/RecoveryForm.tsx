@@ -79,7 +79,7 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenLoginM
                                     color="green"
                                     disabled={!dirty || !isValid}
                                 >
-                                    Login
+                                    Send
                                 </Button>
                             </Grid.Column>
                         </Grid>

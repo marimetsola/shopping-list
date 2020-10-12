@@ -48,8 +48,14 @@ const changePassword = async (userId: string, oldPassword: string, newPassword: 
 };
 
 const resetPassword = async (email: string) => {
-    const response = await axios.patch(`${apiBaseUrl}/users/reset-password`, { email }, listService.config());
-    return response.data;
+    try {
+        const response = await axios.post(`${apiBaseUrl}/users/send-reset-email`, { email }, listService.config());
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+
+
 };
 
 export default { login, register, getUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, changePassword, resetPassword };

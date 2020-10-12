@@ -15,6 +15,7 @@ const RecoveryModal: React.FC<Props> = ({ open }) => {
     const [emailNotFound, setEmailNotFound] = useState(false);
 
     const closeModal = () => {
+        setEmailFound(false);
         setEmailNotFound(false);
         dispatch(setOpenModalType(ModalType.None));
     };
@@ -25,19 +26,16 @@ const RecoveryModal: React.FC<Props> = ({ open }) => {
     };
 
     const sendMail = async (values: { email: string }) => {
-        try {
-            const response = await userService.getUserByEmail(values.email);
-            console.log(response);
-            if (response) {
-                setEmailNotFound(false);
-                setEmailFound(true);
-            } else {
-                setEmailFound(false);
-                setEmailNotFound(true);
-            }
-        } catch (error) {
+        const response = await userService.resetPassword(values.email);
+        console.log(response);
+        if (response.status === 200) {
+            setEmailNotFound(false);
+            setEmailFound(true);
+        } else {
+            setEmailFound(false);
             setEmailNotFound(true);
         }
+
     };
 
     const resetMessage = () => {

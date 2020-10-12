@@ -9,6 +9,7 @@ import AddListModal from './components/AddListModal';
 import { useStateValue, setDesktop } from './state';
 import { Container } from 'semantic-ui-react';
 import ProfilePage from './components/ProfilePage';
+import ResetPassword from './components/ResetPassword';
 import Home from './components/Home';
 
 const App: React.FC = () => {
@@ -35,6 +36,9 @@ const App: React.FC = () => {
                         </Route>
                         <Route path="/list">
                             <ActiveList />
+                        </Route>
+                        <Route path="/users/reset-password">
+                            <ResetPassword />
                         </Route>
                         <Route path="/">
                             <Home />

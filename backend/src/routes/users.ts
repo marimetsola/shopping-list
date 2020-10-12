@@ -54,8 +54,13 @@ usersRouter.patch('/:id/change-password', async (req, res) => {
     res.json(await userService.changePassword(req));
 });
 
-usersRouter.post('reset-password', async (req, res) => {
-    res.json(await userService.resetPassword(req));
+usersRouter.post('/send-reset-email', async (req, res) => {
+    try {
+        await userService.resetPassword(req);
+        res.status(200).send('recovery email sent');
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 });
 
 export default usersRouter;

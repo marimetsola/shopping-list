@@ -70,8 +70,6 @@ const ActiveList: React.FC = () => {
         }
     };
 
-    const contStyle = { padding: "0 4.6rem" };
-
     const adviceStyle =
     {
         marginTop: "4rem",
@@ -82,7 +80,6 @@ const ActiveList: React.FC = () => {
         return <Redirect to="/" />;
     }
 
-    console.log(isLoadingList);
     if (isLoadingList) {
         return null;
     }
@@ -90,7 +87,7 @@ const ActiveList: React.FC = () => {
     if (!activeList) {
 
         return (
-            <Container style={contStyle}>
+            <Container className={isDesktop ? "cont-style" : "cont-style-mobile"}>
                 <Header as="h2" style={adviceStyle}>Create or select a list.</Header>
             </Container>
         );
