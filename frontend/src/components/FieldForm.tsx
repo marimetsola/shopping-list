@@ -1,5 +1,5 @@
-import React from "react";
-import { Form as UIForm } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Form as UIForm, Input, Icon } from "semantic-ui-react";
 import { Field, ErrorMessage, FieldProps } from "formik";
 
 interface TextProps extends FieldProps {
@@ -23,21 +23,38 @@ export const TextField: React.FC<TextProps> = ({
         </UIForm.Field>
     );
 
-export const PasswordField: React.FC<TextProps> = ({
+interface PasswordProps extends FieldProps {
+    label: string;
+    placeholder: string;
+    autoFocus: boolean;
+    type: string;
+}
+
+export const PasswordField: React.FC<PasswordProps> = ({
     field,
     label,
     placeholder,
     autoFocus
-}) => (
+}) => {
+    const [showPassword, setShowPassword] = useState(false);
+    return (
         <UIForm.Field>
             <label>{label}</label>
-            <Field type="password" placeholder={placeholder} {...field} autoFocus={autoFocus} />
+            {/* <Field type={type} placeholder={placeholder} {...field} autoFocus={autoFocus} /> */}
+            <Input
+                autoFocus={autoFocus}
+                placeholder={placeholder}
+                type={showPassword ? 'text' : 'password'}
+                {...field}
+                icon={
+                    <Icon name={showPassword ? 'eye slash' : 'eye'} size="large" link onClick={() => setShowPassword(!showPassword)} />}
+            />
             {/* <div style={{ color: 'red', minHeight: "1.3571rem" }}></div> */}
             <div style={{ color: 'red' }}>
                 <ErrorMessage name={field.name} />
             </div>
-        </UIForm.Field>
-    );
+        </UIForm.Field >);
+};
 
 interface CheckboxProps extends FieldProps {
     label: string;

@@ -7,13 +7,12 @@ import ButtonLink from '../ButtonLink';
 interface Props {
     onSubmit: (values: { email: string }) => void;
     onCancel: () => void;
-    onOpenLoginModal: () => void;
     emailFound: boolean;
     emailNotFound: boolean;
     resetMessage: () => void;
 }
 
-export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenLoginModal, emailFound, emailNotFound, resetMessage }) => {
+export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, emailFound, emailNotFound, resetMessage }) => {
     return (
         <Formik
             initialValues={{
@@ -33,7 +32,10 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenLoginM
                 return errors;
             }}
         >
-            {({ isValid, dirty }) => {
+            {({ isValid, dirty, resetForm, values }) => {
+                if (emailFound && values.email) {
+                    resetForm();
+                }
                 return (
                     <Form className="form ui">
                         <Field
@@ -45,13 +47,13 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, onOpenLoginM
                         />
                         {emailFound &&
                             <Message info>
-                                <p style={{ textAlign: "center" }}>Password reset email successfully sent.</p>
-                                <div className="center-container">
+                                <p style={{ textAlign: "center" }}>Password reset email sent. Please check your mailbox and follow the link provided to reset your password.</p>
+                                {/* <div className="center-container">
                                     <ButtonLink
                                         onClick={onOpenLoginModal}>
                                         Click here to login.
                                     </ButtonLink>
-                                </div>
+                                </div> */}
                             </Message>}
                         {emailNotFound &&
                             <Message negative>

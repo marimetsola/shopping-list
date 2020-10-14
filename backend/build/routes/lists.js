@@ -23,7 +23,6 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const lists = yield listService_1.default.getListsByUser(req);
     const guestLists = yield listService_1.default.getGuestListsByUser(req);
     if (lists && guestLists) {
-        // console.log(lists.concat(guestLists));
         res.send(lists.concat(guestLists));
     }
 }));

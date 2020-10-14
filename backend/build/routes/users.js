@@ -55,9 +55,35 @@ usersRouter.patch('/:id/change-email', (req, res) => __awaiter(void 0, void 0, v
     res.json(user);
 }));
 usersRouter.patch('/:id/change-password', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json(yield userService_1.default.changePassword(req));
+    try {
+        res.json(yield userService_1.default.changePassword(req));
+    }
+    catch (error) {
+        if (error.message === 'invalid password') {
+            res.status(401).send(error.message);
+        }
+        else {
+            res.status(400).send(error.message);
+        }
+    }
 }));
-usersRouter.post('reset-password', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json(yield userService_1.default.resetPassword(req));
+usersRouter.post('/send-reset-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield userService_1.default.sendResetPasswordMail(req);
+        res.status(200).send('recovery email sent');
+    }
+    catch (error) {
+        res.status(400).send(error.message);
+    }
+}));
+usersRouter.post('/validate-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userService_1.default.validateToken(req);
+    res.status(200).send(user);
+    // res.status(400).send();
+}));
+usersRouter.post('/reset-password/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userService_1.default.resetPassword(req);
+    res.status(200).send(user);
+    // res.status(400).send();
 }));
 exports.default = usersRouter;

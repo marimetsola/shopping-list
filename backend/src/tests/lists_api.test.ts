@@ -592,7 +592,6 @@ describe('when there is initially one user at db', () => {
                         .get(`/api/users/${rootUser.id}`);
 
                     expect(response.body.email).toBe('testi@email.com');
-                    console.log(response.body);
                 });
 
                 test('fails with an invalid email adress', async () => {

@@ -44,6 +44,9 @@ const App: React.FC = () => {
                         <Route path="/users/reset-password/:token">
                             <ResetPassword />
                         </Route>
+                        <Route path="/users/reset-password/">
+                            <p>Test</p>
+                        </Route>
                         <Route path="/">
                             <Home />
                         </Route>

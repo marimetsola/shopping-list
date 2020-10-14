@@ -20,14 +20,8 @@ const RecoveryModal: React.FC<Props> = ({ open }) => {
         dispatch(setOpenModalType(ModalType.None));
     };
 
-    const openLoginModal = () => {
-        closeModal();
-        dispatch(setOpenModalType(ModalType.LoginModal));
-    };
-
     const sendMail = async (values: { email: string }) => {
         const response = await userService.requestReset(values.email);
-        console.log(response);
         if (response.status === 200) {
             setEmailNotFound(false);
             setEmailFound(true);
@@ -50,7 +44,6 @@ const RecoveryModal: React.FC<Props> = ({ open }) => {
                 <RecoveryForm
                     onSubmit={sendMail}
                     onCancel={closeModal}
-                    onOpenLoginModal={openLoginModal}
                     emailFound={emailFound}
                     emailNotFound={emailNotFound}
                     resetMessage={resetMessage} />

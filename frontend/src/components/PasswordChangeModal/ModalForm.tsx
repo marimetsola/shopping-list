@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Icon } from "semantic-ui-react";
 import { Field, Formik, Form, FormikHelpers } from "formik";
 import { TextField, PasswordField, Checkbox } from '../FieldForm';
 
@@ -26,28 +26,27 @@ export const ModalForm: React.FC<Props> = ({ onSubmit, onCancel, showPassword, t
                     <Form className="form ui">
                         <Field
                             label="Current password"
-                            placeholder="Current password"
+                            placeholder="Password"
                             name="oldPassword"
                             component={PasswordField}
                             autoFocus={true}
+
                         />
                         <Field
                             label="New password"
                             placeholder="Password"
                             name="newPassword"
-                            component={showPassword ? TextField : PasswordField}
+                            component={PasswordField}
                             autoFocus={false}
-                            validate={validate}
-                            validateOnChange={true}
-                            validateOnBlur={true}
                         />
-                        <Field
+
+                        {/* <Field
                             name="Show password"
                             type="checkbox"
                             checked={showPassword}
                             component={Checkbox}
                             onChange={toggleShowPassword}
-                        />
+                        /> */}
                         <Grid style={{ paddingTop: "1rem" }}>
                             <Grid.Column floated="left" width={5}>
                                 <Button type="button" onClick={onCancel} color="red">

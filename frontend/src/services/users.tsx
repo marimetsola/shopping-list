@@ -65,9 +65,9 @@ const requestReset = async (email: string) => {
     }
 };
 
-const resetPassword = async (id: string, password: string) => {
+const resetPassword = async (email: string, password: string) => {
     try {
-        const response = await axios.post(`${apiBaseUrl}/users/reset-password`, { id, password }, listService.config());
+        const response = await axios.post(`${apiBaseUrl}/users/reset-password`, { email, password }, listService.config());
         return response;
     } catch (error) {
         return error.response;

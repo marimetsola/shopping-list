@@ -12,7 +12,6 @@ router.get('/', async (req, res) => {
     const lists = await listService.getListsByUser(req);
     const guestLists = await listService.getGuestListsByUser(req);
     if (lists && guestLists) {
-        // console.log(lists.concat(guestLists));
         res.send(lists.concat(guestLists));
     }
 

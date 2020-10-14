@@ -191,14 +191,22 @@ const changeEmail = async (req: express.Request) => {
 
 const changePassword = async (req: express.Request) => {
     const user = await getUserFromReq(req);
-    const password = req.body.password;
+    const newPassword = req.body.newPassword;
 
-    if (password.length < 5) {
-        throw Error(`Password is too short. Use at least 5 characters`);
+    const passwordCorrect = user === null
+        ? false
+        : await bcrypt.compare(req.body.oldPassword, user.passwordHash);
+
+    if (!passwordCorrect) {
+        throw Error("invalid password");
+    }
+
+    if (newPassword.length < 5) {
+        throw Error("password is too short");
     }
 
     const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    const passwordHash = await bcrypt.hash(newPassword, saltRounds);
 
     user.passwordHash = passwordHash;
 
@@ -206,9 +214,7 @@ const changePassword = async (req: express.Request) => {
 };
 
 const sendResetPasswordMail = async (req: express.Request) => {
-
     const email = req.body.email;
-    console.log(email);
     if (!email) {
         throw Error("email not found");
     }
@@ -237,7 +243,8 @@ const sendResetPasswordMail = async (req: express.Request) => {
             text:
                 'You are receiving this because you (or someone else) have requested the reset of the password for your Kauppalappu app account.\n\n'
                 + 'Please click the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-                + `http://localhost:3000/users/reset-password/${token} \n\n`
+                // + `http://localhost:3000/users/reset-password/${token} \n\n`
+                + `https://kauppalappu-app.herokuapp.com/users/reset-password/${token} \n\n`
                 + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
         };
 
@@ -245,7 +252,6 @@ const sendResetPasswordMail = async (req: express.Request) => {
             if (err) {
                 console.error('there was an error sending mail: ', err);
             } else {
-                // console.log('mail sent: ', res);
                 return res.status(200).json('recovery email sent');
             }
         });
@@ -257,27 +263,21 @@ const sendResetPasswordMail = async (req: express.Request) => {
 
 
 const validateToken = async (req: express.Request) => {
-    console.log(req.body.token);
     const token = req.body.token;
     const user = await User.findOne({ resetPasswordToken: token });
-    console.log(user);
 
-    if (user) {
-        return user.id;
+    if (user && user.resetPasswordExpires && user.resetPasswordExpires > Date.now()) {
+        return { id: user.id };
     }
     return null;
 
 };
 
 const resetPassword = async (req: express.Request) => {
-    const user = await User.findById(req.body.id);
+    const user = await getUserByEmail(req.body.email);
     const password = req.body.password;
 
-    // console.log(user?.resetPasswordExpires, Date.now());
-
-    if (user && user.resetPasswordExpires && user.resetPasswordExpires > Date.now()) {
-        console.log(user.name, password);
-
+    if (user) {
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
@@ -287,7 +287,7 @@ const resetPassword = async (req: express.Request) => {
 
         return await user.save();
     } else {
-        // token expired
+        return null;
     }
 };
 

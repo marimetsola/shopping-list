@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../models/user"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const crypto_1 = __importDefault(require("crypto"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const listService_1 = __importDefault(require("./listService"));
 // import nodemailer from 'nodemailer';
@@ -184,25 +186,84 @@ const changeEmail = (req) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const changePassword = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield getUserFromReq(req);
-    const password = req.body.password;
-    if (password.length < 5) {
-        throw Error(`Password is too short. Use at least 5 characters`);
+    const newPassword = req.body.newPassword;
+    const passwordCorrect = user === null
+        ? false
+        : yield bcrypt_1.default.compare(req.body.oldPassword, user.passwordHash);
+    if (!passwordCorrect) {
+        throw Error("invalid password");
+    }
+    if (newPassword.length < 5) {
+        throw Error("password is too short");
     }
     const saltRounds = 10;
-    const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
+    const passwordHash = yield bcrypt_1.default.hash(newPassword, saltRounds);
     user.passwordHash = passwordHash;
     return yield user.save();
 });
-const resetPassword = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield getUserFromReq(req);
-    const password = req.body.password;
-    if (password.length < 5) {
-        throw Error(`Password is too short. Use at least 5 characters`);
+const sendResetPasswordMail = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    if (!email) {
+        throw Error("email not found");
     }
-    const saltRounds = 10;
-    const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
-    user.passwordHash = passwordHash;
-    return yield user.save();
+    const user = yield user_1.default.findOne({ email });
+    if (user) {
+        const token = crypto_1.default.randomBytes(20).toString('hex');
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000;
+        yield user.save();
+        const transporter = nodemailer_1.default.createTransport({
+            service: 'gmail',
+            auth: {
+                user: `${process.env.EMAIL_USER}`,
+                pass: `${process.env.EMAIL_PASSWORD}`,
+            }
+        });
+        const mailOptions = {
+            from: 'Kauppalappu app',
+            to: `${user.email}`,
+            subject: 'Link to reset password',
+            text: 'You are receiving this because you (or someone else) have requested the reset of the password for your Kauppalappu app account.\n\n'
+                + 'Please click the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
+                // + `http://localhost:3000/users/reset-password/${token} \n\n`
+                + `https://kauppalappu-app.herokuapp.com/users/reset-password/${token} \n\n`
+                + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+        };
+        transporter.sendMail(mailOptions, (err, res) => {
+            if (err) {
+                console.error('there was an error sending mail: ', err);
+            }
+            else {
+                return res.status(200).json('recovery email sent');
+            }
+        });
+    }
+    else {
+        throw Error("email not in use");
+    }
+});
+const validateToken = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.body.token;
+    const user = yield user_1.default.findOne({ resetPasswordToken: token });
+    if (user && user.resetPasswordExpires && user.resetPasswordExpires > Date.now()) {
+        return { id: user.id };
+    }
+    return null;
+});
+const resetPassword = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserByEmail(req.body.email);
+    const password = req.body.password;
+    if (user) {
+        const saltRounds = 10;
+        const passwordHash = yield bcrypt_1.default.hash(password, saltRounds);
+        user.passwordHash = passwordHash;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        return yield user.save();
+    }
+    else {
+        return null;
+    }
 });
 exports.default = {
     getUserFromReq,
@@ -217,5 +278,7 @@ exports.default = {
     changeName,
     changeEmail,
     changePassword,
+    sendResetPasswordMail,
+    validateToken,
     resetPassword
 };

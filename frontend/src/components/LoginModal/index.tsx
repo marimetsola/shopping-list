@@ -19,6 +19,7 @@ const LoginModal: React.FC<Props> = ({ open }) => {
         try {
             await login(values.name, values.password, dispatch);
             dispatch(setOpenModalType(ModalType.None));
+            setLoginFailed(false);
             history.push('/list');
         } catch (error) {
             setLoginFailed(true);

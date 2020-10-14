@@ -51,7 +51,16 @@ usersRouter.patch('/:id/change-email', async (req, res) => {
 });
 
 usersRouter.patch('/:id/change-password', async (req, res) => {
-    res.json(await userService.changePassword(req));
+    try {
+        res.json(await userService.changePassword(req));
+    } catch (error) {
+        if (error.message === 'invalid password') {
+            res.status(401).send(error.message);
+        } else {
+            res.status(400).send(error.message);
+        }
+    }
+
 });
 
 usersRouter.post('/send-reset-email', async (req, res) => {
@@ -66,14 +75,14 @@ usersRouter.post('/send-reset-email', async (req, res) => {
 usersRouter.post('/validate-token', async (req, res) => {
     const user = await userService.validateToken(req);
     res.status(200).send(user);
-    res.status(400).send();
+    // res.status(400).send();
 
 });
 
-usersRouter.post('/reset-password', async (req, res) => {
+usersRouter.post('/reset-password/', async (req, res) => {
     const user = await userService.resetPassword(req);
     res.status(200).send(user);
-    res.status(400).send();
+    // res.status(400).send();
 
 });
 

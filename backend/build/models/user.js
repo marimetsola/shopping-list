@@ -46,7 +46,9 @@ const userSchema = new mongoose_1.default.Schema({
     activeList: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'ItemList'
-    }
+    },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Number }
 });
 userSchema.plugin(mongoose_unique_validator_1.default);
 userSchema.post('save', (error, _doc, next) => {

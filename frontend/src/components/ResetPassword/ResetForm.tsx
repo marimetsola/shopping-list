@@ -1,18 +1,19 @@
 import React from "react";
 import { Grid, Button, Message } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
-import { PasswordField } from '../FieldForm';
+import { TextField, PasswordField } from '../FieldForm';
 import ButtonLink from '../ButtonLink';
 
 interface Props {
-    onSubmit: (values: { password: string }) => void;
+    onSubmit: (values: { email: string; password: string }) => void;
 }
 
 export const ResetForm: React.FC<Props> = ({ onSubmit }) => {
     return (
         <Formik
             initialValues={{
-                password: "",
+                email: "",
+                password: ""
             }}
             onSubmit={onSubmit}
             validateOnChange={true}
@@ -31,11 +32,18 @@ export const ResetForm: React.FC<Props> = ({ onSubmit }) => {
                 return (
                     <Form className="form ui">
                         <Field
+                            label="Email"
+                            placeholder="Email"
+                            name="email"
+                            component={TextField}
+                            autoFocus={true}
+                        />
+                        <Field
                             label="Password"
                             placeholder="Password"
                             name="password"
                             component={PasswordField}
-                            autoFocus={true}
+                            autoFocus={false}
                         />
                         <div style={{ marginBottom: "1rem" }}>
                         </div>
