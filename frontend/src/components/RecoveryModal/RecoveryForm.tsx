@@ -2,7 +2,6 @@ import React from "react";
 import { Grid, Button, Message } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { TextField } from '../FieldForm';
-import ButtonLink from '../ButtonLink';
 
 interface Props {
     onSubmit: (values: { email: string }) => void;
@@ -48,22 +47,10 @@ export const RecoveryForm: React.FC<Props> = ({ onSubmit, onCancel, emailFound, 
                         {emailFound &&
                             <Message info>
                                 <p style={{ textAlign: "center" }}>Password reset email sent. Please check your mailbox and follow the link provided to reset your password.</p>
-                                {/* <div className="center-container">
-                                    <ButtonLink
-                                        onClick={onOpenLoginModal}>
-                                        Click here to login.
-                                    </ButtonLink>
-                                </div> */}
                             </Message>}
                         {emailNotFound &&
                             <Message negative>
                                 <p>Email is not in use.</p>
-                                {/* <div className="center-container">
-                                    <ButtonLink
-                                        onClick={onOpenLogin}>
-                                        Click here to login.
-                                    </ButtonLink>
-                                </div> */}
                             </Message>}
                         <div style={{ marginBottom: "1rem" }}>
                         </div>

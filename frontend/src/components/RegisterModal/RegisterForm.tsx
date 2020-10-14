@@ -57,7 +57,7 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                         />
                         <Field
                             label="Email"
-                            placeholder="Optional email adress. Can be added later in account settings"
+                            placeholder="Optional email address. Can be added later in account settings"
                             name="email"
                             component={TextField}
                         />

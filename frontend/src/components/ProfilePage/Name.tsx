@@ -15,15 +15,19 @@ const Name: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
 
-    const changeName = async (values: { name: string }, action: FormikHelpers<{ name: string }>) => {
+    const changeName = async (values: { name: string; password: string }, action: FormikHelpers<{ name: string; password: string }>) => {
         if (user) {
             try {
-                const editedUser = await userService.changeName(user.id, values.name);
+                const editedUser = await userService.changeName(user.id, values.name, values.password);
                 changeUserName(editedUser, dispatch);
 
                 setNameModalOpen(false);
             } catch (error) {
-                action.setErrors({ name: "Username already taken." });
+                if (error.response.status === 400) {
+                    action.setErrors({ name: "Username already taken." });
+                } else {
+                    action.setErrors({ password: "Invalid password." });
+                }
             }
         }
     };
@@ -48,8 +52,7 @@ const Name: React.FC<Props> = ({ user }) => {
                     label="Enter new name"
                     header="Change username"
                     placeHolder="Name"
-                    type="name"
-                    validate={undefined}
+                    type="text"
                     initialValue={user.name}
                 />
             </Table.Row>
@@ -72,8 +75,7 @@ const Name: React.FC<Props> = ({ user }) => {
                     label="Enter new name"
                     header="Change username"
                     placeHolder="Name"
-                    type="name"
-                    validate={undefined}
+                    type="text"
                     initialValue={user.name}
                 />
             </Table.Row >

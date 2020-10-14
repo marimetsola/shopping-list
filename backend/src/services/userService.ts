@@ -5,7 +5,6 @@ import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import express from 'express';
 import listService from './listService';
-// import nodemailer from 'nodemailer';
 
 const getUserFromToken = async (token: string | null) => {
     if (!token) {
@@ -164,6 +163,12 @@ const clearActiveList = async (req: express.Request) => {
 
 const changeName = async (req: express.Request) => {
     const user = await getUserFromReq(req);
+    const passwordCorrect = user === null
+        ? false
+        : await bcrypt.compare(req.body.password, user.passwordHash);
+    if (!passwordCorrect) {
+        throw Error('invalid password');
+    }
     const desiredName = req.body.name;
     if (await User.findOne({ name: desiredName })) {
         throw Error(`user with the name ${desiredName} already exists`);
@@ -176,15 +181,21 @@ const changeName = async (req: express.Request) => {
 const changeEmail = async (req: express.Request) => {
     const user = await getUserFromReq(req);
     const desiredEmail = req.body.email.toLowerCase();
+    const passwordCorrect = user === null
+        ? false
+        : await bcrypt.compare(req.body.password, user.passwordHash);
+    if (!passwordCorrect) {
+        throw Error('invalid password');
+    }
     if (await User.findOne({ email: desiredEmail })) {
-        throw Error(`email adress ${desiredEmail} is already in use`);
+        throw Error(`Email address is already in use.`);
     } else {
         const validatedEmail = validateEmail(desiredEmail);
         if (validatedEmail) {
             user.email = desiredEmail;
             return await user.save();
         } else {
-            throw Error(`${desiredEmail} is not a proper email adress`);
+            throw Error(`Invalid email address.`);
         }
     }
 };

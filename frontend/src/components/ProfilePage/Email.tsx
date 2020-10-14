@@ -14,25 +14,21 @@ const Email: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [emailModalOpen, setEmailModalOpen] = useState<boolean>(false);
 
-    const changeEmail = async (values: { name: string }, action: FormikHelpers<{ name: string }>) => {
+    const changeEmail = async (values: { name: string; password: string }, action: FormikHelpers<{ name: string; password: string }>) => {
         if (user) {
             try {
-                const editedUser = await userService.changeEmail(user.id, values.name);
+                const editedUser = await userService.changeEmail(user.id, values.name, values.password);
                 changeUserEmail(editedUser, dispatch);
 
                 setEmailModalOpen(false);
             } catch (error) {
-                action.setErrors({ name: "Email adress already in use." });
+                if (error.response.status === 400) {
+                    action.setErrors({ name: error.response.data });
+                } else {
+                    action.setErrors({ password: "Invalid password." });
+                }
             }
         }
-    };
-
-    const validate = (values: { name: string }) => {
-        const errors: { [field: string]: string } = {};
-        if (values.name && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.name)) {
-            errors.name = 'Invalid email address';
-        }
-        return errors;
     };
 
     if (!user) {
@@ -57,7 +53,6 @@ const Email: React.FC<Props> = ({ user }) => {
                     type="email"
                     header="Change email"
                     placeHolder="Email"
-                    validate={validate}
                     initialValue={user.email ? user.email : ""}
                 />
             </Table.Row>
@@ -80,11 +75,10 @@ const Email: React.FC<Props> = ({ user }) => {
                     open={emailModalOpen}
                     onSubmit={changeEmail}
                     onClose={() => setEmailModalOpen(false)}
-                    label="Email adress"
+                    label="Email address"
                     type="email"
                     header="Change email"
                     placeHolder="Email"
-                    validate={validate}
                     initialValue={user.email ? user.email : ""}
                 />
             </Table.Row>

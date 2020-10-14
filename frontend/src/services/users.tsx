@@ -32,13 +32,13 @@ const clearActiveList = async (userId: string) => {
     return response.data;
 };
 
-const changeName = async (userId: string, name: string) => {
-    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-name`, { name }, listService.config());
+const changeName = async (userId: string, name: string, password: string) => {
+    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-name`, { name, password }, listService.config());
     return response.data;
 };
 
-const changeEmail = async (userId: string, email: string) => {
-    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-email`, { email }, listService.config());
+const changeEmail = async (userId: string, email: string, password: string) => {
+    const response = await axios.patch(`${apiBaseUrl}/users/${userId}/change-email`, { email, password }, listService.config());
     return response.data;
 };
 

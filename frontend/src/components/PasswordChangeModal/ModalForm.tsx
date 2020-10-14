@@ -38,6 +38,7 @@ export const ModalForm: React.FC<Props> = ({ onSubmit, onCancel, showPassword, t
                             name="newPassword"
                             component={PasswordField}
                             autoFocus={false}
+                            validate={validate}
                         />
 
                         {/* <Field

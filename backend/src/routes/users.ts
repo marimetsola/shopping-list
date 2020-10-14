@@ -41,13 +41,31 @@ usersRouter.patch('/:id/clear-active-list', async (req, res) => {
 });
 
 usersRouter.patch('/:id/change-name', async (req, res) => {
-    const user = await userService.changeName(req);
-    res.json(user);
+    try {
+        const user = await userService.changeName(req);
+        res.json(user);
+    } catch (error) {
+        if (error.message.includes('exists')) {
+            res.status(400).send(error.message);
+        } else {
+            res.status(401).send(error.message);
+        }
+    }
+
 });
 
 usersRouter.patch('/:id/change-email', async (req, res) => {
-    const user = await userService.changeEmail(req);
-    res.json(user);
+    try {
+        const user = await userService.changeEmail(req);
+        res.json(user);
+    } catch (error) {
+        if (error.message.includes('password')) {
+            res.status(401).send(error.message);
+        } else {
+            res.status(400).send(error.message);
+        }
+    }
+
 });
 
 usersRouter.patch('/:id/change-password', async (req, res) => {

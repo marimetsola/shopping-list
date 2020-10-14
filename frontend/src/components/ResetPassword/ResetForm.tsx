@@ -21,7 +21,7 @@ export const ResetForm: React.FC<Props> = ({ onSubmit }) => {
             validate={values => {
                 const errors: { [field: string]: string } = {};
                 if (!values.password) {
-                    errors.password = "Field is required";
+                    errors.password = "Field is required.";
                 } else if (values.password.length < 5) {
                     errors.password = "Password is too short. Please use at least 5 characters.";
                 }
