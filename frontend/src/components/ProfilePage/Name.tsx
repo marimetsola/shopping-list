@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useStateValue, changeUserName } from '../../state';
 import { Icon, Table, Button } from 'semantic-ui-react';
 import { FormikHelpers } from "formik";
@@ -10,10 +10,23 @@ interface Props {
     user: User;
 }
 
-
 const Name: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
+    const [nameChanged, setNameChanged] = useState<boolean>(false);
+    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+
+    useEffect(() => {
+        let nameChangedTimer: ReturnType<typeof setTimeout>;
+        if (nameChanged) {
+            setShowSuccess(true);
+            nameChangedTimer = setTimeout(() => {
+                setShowSuccess(false);
+                setNameChanged(false);
+            }, 5000);
+        }
+        return () => clearTimeout(nameChangedTimer);
+    }, [nameChanged]);
 
     const changeName = async (values: { name: string; password: string }, action: FormikHelpers<{ name: string; password: string }>) => {
         if (user) {
@@ -22,6 +35,7 @@ const Name: React.FC<Props> = ({ user }) => {
                 changeUserName(editedUser, dispatch);
 
                 setNameModalOpen(false);
+                setNameChanged(true);
             } catch (error) {
                 if (error.response.status === 400) {
                     action.setErrors({ name: "Username already taken." });
@@ -40,7 +54,15 @@ const Name: React.FC<Props> = ({ user }) => {
         return (
             <Table.Row>
                 <Table.Cell width={2}>Username</Table.Cell>
-                <Table.Cell>{user.name}</Table.Cell>
+                <Table.Cell>
+                    {user.name}
+                    {showSuccess &&
+                        <Fragment>
+                            <Icon style={{ marginLeft: "1rem" }} name="check" color="green" />
+                            <span style={{ color: "#21ba45" }}>Name changed!</span>
+                        </Fragment>
+                    }
+                </Table.Cell>
                 <Table.Cell textAlign='right'>
                     <Button color="olive" size="mini" onClick={() => setNameModalOpen(true)}>
                         <Icon name='edit' />Edit

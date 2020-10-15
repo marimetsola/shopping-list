@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useStateValue } from '../../state';
 import { Icon, Table, Button } from 'semantic-ui-react';
 import { FormikHelpers } from "formik";
@@ -14,6 +14,20 @@ interface Props {
 const Password: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }] = useStateValue();
     const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
+    const [passwordChanged, setPasswordChanged] = useState<boolean>(false);
+    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+
+    useEffect(() => {
+        let nameChangedTimer: ReturnType<typeof setTimeout>;
+        if (passwordChanged) {
+            setShowSuccess(true);
+            nameChangedTimer = setTimeout(() => {
+                setShowSuccess(false);
+                setPasswordChanged(false);
+            }, 5000);
+        }
+        return () => clearTimeout(nameChangedTimer);
+    }, [passwordChanged]);
 
     const changePassword = async (values: { oldPassword: string; newPassword: string },
         action: FormikHelpers<{ oldPassword: string; newPassword: string }>) => {
@@ -23,6 +37,7 @@ const Password: React.FC<Props> = ({ user }) => {
                 await userService.changePassword(user.id, values.oldPassword, values.newPassword);
 
                 setPasswordModalOpen(false);
+                setPasswordChanged(true);
             } catch (error) {
                 if (error.response.status === 401) {
                     action.setErrors({ oldPassword: "Invalid password." });
@@ -48,7 +63,14 @@ const Password: React.FC<Props> = ({ user }) => {
         return (
             <Table.Row>
                 <Table.Cell width={2}>Password</Table.Cell>
-                <Table.Cell>{"********"}</Table.Cell>
+                <Table.Cell>{"********"}
+                    {showSuccess &&
+                        <Fragment>
+                            <Icon style={{ marginLeft: "1rem" }} name="check" color="green" />
+                            <span style={{ color: "#21ba45" }}>Password changed!</span>
+                        </Fragment>
+                    }
+                </Table.Cell>
                 <Table.Cell textAlign='right'>
                     <Button color="olive" size="mini" onClick={() => setPasswordModalOpen(true)}>
                         <Icon name='edit' />Edit

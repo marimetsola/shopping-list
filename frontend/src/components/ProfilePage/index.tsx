@@ -7,7 +7,7 @@ import Password from './Password';
 import ListInvitations from './ListInvitations';
 import userService from '../../services/users';
 import { User } from '../../types';
-import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
+import { usePromiseTracker } from 'react-promise-tracker';
 import { Redirect } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
@@ -24,7 +24,7 @@ const ProfilePage: React.FC = () => {
     useEffect(() => {
         const getUser = async () => {
             if (user) {
-                const userToReturn: User = await trackPromise(userService.getUser(user.id));
+                const userToReturn: User = await userService.getUser(user.id);
                 setUserProp(userToReturn);
             }
         };

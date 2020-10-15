@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { useStateValue, changeUserEmail } from '../../state';
 import { Icon, Table, Button } from 'semantic-ui-react';
 import { FormikHelpers } from "formik";
@@ -13,6 +13,20 @@ interface Props {
 const Email: React.FC<Props> = ({ user }) => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const [emailModalOpen, setEmailModalOpen] = useState<boolean>(false);
+    const [emailChanged, setEmailChanged] = useState<boolean>(false);
+    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+
+    useEffect(() => {
+        let nameChangedTimer: ReturnType<typeof setTimeout>;
+        if (emailChanged) {
+            setShowSuccess(true);
+            nameChangedTimer = setTimeout(() => {
+                setShowSuccess(false);
+                setEmailChanged(false);
+            }, 5000);
+        }
+        return () => clearTimeout(nameChangedTimer);
+    }, [emailChanged]);
 
     const changeEmail = async (values: { name: string; password: string }, action: FormikHelpers<{ name: string; password: string }>) => {
         if (user) {
@@ -21,6 +35,7 @@ const Email: React.FC<Props> = ({ user }) => {
                 changeUserEmail(editedUser, dispatch);
 
                 setEmailModalOpen(false);
+                setEmailChanged(true);
             } catch (error) {
                 if (error.response.status === 400) {
                     action.setErrors({ name: error.response.data });
@@ -39,7 +54,14 @@ const Email: React.FC<Props> = ({ user }) => {
         return (
             <Table.Row>
                 <Table.Cell width={2}>Email</Table.Cell>
-                <Table.Cell>{user.email ? user.email : ""}</Table.Cell>
+                <Table.Cell>{user.email ? user.email : ""}
+                    {showSuccess &&
+                        <Fragment>
+                            <Icon style={{ marginLeft: "1rem" }} name="check" color="green" />
+                            <span style={{ color: "#21ba45" }}>Email changed!</span>
+                        </Fragment>
+                    }
+                </Table.Cell>
                 <Table.Cell textAlign='right'>
                     <Button color="olive" size="mini" onClick={() => setEmailModalOpen(true)}>
                         <Icon name='edit' />Edit
