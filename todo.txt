@@ -1,0 +1,4 @@
+add loading icon with module
+add notification to profile if there are invitations
+add button to cross over items
+add/fix backend tests

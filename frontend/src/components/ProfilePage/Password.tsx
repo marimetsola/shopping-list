@@ -24,7 +24,6 @@ const Password: React.FC<Props> = ({ user }) => {
 
                 setPasswordModalOpen(false);
             } catch (error) {
-                console.log(error.response.status);
                 if (error.response.status === 401) {
                     action.setErrors({ oldPassword: "Invalid password." });
                 } else {

@@ -18,7 +18,6 @@ const crypto_1 = __importDefault(require("crypto"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const listService_1 = __importDefault(require("./listService"));
-// import nodemailer from 'nodemailer';
 const getUserFromToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     if (!token) {
         throw Error('token missing');
@@ -158,6 +157,12 @@ const clearActiveList = (req) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const changeName = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield getUserFromReq(req);
+    const passwordCorrect = user === null
+        ? false
+        : yield bcrypt_1.default.compare(req.body.password, user.passwordHash);
+    if (!passwordCorrect) {
+        throw Error('invalid password');
+    }
     const desiredName = req.body.name;
     if (yield user_1.default.findOne({ name: desiredName })) {
         throw Error(`user with the name ${desiredName} already exists`);
@@ -170,8 +175,14 @@ const changeName = (req) => __awaiter(void 0, void 0, void 0, function* () {
 const changeEmail = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield getUserFromReq(req);
     const desiredEmail = req.body.email.toLowerCase();
+    const passwordCorrect = user === null
+        ? false
+        : yield bcrypt_1.default.compare(req.body.password, user.passwordHash);
+    if (!passwordCorrect) {
+        throw Error('invalid password');
+    }
     if (yield user_1.default.findOne({ email: desiredEmail })) {
-        throw Error(`email adress ${desiredEmail} is already in use`);
+        throw Error(`Email address is already in use.`);
     }
     else {
         const validatedEmail = validateEmail(desiredEmail);
@@ -180,7 +191,7 @@ const changeEmail = (req) => __awaiter(void 0, void 0, void 0, function* () {
             return yield user.save();
         }
         else {
-            throw Error(`${desiredEmail} is not a proper email adress`);
+            throw Error(`Invalid email address.`);
         }
     }
 });

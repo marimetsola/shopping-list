@@ -15,6 +15,7 @@ import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import RecoveryModal from './components/RecoveryModal';
 import { ModalType } from './types';
+import LoadingIndicator from './components/LoadingIndicator';
 
 const App: React.FC = () => {
     const [{ modalType }, dispatch] = useStateValue();
@@ -33,6 +34,7 @@ const App: React.FC = () => {
         <Router>
             <div>
                 <NavBar />
+                <LoadingIndicator />
                 <Container>
                     <Switch>
                         <Route path="/profile">

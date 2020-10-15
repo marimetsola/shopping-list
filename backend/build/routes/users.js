@@ -47,12 +47,32 @@ usersRouter.patch('/:id/clear-active-list', (req, res) => __awaiter(void 0, void
     res.json(user);
 }));
 usersRouter.patch('/:id/change-name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield userService_1.default.changeName(req);
-    res.json(user);
+    try {
+        const user = yield userService_1.default.changeName(req);
+        res.json(user);
+    }
+    catch (error) {
+        if (error.message.includes('exists')) {
+            res.status(400).send(error.message);
+        }
+        else {
+            res.status(401).send(error.message);
+        }
+    }
 }));
 usersRouter.patch('/:id/change-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield userService_1.default.changeEmail(req);
-    res.json(user);
+    try {
+        const user = yield userService_1.default.changeEmail(req);
+        res.json(user);
+    }
+    catch (error) {
+        if (error.message.includes('password')) {
+            res.status(401).send(error.message);
+        }
+        else {
+            res.status(400).send(error.message);
+        }
+    }
 }));
 usersRouter.patch('/:id/change-password', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

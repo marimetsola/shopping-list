@@ -5,6 +5,7 @@ import { useStateValue, setActiveList, setLists, changeActiveList } from '../sta
 import { ItemList } from '../types';
 import { Dropdown, Icon } from 'semantic-ui-react';
 import listService from '../services/lists';
+import { trackPromise } from 'react-promise-tracker';
 
 const ShoppingLists: React.FC = () => {
     const [{ lists, activeList, user, isDesktop, isLoadingList }, dispatch] = useStateValue();
@@ -13,6 +14,8 @@ const ShoppingLists: React.FC = () => {
 
     useEffect(() => {
         const fetchLists = async () => {
+            // const waitFor = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
+            // await waitFor(2000);
             try {
                 const listsFromApi = await listService.getListsByUser();
                 dispatch(setLists(listsFromApi));
@@ -24,7 +27,7 @@ const ShoppingLists: React.FC = () => {
                 console.error(e);
             }
         };
-        fetchLists();
+        trackPromise(fetchLists());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
