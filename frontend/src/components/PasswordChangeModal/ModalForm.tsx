@@ -1,7 +1,7 @@
 import React from "react";
-import { Grid, Button, Icon } from "semantic-ui-react";
+import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form, FormikHelpers } from "formik";
-import { TextField, PasswordField, Checkbox } from '../FieldForm';
+import { PasswordField } from '../FieldForm';
 
 interface Props {
     onSubmit: (values: { oldPassword: string; newPassword: string },

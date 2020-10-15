@@ -6,7 +6,7 @@ import { Container, Header, Button, Segment } from 'semantic-ui-react';
 import { ModalType } from '../types';
 
 const Home: React.FC = () => {
-    const [{ user, isDesktop, modalType, activeList, isLoadingList }, dispatch] = useStateValue();
+    const [{ user, isDesktop }, dispatch] = useStateValue();
     const contStyle = { padding: "0 4.6rem" };
 
     const adviceStyle =

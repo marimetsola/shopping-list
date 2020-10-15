@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import AddListForm from './AddListForm';
 import { useStateValue, closeListModal, addList } from '../../state';
+import { trackPromise } from 'react-promise-tracker';
 
 const AddListModal: React.FC = () => {
     const [{ listModalOpen, user }, dispatch] = useStateValue();
@@ -10,7 +11,7 @@ const AddListModal: React.FC = () => {
         dispatch(closeListModal());
         try {
             if (user) {
-                addList(values.name, user, dispatch);
+                trackPromise(addList(values.name, user, dispatch));
             }
         } catch (e) {
             console.error(e);

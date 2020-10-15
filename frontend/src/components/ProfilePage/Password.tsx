@@ -12,7 +12,7 @@ interface Props {
 
 
 const Password: React.FC<Props> = ({ user }) => {
-    const [{ isDesktop }, dispatch] = useStateValue();
+    const [{ isDesktop }] = useStateValue();
     const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
 
     const changePassword = async (values: { oldPassword: string; newPassword: string },

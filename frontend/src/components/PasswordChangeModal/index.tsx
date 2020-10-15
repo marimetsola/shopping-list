@@ -24,7 +24,7 @@ const PasswordChangeModal: React.FC<Props> = ({ open, onSubmit, onClose, header,
         <Modal open={open} onClose={onClose} centered={false} size="tiny" closeIcon>
             <Modal.Header>{header}</Modal.Header>
             <Modal.Content>
-                <ModalForm onSubmit={onSubmit} onCancel={() => { onClose(); { setShowPassword(false); } }} showPassword={showPassword} toggleShowPassword={toggleShowPassword} validate={validate} />
+                <ModalForm onSubmit={onSubmit} onCancel={() => { onClose(); setShowPassword(false); }} showPassword={showPassword} toggleShowPassword={toggleShowPassword} validate={validate} />
             </Modal.Content>
         </Modal >
     );

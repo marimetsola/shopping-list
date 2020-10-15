@@ -7,15 +7,16 @@ import AddItemModal from './AddItemModal';
 import EditItemModal from './EditItemModal';
 import Item from './Item';
 import { ItemType } from '../types';
-
+import { usePromiseTracker } from 'react-promise-tracker';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 const ActiveList: React.FC = () => {
     const [editListModalOpen, setEditListModalOpen] = useState<boolean>(false);
     const [editedItem, setEditedItem] = useState<ItemType | null>(null);
     const [addItemModalOpen, setAddItemModalOpen] = useState<boolean>(false);
-    const [{ activeList, isDesktop, user, isLoadingList }, dispatch] = useStateValue();
+    const [{ activeList, isDesktop, user }, dispatch] = useStateValue();
     const refContainer = useRef<Button>(null);
+    const { promiseInProgress } = usePromiseTracker();
 
     const focusAddButton = () => {
         if (refContainer && refContainer.current) {
@@ -80,12 +81,11 @@ const ActiveList: React.FC = () => {
         return <Redirect to="/" />;
     }
 
-    if (isLoadingList) {
+    if (promiseInProgress) {
         return null;
     }
 
     if (!activeList) {
-
         return (
             <Container className={isDesktop ? "cont-style" : "cont-style-mobile"}>
                 <Header as="h2" style={adviceStyle}>Create or select a list.</Header>

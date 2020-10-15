@@ -105,11 +105,6 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 isDesktop: action.payload
             };
-        case "SET_IS_LOADING_LIST":
-            return {
-                ...state,
-                isLoadingList: action.payload
-            };
         case "SET_LISTS":
             return {
                 ...state,
@@ -317,10 +312,12 @@ export const addList = async (name: string, user: User, dispatch: React.Dispatch
             payload: addedList
         }
     );
-    dispatch({
-        type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
-        payload: addedList
-    });
+    dispatch(
+        {
+            type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
+            payload: addedList
+        }
+    );
 };
 
 export const editList = async (list: ItemList, items: ItemType[], dispatch: React.Dispatch<Action>) => {

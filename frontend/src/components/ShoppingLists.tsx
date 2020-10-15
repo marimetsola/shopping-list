@@ -5,12 +5,13 @@ import { useStateValue, setActiveList, setLists, changeActiveList } from '../sta
 import { ItemList } from '../types';
 import { Dropdown, Icon } from 'semantic-ui-react';
 import listService from '../services/lists';
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 
 const ShoppingLists: React.FC = () => {
-    const [{ lists, activeList, user, isDesktop, isLoadingList }, dispatch] = useStateValue();
+    const [{ lists, activeList, user, isDesktop }, dispatch] = useStateValue();
     const history = useHistory();
     const location = useLocation();
+    const { promiseInProgress } = usePromiseTracker();
 
     useEffect(() => {
         const fetchLists = async () => {
@@ -20,7 +21,7 @@ const ShoppingLists: React.FC = () => {
                 const listsFromApi = await listService.getListsByUser();
                 dispatch(setLists(listsFromApi));
                 if (user) {
-                    setActiveList(user, dispatch);
+                    trackPromise(setActiveList(user, dispatch));
                 }
 
             } catch (e) {
@@ -35,7 +36,7 @@ const ShoppingLists: React.FC = () => {
 
     const setActive = (list: ItemList) => {
         if (user) {
-            changeActiveList(list, user, dispatch);
+            trackPromise(changeActiveList(list, user, dispatch));
             history.push('/list');
         }
     };
@@ -47,7 +48,7 @@ const ShoppingLists: React.FC = () => {
         return true;
     };
 
-    if (isLoadingList) {
+    if (promiseInProgress) {
         return (
             <Dropdown item text={(showActiveList()) ? activeList?.name : 'Select list'} style={{ minWidth: "11rem" }}></Dropdown >
         );

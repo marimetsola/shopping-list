@@ -7,11 +7,14 @@ import Password from './Password';
 import ListInvitations from './ListInvitations';
 import userService from '../../services/users';
 import { User } from '../../types';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
+import { Redirect } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
-    const [{ user, isDesktop }, dispatch] = useStateValue();
+    const [{ user, isDesktop, activeList }, dispatch] = useStateValue();
     const [userProp, setUserProp] = useState<User>();
     const dividerStyle = { padding: "1rem 0 1rem 0" };
+    const { promiseInProgress } = usePromiseTracker();
 
     useEffect(() => {
         dispatch(clearActiveList());
@@ -21,15 +24,19 @@ const ProfilePage: React.FC = () => {
     useEffect(() => {
         const getUser = async () => {
             if (user) {
-                const userToReturn: User = await userService.getUser(user.id);
+                const userToReturn: User = await trackPromise(userService.getUser(user.id));
                 setUserProp(userToReturn);
             }
         };
         getUser();
     }, [user]);
 
-    if (!user || !userProp) {
+    if (!user || !userProp || promiseInProgress) {
         return null;
+    }
+
+    if (activeList) {
+        return <Redirect to="/list" />;
     }
 
     return (
