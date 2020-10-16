@@ -5,6 +5,7 @@ import { FormikHelpers } from "formik";
 import userService from '../../services/users';
 import PromptModal from '../PromptModal';
 import { User } from '../../types';
+import DataChanged from './DataChanged';
 
 interface Props {
     user: User;
@@ -23,7 +24,7 @@ const Name: React.FC<Props> = ({ user }) => {
             nameChangedTimer = setTimeout(() => {
                 setShowSuccess(false);
                 setNameChanged(false);
-            }, 5000);
+            }, 7500);
         }
         return () => clearTimeout(nameChangedTimer);
     }, [nameChanged]);
@@ -57,10 +58,7 @@ const Name: React.FC<Props> = ({ user }) => {
                 <Table.Cell>
                     {user.name}
                     {showSuccess &&
-                        <Fragment>
-                            <Icon style={{ marginLeft: "1rem" }} name="check" color="green" />
-                            <span style={{ color: "#21ba45" }}>Name changed!</span>
-                        </Fragment>
+                        <DataChanged />
                     }
                 </Table.Cell>
                 <Table.Cell textAlign='right'>
@@ -82,7 +80,11 @@ const Name: React.FC<Props> = ({ user }) => {
     } else {
         return (
             <Table.Row style={{ paddingTop: 0 }}>
-                <Table.Cell>Username</Table.Cell>
+                <Table.Cell>Username
+                    {showSuccess &&
+                        <DataChanged />
+                    }
+                </Table.Cell>
                 <Table.Cell style={{ paddingTop: 0, paddingBottom: 0 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", textAlign: "justify", textJustify: "inter-word", marginTop: "1rem" }}>
                         <p style={{ lineHeight: "2rem", marginBottom: 0 }}> {user.name}</p>

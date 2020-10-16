@@ -59,6 +59,12 @@ router.patch('/:id/edit-item', async (req, res) => {
     res.send(updatedList);
 });
 
+// Toggle strikethrough of an item on a list
+router.patch('/:id/mark-item', async (req, res) => {
+    const updatedList = await listService.markItem(req);
+    res.send(updatedList);
+});
+
 // Update list
 router.put('/:id/update', async (req, res) => {
     const updatedList = await listService.updateList(req);

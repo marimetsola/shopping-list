@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useStateValue, deleteItem, editList } from '../state';
+import { useStateValue, markItem, deleteItem, editList } from '../state';
 import { Container, Header, Divider, Button, Icon } from 'semantic-ui-react';
 import EditListModal from './EditListModal';
 import AddItemModal from './AddItemModal';
@@ -27,6 +27,16 @@ const ActiveList: React.FC = () => {
     useEffect(() => {
         focusAddButton();
     }, [activeList]);
+
+    const clickItem = async (item: ItemType) => {
+        if (activeList) {
+            try {
+                await markItem(activeList, item, dispatch);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    };
 
     const removeItem = async (item: ItemType) => {
         if (activeList) {
@@ -111,8 +121,9 @@ const ActiveList: React.FC = () => {
                                         index={index}
                                         key={item.id}
                                         item={item}
-                                        onRemove={() => removeItem(item)}
-                                        onEdit={() => setEditedItem(item)}
+                                        onClick={() => clickItem(item)}
+                                        onRemove={(e) => { removeItem(item); e.stopPropagation(); }}
+                                        onEdit={(e) => { setEditedItem(item); e.stopPropagation(); }}
                                     />))}
                                 {provided.placeholder}
                             </div>

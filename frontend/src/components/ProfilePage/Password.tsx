@@ -5,6 +5,7 @@ import { FormikHelpers } from "formik";
 import userService from '../../services/users';
 import PasswordChangeModal from '../PasswordChangeModal';
 import { User } from '../../types';
+import DataChanged from './DataChanged';
 
 interface Props {
     user: User;
@@ -24,7 +25,7 @@ const Password: React.FC<Props> = ({ user }) => {
             nameChangedTimer = setTimeout(() => {
                 setShowSuccess(false);
                 setPasswordChanged(false);
-            }, 5000);
+            }, 7500);
         }
         return () => clearTimeout(nameChangedTimer);
     }, [passwordChanged]);
@@ -65,10 +66,7 @@ const Password: React.FC<Props> = ({ user }) => {
                 <Table.Cell width={2}>Password</Table.Cell>
                 <Table.Cell>{"********"}
                     {showSuccess &&
-                        <Fragment>
-                            <Icon style={{ marginLeft: "1rem" }} name="check" color="green" />
-                            <span style={{ color: "#21ba45" }}>Password changed!</span>
-                        </Fragment>
+                        <DataChanged />
                     }
                 </Table.Cell>
                 <Table.Cell textAlign='right'>
@@ -88,7 +86,11 @@ const Password: React.FC<Props> = ({ user }) => {
     } else {
         return (
             <Table.Row style={{ paddingTop: 0 }}>
-                <Table.Cell>Password</Table.Cell>
+                <Table.Cell>Password
+                    {showSuccess &&
+                        <DataChanged />
+                    }
+                </Table.Cell>
                 <Table.Cell style={{ paddingTop: 0, paddingBottom: 0 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", textAlign: "justify", textJustify: "inter-word", marginTop: "1rem" }}>
                         <p style={{ lineHeight: "2rem", marginBottom: 0 }}> {"********"}</p>

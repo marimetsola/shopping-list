@@ -56,6 +56,10 @@ export type Action =
         payload: { list: ItemList; editedItem: ItemType };
     }
     | {
+        type: "MARK_ITEM";
+        payload: { list: ItemList; editedItem: ItemType };
+    }
+    | {
         type: "SET_USER";
         payload: { user: User };
     }
@@ -159,6 +163,12 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
         case "EDIT_ITEM":
+            action.payload.list.items = action.payload.list.items.map(i => i.id === action.payload.editedItem.id ? action.payload.editedItem : i);
+            return {
+                ...state,
+                lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
+            };
+        case "MARK_ITEM":
             action.payload.list.items = action.payload.list.items.map(i => i.id === action.payload.editedItem.id ? action.payload.editedItem : i);
             return {
                 ...state,
@@ -367,6 +377,17 @@ export const editItem = async (list: ItemList, item: ItemType, newName: string, 
         {
             type: "EDIT_ITEM" as "EDIT_ITEM",
             payload: { list, editedItem: newItem }
+        }
+    );
+};
+
+export const markItem = async (list: ItemList, item: ItemType, dispatch: React.Dispatch<Action>) => {
+    const markedItem = { ...item, strikethrough: !item.strikethrough };
+    await listService.markItem(list.id, item);
+    dispatch(
+        {
+            type: "MARK_ITEM" as "MARK_ITEM",
+            payload: { list, editedItem: markedItem }
         }
     );
 };

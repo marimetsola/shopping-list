@@ -4,6 +4,7 @@ export interface ItemType extends Document {
     id: string;
     name: string;
     list: string;
+    strikethrough: boolean;
 }
 
 export interface ItemListType extends Document {

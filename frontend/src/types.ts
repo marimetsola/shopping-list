@@ -1,6 +1,7 @@
 export interface ItemType extends Document {
     id: string;
     name: string;
+    strikethrough: boolean;
 }
 
 export interface ItemList {

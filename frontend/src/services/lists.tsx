@@ -55,6 +55,12 @@ const editItem = async (listID: string, item: ItemType) => {
     );
 };
 
+const markItem = async (listID: string, item: ItemType) => {
+    await axios.patch<ItemList>(
+        `${apiBaseUrl}/lists/${listID}/mark-item`, { item }, config()
+    );
+};
+
 const inviteGuest = async (listID: string, guestName: string) => {
     const { data: editedList } = await axios.post<ItemList>(
         `${apiBaseUrl}/lists/${listID}/invite-guest`, { guestName }, config()
@@ -111,6 +117,7 @@ export default {
     addItem,
     deleteItem,
     editItem,
+    markItem,
     deleteList,
     editList,
     inviteGuest,

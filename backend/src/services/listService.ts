@@ -188,6 +188,15 @@ const editItem = async (req: express.Request) => {
     return null;
 };
 
+const markItem = async (req: express.Request) => {
+    const item: ItemType = req.body.item;
+    const { user } = await authUserOrGuestToList(req);
+    if (user) {
+        return await Item.findByIdAndUpdate(item.id, { strikethrough: !item.strikethrough }, { new: true });
+    }
+    return null;
+};
+
 const updateList = async (req: express.Request) => {
     const items = req.body.items;
     if (!items || items.length === 0) {
@@ -202,7 +211,7 @@ const updateList = async (req: express.Request) => {
 
     await Item.deleteMany({ list: list.id });
 
-    const itemsToSave: ItemType[] = items.map((i: ItemType) => new Item({ name: i.name, list: list.id }));
+    const itemsToSave: ItemType[] = items.map((i: ItemType) => new Item({ name: i.name, list: list.id, strikethrough: i.strikethrough }));
     const itemObjects = await Item.insertMany(itemsToSave);
 
     const editedList = ItemList.findByIdAndUpdate(list.id, { items: itemObjects }, { new: true });
@@ -219,6 +228,7 @@ export default {
     addItem,
     deleteItem,
     editItem,
+    markItem,
     updateList,
     authUserToList,
     authGuestToList,

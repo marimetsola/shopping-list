@@ -6,7 +6,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    list: { type: Schema.Types.ObjectId, ref: 'ItemList' }
+    list: { type: Schema.Types.ObjectId, ref: 'ItemList' },
+    strikethrough: {
+        type: Boolean
+    }
 });
 
 itemSchema.set('toJSON', {
