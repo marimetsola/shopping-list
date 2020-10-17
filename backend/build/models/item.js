@@ -13,7 +13,10 @@ const itemSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    list: { type: mongoose_1.Schema.Types.ObjectId, ref: 'ItemList' }
+    list: { type: mongoose_1.Schema.Types.ObjectId, ref: 'ItemList' },
+    strikethrough: {
+        type: Boolean
+    }
 });
 itemSchema.set('toJSON', {
     transform: (_document, returnedObject) => {

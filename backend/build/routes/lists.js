@@ -63,6 +63,11 @@ router.patch('/:id/edit-item', (req, res) => __awaiter(void 0, void 0, void 0, f
     const updatedList = yield listService_1.default.editItem(req);
     res.send(updatedList);
 }));
+// Toggle strikethrough of an item on a list
+router.patch('/:id/mark-item', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedList = yield listService_1.default.markItem(req);
+    res.send(updatedList);
+}));
 // Update list
 router.put('/:id/update', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const updatedList = yield listService_1.default.updateList(req);

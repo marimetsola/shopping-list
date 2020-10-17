@@ -170,6 +170,14 @@ const editItem = (req) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return null;
 });
+const markItem = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const item = req.body.item;
+    const { user } = yield authUserOrGuestToList(req);
+    if (user) {
+        return yield item_1.default.findByIdAndUpdate(item.id, { strikethrough: !item.strikethrough }, { new: true });
+    }
+    return null;
+});
 const updateList = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const items = req.body.items;
     if (!items || items.length === 0) {
@@ -181,7 +189,7 @@ const updateList = (req) => __awaiter(void 0, void 0, void 0, function* () {
     });
     const { list } = yield authUserOrGuestToList(req);
     yield item_1.default.deleteMany({ list: list.id });
-    const itemsToSave = items.map((i) => new item_1.default({ name: i.name, list: list.id }));
+    const itemsToSave = items.map((i) => new item_1.default({ name: i.name, list: list.id, strikethrough: i.strikethrough }));
     const itemObjects = yield item_1.default.insertMany(itemsToSave);
     const editedList = itemList_1.default.findByIdAndUpdate(list.id, { items: itemObjects }, { new: true });
     return editedList;
@@ -196,6 +204,7 @@ exports.default = {
     addItem,
     deleteItem,
     editItem,
+    markItem,
     updateList,
     authUserToList,
     authGuestToList,

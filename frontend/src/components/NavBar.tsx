@@ -15,8 +15,8 @@ const NavBar: React.FC = () => {
             <Menu borderless inverted size="massive">
                 <Container>
                     <Menu.Item position='left' header>
-                        <Icon name="list alternate outline" size="large" />
-                    Shopping List
+                        {/* <Icon name="list alternate outline" size="large" /> */}
+                    Kauppalappu
                 </Menu.Item>
                     <Menu.Menu position='right'>
                         {user && <ShoppingLists />}
@@ -39,8 +39,8 @@ const NavBar: React.FC = () => {
             <Menu borderless inverted size="huge" >
                 <Container>
                     <Menu.Item header className="mobile-logo">
-                        <Icon name="list alternate outline" size="large" />
-                        Shopping List
+                        {/* <Icon name="list alternate outline" size="large" /> */}
+                        Kauppalappu
                     </Menu.Item>
                     <Dropdown item text="Menu" className="mobile-menu">
                         <Dropdown.Menu>
