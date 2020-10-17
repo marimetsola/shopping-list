@@ -23,6 +23,8 @@ const NavBar: React.FC = () => {
                         {user &&
                             <Menu.Item type="button" onClick={() => history.push('/profile')} color="grey">
                                 <Icon name="user" size="large" />
+                                {user.listInvitations && user.listInvitations.length > 0 &&
+                                    <div className="ui floating circular red label" style={{ top: "0.3rem", left: "4.4rem" }}>{user.listInvitations.length}</div>}
                                 {user.name}
                             </Menu.Item>
                         }

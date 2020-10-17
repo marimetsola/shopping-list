@@ -11,10 +11,6 @@ export type Action =
         payload: boolean;
     }
     | {
-        type: "SET_IS_LOADING_LIST";
-        payload: boolean;
-    }
-    | {
         type: "SET_LISTS";
         payload: ItemList[];
     }
@@ -175,7 +171,7 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
         case "SET_USER":
-            window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(action.payload.user));
+            // window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(action.payload.user));
             listService.setToken(action.payload.user.token);
             return {
                 ...state,
@@ -277,13 +273,6 @@ export const setActiveList = async (user: User, dispatch: React.Dispatch<Action>
             );
         }
     }
-
-    dispatch(
-        {
-            type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
-            payload: false
-        }
-    );
 };
 
 export const changeActiveList = async (list: ItemList, user: User, dispatch: React.Dispatch<Action>) => {
@@ -392,10 +381,12 @@ export const markItem = async (list: ItemList, item: ItemType, dispatch: React.D
     );
 };
 
-export const setUser = (dispatch: React.Dispatch<Action>) => {
+export const getUserFromLocal = async (dispatch: React.Dispatch<Action>) => {
     const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
     if (loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON);
+        const userFromApi = await userService.getUser(user.id);
+        user.listInvitations = userFromApi.listInvitations;
         dispatch(
             {
                 type: "SET_USER" as "SET_USER",
@@ -413,16 +404,13 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
             type: "DISCARD_USER" as "DISCARD_USER"
         }
     );
-    dispatch(
-        {
-            type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
-            payload: true
-        }
-    );
 };
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
     const user = await userService.login(name, password);
+    window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(user));
+    const userFromApi = await userService.getUser(user.id);
+    user.listInvitations = userFromApi.listInvitations;
     if (user) {
         dispatch(
             {
@@ -435,12 +423,6 @@ export const login = async (name: string, password: string, dispatch: React.Disp
                 payload: { user }
             }
         );
-        // dispatch(
-        //     {
-        //         type: "SET_IS_LOADING_LIST" as "SET_IS_LOADING_LIST",
-        //         payload: false
-        //     }
-        // );
     }
 };
 
@@ -522,10 +504,11 @@ export const acceptInvitation = async (list: ItemList, user: User, dispatch: Rea
     const editedList = await listService.acceptInvitation(list.id, user.id);
     // const editedUser: User = await userService.getUser(user.id);
     const lists: ItemList[] = await listService.getListsByUser();
+    const editedUser: User = await userService.setActiveList(user.id, editedList.id);
     dispatch(
         {
             type: "ACCEPT_INVITATION" as "ACCEPT_INVITATION",
-            payload: { list: editedList, user }
+            payload: { list: editedList, user: editedUser }
         }
     );
     dispatch(
@@ -534,7 +517,6 @@ export const acceptInvitation = async (list: ItemList, user: User, dispatch: Rea
             payload: lists
         }
     );
-    const editedUser: User = await userService.setActiveList(user.id, editedList.id);
     dispatch(
         {
             type: "SET_ACTIVE_LIST" as "SET_ACTIVE_LIST",
