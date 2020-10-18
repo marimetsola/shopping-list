@@ -10,12 +10,26 @@ const NavBar: React.FC = () => {
     const [{ user, isDesktop }] = useStateValue();
     const history = useHistory();
 
+    const getNameCapitalized = () => {
+        if (!user) {
+            return null;
+        }
+
+        const firstChar = user.name.charAt(0);
+
+        if (firstChar.toLowerCase() != firstChar.toUpperCase()) {
+            return user.name.charAt(0).toUpperCase() + user.name.slice(1);
+        } else {
+            return user.name;
+        }
+    };
+
     if (isDesktop) {
         return (
-            <Menu borderless inverted size="massive">
+            <Menu borderless inverted size="massive" style={{ minHeight: "4.315rem" }}>
                 <Container>
                     <Menu.Item position='left' header>
-                        {/* <Icon name="list alternate outline" size="large" /> */}
+                        {/* <Icon color="black" name="list alternate outline" size="large" /> */}
                     Kauppalappu
                 </Menu.Item>
                     <Menu.Menu position='right'>
@@ -25,7 +39,7 @@ const NavBar: React.FC = () => {
                                 <Icon name="user" size="large" />
                                 {user.listInvitations && user.listInvitations.length > 0 &&
                                     <div className="ui floating circular red label" style={{ top: "0.3rem", left: "4.4rem" }}>{user.listInvitations.length}</div>}
-                                {user.name}
+                                {getNameCapitalized()}
                             </Menu.Item>
                         }
                         <LogInOut />
@@ -36,9 +50,9 @@ const NavBar: React.FC = () => {
         );
     } else {
         return (
-            <Menu borderless inverted size="huge" >
+            <Menu borderless inverted size="huge" style={{ minHeight: "4.077rem" }}>
                 <Container>
-                    <Menu.Item header className="mobile-logo">
+                    <Menu.Item header className="mobile-logo" >
                         {/* <Icon name="list alternate outline" size="large" /> */}
                         Kauppalappu
                     </Menu.Item>
@@ -48,7 +62,7 @@ const NavBar: React.FC = () => {
                             {user &&
                                 <Dropdown.Item type="button" onClick={() => history.push('/profile')} color="grey">
                                     <Icon name="user" size="large" />
-                                    {user.name}
+                                    {getNameCapitalized()}
                                 </Dropdown.Item>
                             }
                             <LogInOut />

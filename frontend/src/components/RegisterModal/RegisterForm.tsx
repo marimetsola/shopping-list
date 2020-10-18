@@ -1,18 +1,17 @@
 import React from "react";
 import { Grid, Button, Message } from "semantic-ui-react";
-import { Field, Formik, Form, } from "formik";
+import { Field, Formik, Form, FormikHelpers } from "formik";
 import { TextField, PasswordField } from '../FieldForm';
 import ButtonLink from '../ButtonLink';
 import { setOpenModalType, useStateValue } from '../../state';
 import { ModalType } from "../../types";
 
 interface Props {
-    onSubmit: (values: { name: string; email: string; password: string }) => void;
+    onSubmit: (values: { name: string; email: string; password: string }, action: FormikHelpers<{ name: string; email: string; password: string }>) => void;
     onCancel: () => void;
-    registerFailed: string;
 }
 
-export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFailed }) => {
+export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     const [, dispatch] = useStateValue();
     return (
         <Formik
@@ -22,19 +21,24 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                 password: ""
             }}
             onSubmit={onSubmit}
-            validateOnChange={false}
-            validateOnBlur={false}
+            validateOnChange={true}
+            validateOnBlur={true}
             validate={values => {
-                const requiredError = "Field is required";
                 const errors: { [field: string]: string } = {};
                 if (!values.name) {
-                    errors.name = requiredError;
+                    errors.name = "Field is required";
+                }
+                if (values.name.length < 3) {
+                    errors.name = "Name is too short. Please use at least 3 characters.";
+                }
+                if (!values.password) {
+                    errors.password = "Field is required";
+                }
+                if (values.password.length < 5) {
+                    errors.password = "Password is too short. Please use at least 5 characters";
                 }
                 if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                     errors.email = 'Invalid email address';
-                }
-                if (!values.password) {
-                    errors.password = requiredError;
                 }
                 return errors;
             }}
@@ -61,10 +65,10 @@ export const RegisterForm: React.FC<Props> = ({ onSubmit, onCancel, registerFail
                             name="email"
                             component={TextField}
                         />
-                        {registerFailed &&
+                        {/* {registerFailed &&
                             <Message negative>
                                 <p>{registerFailed}</p>
-                            </Message>}
+                            </Message>} */}
                         <div style={{ marginBottom: "1rem" }}>
                             <ButtonLink
                                 onClick={() => dispatch(setOpenModalType(ModalType.LoginModal))}>

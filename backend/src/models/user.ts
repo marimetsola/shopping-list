@@ -7,14 +7,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        uniqueCaseInsensitive: true
+        uniqueCaseInsensitive: true,
+        lowercase: true
     },
     email: {
         type: String,
         index: true,
         sparse: true,
         unique: true,
-        uniqueCaseInsensitive: true
+        uniqueCaseInsensitive: true,
+        lowercase: true
     },
     passwordHash: String,
     lists: [

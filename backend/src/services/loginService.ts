@@ -3,11 +3,12 @@ import bcrypt from 'bcrypt';
 import User from '../models/user';
 
 const loginUser = async (name: string, password: string) => {
+    const nameLowerCased = name.toLowerCase();
     let user;
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(name)) {
-        user = await User.findOne({ name });
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(nameLowerCased)) {
+        user = await User.findOne({ name: nameLowerCased });
     } else {
-        user = await User.findOne({ email: name });
+        user = await User.findOne({ email: nameLowerCased });
     }
 
     const passwordCorrect = user === null
