@@ -17,6 +17,7 @@ const NavBar: React.FC = () => {
 
         const firstChar = user.name.charAt(0);
 
+        // eslint-disable-next-line
         if (firstChar.toLowerCase() != firstChar.toUpperCase()) {
             return user.name.charAt(0).toUpperCase() + user.name.slice(1);
         } else {

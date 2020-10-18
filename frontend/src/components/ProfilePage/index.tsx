@@ -8,13 +8,14 @@ import ListInvitations from './ListInvitations';
 import userService from '../../services/users';
 import { User } from '../../types';
 import { usePromiseTracker } from 'react-promise-tracker';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
     const [{ user, isDesktop, activeList }, dispatch] = useStateValue();
     const [userProp, setUserProp] = useState<User>();
     const dividerStyle = { padding: "1rem 0 1rem 0" };
     const { promiseInProgress } = usePromiseTracker();
+    const history = useHistory();
 
     useEffect(() => {
         dispatch(clearActiveList());
@@ -22,15 +23,22 @@ const ProfilePage: React.FC = () => {
     }, [dispatch, user?.listInvitations]);
 
     useEffect(() => {
+        let isMounted = true;
         const getUser = async () => {
             if (user) {
                 const userToReturn: User = await userService.getUser(user.id);
-                setUserProp(userToReturn);
+                if (isMounted) {
+                    setUserProp(userToReturn);
+                }
             }
         };
         getUser();
+        return () => { isMounted = false; };
     }, [user]);
 
+    if (!user) {
+        history.push('/');
+    }
     if (!user || !userProp || promiseInProgress) {
         return null;
     }

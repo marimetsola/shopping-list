@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { CommentActions, Modal } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import { useStateValue, register, setOpenModalType } from '../../state';
 import { ModalType } from '../../types';
 import RegisterForm from './RegisterForm';

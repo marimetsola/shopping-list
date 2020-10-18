@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStateValue, changeUserName } from '../../state';
 import { Icon, Table, Button } from 'semantic-ui-react';
 import { FormikHelpers } from "formik";
