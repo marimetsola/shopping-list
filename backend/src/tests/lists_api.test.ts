@@ -64,7 +64,7 @@ describe('when there is initially one user at db', () => {
         expect(token.length).toBeGreaterThanOrEqual(1);
     });
 
-    test('creation fails with a proper statuscode and message if name already taken', async () => {
+    test.only('creation fails with a proper statuscode and message if name already taken', async () => {
         const usersAtStart = await helper.usersInDb();
 
         const newUser = {
@@ -78,7 +78,7 @@ describe('when there is initially one user at db', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/);
 
-        expect(result.body.error).toContain('`name` to be unique');
+        expect(result.body.error).toBe('Username is already taken.');
 
         const usersAtEnd = await helper.usersInDb();
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
@@ -580,7 +580,7 @@ describe('when there is initially one user at db', () => {
             });
 
             describe('changing email', () => {
-                test('succeeds with a proper email adress', async () => {
+                test('succeeds with a proper email address', async () => {
                     await api
                         .patch(`/api/users/${rootUser.id}/change-email`)
                         .set('Authorization', `Bearer ${token}`)
@@ -594,7 +594,7 @@ describe('when there is initially one user at db', () => {
                     expect(response.body.email).toBe('testi@email.com');
                 });
 
-                test('fails with an invalid email adress', async () => {
+                test('fails with an invalid email address', async () => {
                     await api
                         .patch(`/api/users/${rootUser.id}/change-email`)
                         .set('Authorization', `Bearer ${token}`)

@@ -59,7 +59,7 @@ userSchema.post('save', (error, _doc, next) => {
             next(new Error('Username is already taken.'));
         }
         else if (error.errors['email']) {
-            next(new Error('Email adress is already in use.'));
+            next(new Error('Email address is already in use.'));
         }
     }
     else {

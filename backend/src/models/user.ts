@@ -46,12 +46,14 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(uniqueValidator);
 
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 userSchema.post('save', (error: any, _doc: any, next: any) => {
     if (error.name === 'ValidationError') {
         if (error.errors['name']) {
             next(new Error('Username is already taken.'));
         } else if (error.errors['email']) {
-            next(new Error('Email adress is already in use.'));
+            next(new Error('Email address is already in use.'));
         }
     }
     else {
