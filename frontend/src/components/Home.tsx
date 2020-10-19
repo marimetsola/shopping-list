@@ -2,12 +2,13 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useStateValue, setOpenModalType } from '../state';
 import { Container, Header, Button, Segment } from 'semantic-ui-react';
-
 import { ModalType } from '../types';
+import { usePromiseTracker } from 'react-promise-tracker';
 
 const Home: React.FC = () => {
     const [{ user, isDesktop }, dispatch] = useStateValue();
     const contStyle = { padding: "0 4.6rem" };
+    const { promiseInProgress } = usePromiseTracker();
 
     const adviceStyle =
     {
@@ -30,6 +31,10 @@ const Home: React.FC = () => {
             return null;
         }
     };
+
+    if (promiseInProgress) {
+        return null;
+    }
 
     if (user) {
         return <Redirect to="/list" />;

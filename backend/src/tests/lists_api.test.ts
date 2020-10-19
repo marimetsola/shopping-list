@@ -64,7 +64,7 @@ describe('when there is initially one user at db', () => {
         expect(token.length).toBeGreaterThanOrEqual(1);
     });
 
-    test.only('creation fails with a proper statuscode and message if name already taken', async () => {
+    test('creation fails with a proper statuscode and message if name already taken', async () => {
         const usersAtStart = await helper.usersInDb();
 
         const newUser = {

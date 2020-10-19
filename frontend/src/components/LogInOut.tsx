@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useStateValue, getUserFromLocal, discardUser, setOpenModalType } from '../state';
 import { Menu } from 'semantic-ui-react';
-
+import { trackPromise } from 'react-promise-tracker';
 import { ModalType } from '../types';
 
 const LogInOut: React.FC = () => {
@@ -16,7 +16,7 @@ const LogInOut: React.FC = () => {
     };
 
     useEffect(() => {
-        getUserFromLocal(dispatch);
+        trackPromise(getUserFromLocal(dispatch));
 
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
