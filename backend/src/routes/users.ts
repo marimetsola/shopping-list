@@ -46,9 +46,9 @@ usersRouter.patch('/:id/change-name', async (req, res) => {
         res.json(user);
     } catch (error) {
         if (error.message.includes('exists')) {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         } else {
-            res.status(401).send(error.message);
+            res.status(401).json(error.message);
         }
     }
 
@@ -60,9 +60,9 @@ usersRouter.patch('/:id/change-email', async (req, res) => {
         res.json(user);
     } catch (error) {
         if (error.message.includes('password')) {
-            res.status(401).send(error.message);
+            res.status(401).json(error.message);
         } else {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         }
     }
 
@@ -73,9 +73,9 @@ usersRouter.patch('/:id/change-password', async (req, res) => {
         res.json(await userService.changePassword(req));
     } catch (error) {
         if (error.message === 'invalid password') {
-            res.status(401).send(error.message);
+            res.status(401).json(error.message);
         } else {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         }
     }
 
@@ -84,22 +84,22 @@ usersRouter.patch('/:id/change-password', async (req, res) => {
 usersRouter.post('/send-reset-email', async (req, res) => {
     try {
         await userService.sendResetPasswordMail(req);
-        res.status(200).send('recovery email sent');
+        res.status(200).json('recovery email sent');
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 });
 
 usersRouter.post('/validate-token', async (req, res) => {
     const user = await userService.validateToken(req);
-    res.status(200).send(user);
+    res.status(200).json(user);
     // res.status(400).send();
 
 });
 
 usersRouter.post('/reset-password/', async (req, res) => {
     const user = await userService.resetPassword(req);
-    res.status(200).send(user);
+    res.status(200).json(user);
     // res.status(400).send();
 
 });

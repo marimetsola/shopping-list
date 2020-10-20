@@ -35,7 +35,7 @@ usersRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json(user);
     }
     catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ error: error.message });
     }
 }));
 usersRouter.patch('/:id/set-active-list', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,10 +53,10 @@ usersRouter.patch('/:id/change-name', (req, res) => __awaiter(void 0, void 0, vo
     }
     catch (error) {
         if (error.message.includes('exists')) {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         }
         else {
-            res.status(401).send(error.message);
+            res.status(401).json(error.message);
         }
     }
 }));
@@ -67,10 +67,10 @@ usersRouter.patch('/:id/change-email', (req, res) => __awaiter(void 0, void 0, v
     }
     catch (error) {
         if (error.message.includes('password')) {
-            res.status(401).send(error.message);
+            res.status(401).json(error.message);
         }
         else {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         }
     }
 }));
@@ -80,30 +80,30 @@ usersRouter.patch('/:id/change-password', (req, res) => __awaiter(void 0, void 0
     }
     catch (error) {
         if (error.message === 'invalid password') {
-            res.status(401).send(error.message);
+            res.status(401).json(error.message);
         }
         else {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         }
     }
 }));
 usersRouter.post('/send-reset-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield userService_1.default.sendResetPasswordMail(req);
-        res.status(200).send('recovery email sent');
+        res.status(200).json('recovery email sent');
     }
     catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }));
 usersRouter.post('/validate-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.validateToken(req);
-    res.status(200).send(user);
+    res.status(200).json(user);
     // res.status(400).send();
 }));
 usersRouter.post('/reset-password/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.resetPassword(req);
-    res.status(200).send(user);
+    res.status(200).json(user);
     // res.status(400).send();
 }));
 exports.default = usersRouter;

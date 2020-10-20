@@ -550,25 +550,39 @@ describe('when there is initially one user at db', () => {
             });
 
             describe('changing name', () => {
-                test('succeeds with an available name', async () => {
+                test('succeeds with an available name and is lowercased', async () => {
                     await api
                         .patch(`/api/users/${rootUser.id}/change-name`)
                         .set('Authorization', `Bearer ${token}`)
-                        .send({ name: "renamedRoot" })
+                        .send({ name: "renamedRoot", password: "passu666" })
                         .expect(200)
                         .expect('Content-Type', /application\/json/);
 
                     const response = await api
                         .get(`/api/users/${rootUser.id}`);
 
-                    expect(response.body.name).toBe('renamedRoot');
+                    expect(response.body.name).toBe('renamedroot');
+                });
+
+                test('fails with invalid password', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-name`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ name: "renamedRoot", password: "wrongpw" })
+                        .expect(401)
+                        .expect('Content-Type', /application\/json/);
+
+                    const response = await api
+                        .get(`/api/users/${rootUser.id}`);
+
+                    expect(response.body.name).toBe('root');
                 });
 
                 test('fails with a taken name', async () => {
                     await api
                         .patch(`/api/users/${rootUser.id}/change-name`)
                         .set('Authorization', `Bearer ${token}`)
-                        .send({ name: "guest" })
+                        .send({ name: "guest", password: "passu666" })
                         .expect(400)
                         .expect('Content-Type', /application\/json/);
 
@@ -584,7 +598,7 @@ describe('when there is initially one user at db', () => {
                     await api
                         .patch(`/api/users/${rootUser.id}/change-email`)
                         .set('Authorization', `Bearer ${token}`)
-                        .send({ email: "testi@email.com" })
+                        .send({ email: "testi@email.com", password: "passu666" })
                         .expect(200)
                         .expect('Content-Type', /application\/json/);
 
@@ -598,7 +612,7 @@ describe('when there is initially one user at db', () => {
                     await api
                         .patch(`/api/users/${rootUser.id}/change-email`)
                         .set('Authorization', `Bearer ${token}`)
-                        .send({ email: "notanemail" })
+                        .send({ email: "notanemail", password: "passu666" })
                         .expect(400)
                         .expect('Content-Type', /application\/json/);
 
@@ -606,6 +620,43 @@ describe('when there is initially one user at db', () => {
                         .get(`/api/users/${rootUser.id}`);
 
                     expect(response.body.email).not.toBe('notanemail');
+                });
+            });
+
+            describe('changing password', () => {
+                test('succeeds with valid old password', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-password`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ oldPassword: "passu666", newPassword: "uuspassu" })
+                        .expect(200)
+                        .expect('Content-Type', /application\/json/);
+
+                    const response = await api.post('/api/login')
+                        .send({
+                            name: 'root',
+                            password: 'uuspassu'
+                        })
+                        .expect(200)
+                        .expect('Content-Type', /application\/json/);
+                    expect(response.body.name).toBe('root');
+                });
+
+                test('fails with invalid old password', async () => {
+                    await api
+                        .patch(`/api/users/${rootUser.id}/change-password`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send({ oldPassword: "wrongpw", newPassword: "uuspassu" })
+                        .expect(401)
+                        .expect('Content-Type', /application\/json/);
+
+                    await api.post('/api/login')
+                        .send({
+                            name: 'root',
+                            password: 'uuspassu'
+                        })
+                        .expect(401)
+                        .expect('Content-Type', /application\/json/);
                 });
             });
         });

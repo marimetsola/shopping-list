@@ -53,6 +53,7 @@ const userSchema = new mongoose_1.default.Schema({
     resetPasswordExpires: { type: Number }
 });
 userSchema.plugin(mongoose_unique_validator_1.default);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 userSchema.post('save', (error, _doc, next) => {
     if (error.name === 'ValidationError') {
         if (error.errors['name']) {
