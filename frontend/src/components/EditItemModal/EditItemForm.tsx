@@ -34,6 +34,7 @@ export const EditItemForm: React.FC<Props> = ({ onSubmit, onCancel, item }) => {
                             placeholder="Name"
                             name="name"
                             component={TextField}
+                            autoFocus={true}
                         />
                         <Grid>
                             <Grid.Column floated="left" width={5}>
