@@ -1,1 +1,1 @@
-add/fix backend tests
+käytä express-async-errorsia kunnolla https://fullstackopen.com/osa4/backendin_testaaminen

@@ -93,15 +93,12 @@ usersRouter.post('/send-reset-email', async (req, res) => {
 usersRouter.post('/validate-token', async (req, res) => {
     const user = await userService.validateToken(req);
     res.status(200).json(user);
-    // res.status(400).send();
 
 });
 
 usersRouter.post('/reset-password/', async (req, res) => {
     const user = await userService.resetPassword(req);
     res.status(200).json(user);
-    // res.status(400).send();
-
 });
 
 

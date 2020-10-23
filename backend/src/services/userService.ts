@@ -258,8 +258,8 @@ const sendResetPasswordMail = async (req: express.Request) => {
             text:
                 'You are receiving this because you (or someone else) have requested the reset of the password for your Kauppalappu app account.\n\n'
                 + 'Please click the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-                // + `http://localhost:3000/users/reset-password/${token} \n\n`
-                + `https://lappu.herokuapp.com/users/reset-password/${token} \n\n`
+                + `http://localhost:3000/users/reset-password/${token} \n\n`
+                // + `https://lappu.herokuapp.com/users/reset-password/${token} \n\n`
                 + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
         };
 
@@ -280,11 +280,11 @@ const sendResetPasswordMail = async (req: express.Request) => {
 const validateToken = async (req: express.Request) => {
     const token = req.body.token;
     const user = await User.findOne({ resetPasswordToken: token });
-
     if (user && user.resetPasswordExpires && user.resetPasswordExpires > Date.now()) {
         return { id: user.id };
+    } else {
+        throw Error("invalid or expired token");
     }
-    return null;
 
 };
 

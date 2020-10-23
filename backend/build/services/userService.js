@@ -224,7 +224,7 @@ const sendResetPasswordMail = (req) => __awaiter(void 0, void 0, void 0, functio
     if (user) {
         const token = crypto_1.default.randomBytes(20).toString('hex');
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000;
+        user.resetPasswordExpires = Date.now() + 360000;
         yield user.save();
         const transporter = nodemailer_1.default.createTransport({
             service: 'gmail',

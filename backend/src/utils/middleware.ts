@@ -9,6 +9,8 @@ const errorHandler = (error: Error, _request: Request, response: Response, next:
         response.status(401).json({
             error: 'invalid token'
         });
+    } else if (error.message === 'invalid or expired token') {
+        response.status(401).json({ error: error.message });
     }
     else {
         response.status(400).json({ error: error.message });

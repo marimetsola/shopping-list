@@ -48,12 +48,8 @@ const changePassword = async (userId: string, oldPassword: string, newPassword: 
 };
 
 const validateToken = async (token: string) => {
-    try {
-        const response = await axios.post(`${apiBaseUrl}/users/validate-token`, { token }, listService.config());
-        return response;
-    } catch (error) {
-        return error.response;
-    }
+    const response = await axios.post(`${apiBaseUrl}/users/validate-token`, { token }, listService.config());
+    return response;
 };
 
 const requestReset = async (email: string) => {

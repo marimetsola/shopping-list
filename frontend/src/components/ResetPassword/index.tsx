@@ -10,14 +10,19 @@ import ButtonLink from '../ButtonLink';
 const ResetPassword: React.FC<{}> = () => {
     const [{ isDesktop }, dispatch] = useStateValue();
     const { token } = useParams<{ token: string }>();
-    const [validatedUserId, setValidatedUser] = useState<string | undefined>(undefined);
+    const [validatedUserId, setValidatedUserId] = useState<string | undefined>(undefined);
     const [resetSuccessful, setResetSuccessful] = useState(false);
 
     useEffect(() => {
 
         const validateUser = async () => {
-            const response = await userService.validateToken(token);
-            setValidatedUser(response.data);
+            try {
+                const response = await userService.validateToken(token);
+                setValidatedUserId(response.data.id);
+            } catch (error) {
+                setValidatedUserId("");
+            }
+
         };
 
         validateUser();
@@ -39,6 +44,10 @@ const ResetPassword: React.FC<{}> = () => {
         marginBottom: "1rem",
         textAlign: "center"
     };
+
+    if (validatedUserId === undefined) {
+        return null;
+    }
 
     if (validatedUserId === "") {
         return <Container className={isDesktop ? "cont-style" : 'cont-style-mobile'} style={isDesktop ? { width: "60%" } : {}}>
