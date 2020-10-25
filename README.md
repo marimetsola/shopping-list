@@ -66,15 +66,16 @@ Listed below are the steps to use the main features of the application.
 
 ### Registration
 
+Click the register button to open a modal for registration.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97081953-a5167e00-160e-11eb-91a9-861d128e7e80.png" alt="Registration" width="640">
 </p>
-Click the register button to open a modal for registration.
-
+<br></br>
+Fill in a username and a password and optionally an email address so you can reset your password in case you should forget it. Email can also be added later in the account settings.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97118828-f5780380-1714-11eb-8829-a38290e3241b.png" alt="Registration" width="640">
 </p>
-Fill in a username and a password and optionally an email address so you can reset your password in case you should forget it. Email can also be added later in the account settings.
+
 
 ### Create A List
 
@@ -86,7 +87,7 @@ Click the add list button to open up a modal to create a list.
 ### Add Item
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/32650229/97118830-f6109a00-1714-11eb-893f-12ad51af8a60.png" alt="Add item" width="135">
+    <img src="https://user-images.githubusercontent.com/32650229/97119180-1e999380-1717-11eb-8443-0b3f311af2c0.png" alt="Add item" width="640">
 </p>
 Click the add item button to open up a modal to add an item.
 
@@ -100,6 +101,18 @@ Click an item to check it on and off.
 ### Drag Item
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/32650229/97118822-f3ae4000-1714-11eb-84f7-fac5fc0aadc9.png" alt="Click item" width="640">
+    <img src="https://user-images.githubusercontent.com/32650229/97118822-f3ae4000-1714-11eb-84f7-fac5fc0aadc9.png" alt="Drag item" width="640">
 </p>
 Drag and drop an item to move it to a different place on the list.
+
+### Invite User
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97119151-f742c680-1716-11eb-9038-b648a21ece56.png" alt="Click edit" width="640">
+</p>
+Click the edit button to open a modal for the list's information and settings.
+<br></br>
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118824-f446d680-1714-11eb-81fa-04cafd4a87d7.png" alt="Invite user" width="640">
+</p>
+Fill in a user's name and invite them to the list.
