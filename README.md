@@ -27,8 +27,6 @@
   * [Unintive User](#invite-user)
   * [Account Settings](#account-settings)
 * [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
 
@@ -39,6 +37,8 @@
 </p>
 
 A simple and easy to use shopping list web application made with the MERN stack. Create a list and manage the items using your desired device before breezing through your favourite grocery store with your trusted web app open on your phone.
+
+Hosted on Heroku. <a href="https://lappu.herokuapp.com/" target="_blank">Click here to open the application.</a>
 
 ### List Of Features
 
@@ -134,3 +134,21 @@ You can change your username, email and password in the account settings in addi
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97118827-f5780380-1714-11eb-8cb2-26cd25a4f393.png" alt="Profile page" width="640">
 </p>
+
+## Roadmap
+
+See about using WebSocket API to listen to changes made to lists by other users.
+
+## Contact
+
+lari.lofman@gmail.com
+
+## Acknowledgements
+* [Full Stack open 2020](https://fullstackopen.com/)
+* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Formik](https://formik.org)
+* [Semantic UI React](https://react.semantic-ui.com/)
+* [Axios](https://github.com/axios/axios)
+* [React-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
+* [Nodemailer](https://nodemailer.com)
