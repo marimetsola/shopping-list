@@ -71,4 +71,35 @@ Listed below are the steps to use the main features of the application.
 </p>
 Click the register button to open a modal for registration.
 
-![01_register](https://user-images.githubusercontent.com/32650229/97081953-a5167e00-160e-11eb-91a9-861d128e7e80.png)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118828-f5780380-1714-11eb-8829-a38290e3241b.png" alt="Registration" width="640">
+</p>
+Fill in a username and a password and optionally an email address so you can reset your password in case you should forget it. Email can also be added later in the account settings.
+
+### Create A List
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118829-f6109a00-1714-11eb-92cb-209d449e3943.png" alt="Add list" width="640">
+</p>
+Click the add list button to open up a modal to create a list.
+
+### Add Item
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118830-f6109a00-1714-11eb-893f-12ad51af8a60.png" alt="Add item" width="135">
+</p>
+Click the add item button to open up a modal to add an item.
+
+### Check Item
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118835-f6a93080-1714-11eb-9821-119c512f10fa.png" alt="Click item" width="640">
+</p>
+Click an item to check it on and off.
+
+### Drag Item
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118822-f3ae4000-1714-11eb-84f7-fac5fc0aadc9.png" alt="Click item" width="640">
+</p>
+Drag and drop an item to move it to a different place on the list.
