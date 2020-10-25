@@ -17,10 +17,16 @@
 * [About the Project](#about-the-project)
   * [List Of Features](#list-of-features)
   * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
 * [Usage](#usage)
+  * [Registration](#registeration)
+  * [Create A List](#create-a-list)
+  * [Add Item](#add-item)
+  * [Check Item](#check-item)
+  * [Drag Item](#drag-item)
+  * [Invite User](#invite-user)
+  * [Unintive User](#invite-user)
+  * [Account Settings](#account-settings)
+  * [Change Information / List Invitations](#change-information)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -54,6 +60,15 @@ A simple and easy to use shopping list web application made with the MERN stack.
 * [Express](https://expressjs.com)
 * [MongoDB](https://www.mongodb.com)
 
-Register
+## Usage
+
+Listed below are the steps to use the main features of the application.
+
+### Registration
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97081953-a5167e00-160e-11eb-91a9-861d128e7e80.png" alt="Registration" width="640">
+</p>
+Click the register button to open a modal for registration.
 
 ![01_register](https://user-images.githubusercontent.com/32650229/97081953-a5167e00-160e-11eb-91a9-861d128e7e80.png)
