@@ -224,7 +224,7 @@ const sendResetPasswordMail = (req) => __awaiter(void 0, void 0, void 0, functio
     if (user) {
         const token = crypto_1.default.randomBytes(20).toString('hex');
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 360000;
+        user.resetPasswordExpires = Date.now() + 3600000;
         yield user.save();
         const transporter = nodemailer_1.default.createTransport({
             service: 'gmail',
@@ -262,7 +262,9 @@ const validateToken = (req) => __awaiter(void 0, void 0, void 0, function* () {
     if (user && user.resetPasswordExpires && user.resetPasswordExpires > Date.now()) {
         return { id: user.id };
     }
-    return null;
+    else {
+        throw Error("invalid or expired token");
+    }
 });
 const resetPassword = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield getUserByEmail(req.body.email);

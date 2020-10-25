@@ -99,11 +99,9 @@ usersRouter.post('/send-reset-email', (req, res) => __awaiter(void 0, void 0, vo
 usersRouter.post('/validate-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.validateToken(req);
     res.status(200).json(user);
-    // res.status(400).send();
 }));
 usersRouter.post('/reset-password/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.resetPassword(req);
     res.status(200).json(user);
-    // res.status(400).send();
 }));
 exports.default = usersRouter;
