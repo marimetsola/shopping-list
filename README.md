@@ -8,7 +8,7 @@
   <p align="center">
     Responsive, easy to use shopping list web application
     <br />
-    <a href="https://lappu.herokuapp.com/"><strong>Open app running on Heroku »</strong></a>
+    <a href="https://lappu.herokuapp.com/" target="_blank"><strong>Open app on Heroku »</strong></a>
     <br />
 </p>
 
@@ -43,15 +43,16 @@ A simple and easy to use shopping list web application made with the MERN stack.
 * Drag and drop the items to change their order on the list
 * Click on items to check them on and off
 * Invite and uninvite other users to and from your lists
-* Request a password reset email
-* Change username, email and password in profile settings
+* Request a password reset email and follow the link to reset your password
+* Change username, email and password in account settings
+* Accept or decline list invitations in the account settings 
 
 ### Built With
 
-* [React]()
-* [Node]()
-* [Express]()
-* [MongoDB]()
+* [React](https://reactjs.org)
+* [Node](https://nodejs.org)
+* [Express](https://expressjs.com)
+* [MongoDB](https://www.mongodb.com)
 
 Register
 
