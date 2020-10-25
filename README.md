@@ -18,7 +18,7 @@
   * [List Of Features](#list-of-features)
   * [Built With](#built-with)
 * [Usage](#usage)
-  * [Registration](#registeration)
+  * [Registration](#registration)
   * [Create A List](#create-a-list)
   * [Add Item](#add-item)
   * [Check Item](#check-item)
@@ -26,7 +26,6 @@
   * [Invite User](#invite-user)
   * [Unintive User](#invite-user)
   * [Account Settings](#account-settings)
-  * [Change Information / List Invitations](#change-information)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -79,40 +78,59 @@ Fill in a username and a password and optionally an email address so you can res
 
 ### Create A List
 
+Click the add list button to open up a modal to create a list.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97118829-f6109a00-1714-11eb-92cb-209d449e3943.png" alt="Add list" width="640">
 </p>
-Click the add list button to open up a modal to create a list.
 
 ### Add Item
 
+Click the add item button to open up a modal to add an item.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97119180-1e999380-1717-11eb-8443-0b3f311af2c0.png" alt="Add item" width="640">
 </p>
-Click the add item button to open up a modal to add an item.
 
 ### Check Item
 
+Click an item to check it on and off.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97118835-f6a93080-1714-11eb-9821-119c512f10fa.png" alt="Click item" width="640">
 </p>
-Click an item to check it on and off.
 
 ### Drag Item
 
+Drag and drop an item to move it to a different place on the list.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97118822-f3ae4000-1714-11eb-84f7-fac5fc0aadc9.png" alt="Drag item" width="640">
 </p>
-Drag and drop an item to move it to a different place on the list.
 
 ### Invite User
 
+Click the edit button to open a modal for the list's information and settings.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97119151-f742c680-1716-11eb-9038-b648a21ece56.png" alt="Click edit" width="640">
 </p>
-Click the edit button to open a modal for the list's information and settings.
 <br></br>
+Fill in a user's name and invite them to the list.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97118824-f446d680-1714-11eb-81fa-04cafd4a87d7.png" alt="Invite user" width="640">
 </p>
-Fill in a user's name and invite them to the list.
+
+### Uninvite User
+
+Click the X button to remove an invitation from a user.
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118825-f4df6d00-1714-11eb-8796-1d8cbeee9c12.png" alt="Uninvite user" width="640">
+</p>
+
+### Account Settings
+
+Click the account button on the navigation bar to access your settings. A red badge with a number will indicate the number of invitations you have to lists.
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118826-f4df6d00-1714-11eb-972d-465f8073cd12.png" alt="Open profile" width="640">
+</p>
+<br></br>
+You can change your username, email and password in the account settings in addition to accepting or declining any invitations to lists you might have.
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/32650229/97118827-f5780380-1714-11eb-8cb2-26cd25a4f393.png" alt="Profile page" width="640">
+</p>
