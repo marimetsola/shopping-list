@@ -87,7 +87,7 @@ Click the add list button to open up a modal to create a list.
 
 ### Add Item
 
-Click the add item button to open up a modal to add an item.
+Click the add item button or press enter to open up a modal to add an item.
 <p align="center">
     <img src="https://user-images.githubusercontent.com/32650229/97119180-1e999380-1717-11eb-8443-0b3f311af2c0.png" alt="Add item" width="640">
 </p>
