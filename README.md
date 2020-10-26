@@ -40,6 +40,8 @@ A simple and easy to use shopping list web application made with the MERN stack.
 
 Hosted on Heroku. <a href="https://lappu.herokuapp.com/" target="_blank">Click here to open the application.</a>
 
+Record of working hours: <a href="time_used.md">Markdown file</a>, <a href="time_used.ods">OpenOffice file</a>
+
 ### List Of Features
 
 * Create lists
