@@ -19,14 +19,14 @@ const ActiveList: React.FC = () => {
     const { promiseInProgress } = usePromiseTracker();
 
     const focusAddButton = () => {
-        if (refContainer && refContainer.current) {
+        if (refContainer && refContainer.current && !addItemModalOpen && !editedItem && !editListModalOpen) {
             refContainer.current.focus();
         }
     };
 
     useEffect(() => {
         focusAddButton();
-    }, [activeList]);
+    });
 
     const clickItem = async (item: ItemType) => {
         if (activeList) {

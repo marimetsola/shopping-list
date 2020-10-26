@@ -14,14 +14,6 @@ export const InviteGuestForm: React.FC<Props> = ({ onSubmit }) => {
                 name: "",
             }}
             onSubmit={onSubmit}
-        // validate={values => {
-        //     const requiredError = "Field is required";
-        //     const errors: { [field: string]: string } = {};
-        //     if (!values.name) {
-        //         errors.name = requiredError;
-        //     }
-        //     return errors;
-        // }}
         >
             {({ isValid, dirty }) => {
                 return (
@@ -31,13 +23,9 @@ export const InviteGuestForm: React.FC<Props> = ({ onSubmit }) => {
                             placeholder="Name"
                             name="name"
                             component={TextField}
+                            autoFocus={true}
                         />
                         <Grid>
-                            {/* <Grid.Column floated="left" width={5}>
-                                <Button type="button" onClick={onCancel} color="red">
-                                    Cancel
-                                </Button>
-                            </Grid.Column> */}
                             <Grid.Column floated="left" width={5}>
                                 <Button
                                     type="submit"
