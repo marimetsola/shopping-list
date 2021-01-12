@@ -17,6 +17,11 @@ const getUser = async (id: string) => {
     return response.data;
 };
 
+const authUser = async () => {
+    const response = await axios.get(`${apiBaseUrl}/users/auth/token`, listService.config());
+    return response.data;
+};
+
 const getUserByEmail = async (email: string) => {
     const response = await axios.get(`${apiBaseUrl}/users/find-email/${email}`, listService.config());
     return response.data;
@@ -70,4 +75,4 @@ const resetPassword = async (email: string, password: string) => {
     }
 };
 
-export default { login, register, getUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, changePassword, requestReset, validateToken, resetPassword };
+export default { login, register, getUser, authUser, getUserByEmail, setActiveList, clearActiveList, changeName, changeEmail, changePassword, requestReset, validateToken, resetPassword };

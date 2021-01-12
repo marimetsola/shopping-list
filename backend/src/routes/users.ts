@@ -13,6 +13,11 @@ usersRouter.get('/:id', async (req, res) => {
     res.json(user);
 });
 
+usersRouter.get('/auth/token', async (req, res) => {
+    const user = await userService.getUserFromReq(req);
+    res.json(user);
+});
+
 usersRouter.get('/find-email/:email', async (req, res) => {
     const user = await userService.getUserByEmail(req.params.email);
     res.json(user);

@@ -171,7 +171,6 @@ export const reducer = (state: State, action: Action): State => {
                 lists: state.lists.map(l => l.id === action.payload.list.id ? action.payload.list : l)
             };
         case "SET_USER":
-            // window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(action.payload.user));
             listService.setToken(action.payload.user.token);
             return {
                 ...state,
@@ -385,7 +384,8 @@ export const getUserFromLocal = async (dispatch: React.Dispatch<Action>) => {
     const loggedUserJSON = window.localStorage.getItem('loggedShoppingListAppUser');
     if (loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON);
-        const userFromApi = await userService.getUser(user.id);
+        listService.setToken(user.token);
+        const userFromApi = await userService.authUser();
         user.listInvitations = userFromApi.listInvitations;
         dispatch(
             {
@@ -408,7 +408,7 @@ export const discardUser = (dispatch: React.Dispatch<Action>) => {
 
 export const login = async (name: string, password: string, dispatch: React.Dispatch<Action>) => {
     const user = await userService.login(name, password);
-    window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify(user));
+    window.localStorage.setItem('loggedShoppingListAppUser', JSON.stringify({ token: user.token, name: user.name, id: user.id }));
     const userFromApi = await userService.getUser(user.id);
     user.listInvitations = userFromApi.listInvitations;
     if (user) {
