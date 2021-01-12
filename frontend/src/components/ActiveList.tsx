@@ -14,12 +14,12 @@ const ActiveList: React.FC = () => {
     const [editListModalOpen, setEditListModalOpen] = useState<boolean>(false);
     const [editedItem, setEditedItem] = useState<ItemType | null>(null);
     const [addItemModalOpen, setAddItemModalOpen] = useState<boolean>(false);
-    const [{ activeList, isDesktop, user }, dispatch] = useStateValue();
+    const [{ activeList, isDesktop, user, listModalOpen }, dispatch] = useStateValue();
     const refContainer = useRef<Button>(null);
     const { promiseInProgress } = usePromiseTracker();
 
     const focusAddButton = () => {
-        if (refContainer && refContainer.current && !addItemModalOpen && !editedItem && !editListModalOpen) {
+        if (refContainer && refContainer.current && !addItemModalOpen && !editedItem && !editListModalOpen && !listModalOpen) {
             refContainer.current.focus();
         }
     };
