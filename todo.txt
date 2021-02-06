@@ -1,2 +1,0 @@
-use express-async-errors properly https://fullstackopen.com/osa4/backendin_testaaminen
-use websocket API or something to listen to changes made
