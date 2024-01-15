@@ -8,7 +8,7 @@
   <p align="center">
     Responsive, easy to use shopping list web application
     <br />
-    <a href="https://lappu.herokuapp.com/" target="_blank"><strong>Open app on Heroku »</strong></a>
+    <a href="https://larilofman.com/kauppalappu" target="_blank"><strong>Open app on »</strong></a>
     <br />
 </p>
 
