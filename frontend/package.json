@@ -52,5 +52,6 @@
   "devDependencies": {
     "@types/react-beautiful-dnd": "^12.1.2"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "homepage": "http://larilofman.com/kauppalappu"
 }

@@ -31,13 +31,13 @@ const App: React.FC = () => {
     }, [dispatch, isDesktop]);
 
     return (
-        <Router>
+        <Router basename='/kauppalappu/'>
             <div>
                 <NavBar />
                 <LoadingIndicator />
                 <Container>
                     <Switch>
-                        <Route path="/profile">
+                        <Route path="/profile" exact>
                             <ProfilePage />
                         </Route>
                         <Route path="/list">

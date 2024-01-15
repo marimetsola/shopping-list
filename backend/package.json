@@ -10,6 +10,7 @@
     "start": "cross-env NODE_ENV=production node build/index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend",
+    "build:full": "npm run build:ui && npm run tsc",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && npm run tsc && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"

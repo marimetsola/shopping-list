@@ -4,8 +4,8 @@ require('express-async-errors');
 import userService from '../services/userService';
 
 usersRouter.get('/', async (_req, res) => {
-    const users = await userService.getAll();
-    res.json(users);
+    // const users = await userService.getAll();
+    res.json("Users");
 });
 
 usersRouter.get('/:id', async (req, res) => {

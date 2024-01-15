@@ -2,13 +2,6 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
@@ -22,7 +15,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 mongoose_1.default.set('useFindAndModify', false);
 mongoose_1.default.set('useCreateIndex', true);
 require("./lib/env");
-const path = __importStar(require("path"));
+// import * as path from 'path';
 let url = process.env.MONGODB_URI;
 if (process.env.NODE_ENV === 'test') {
     url = process.env.TEST_MONGODB_URI;
@@ -53,14 +46,14 @@ if (url) {
 else {
     throw new Error('No mongodb url provided');
 }
-app.use(express_1.default.static('build'));
+// app.use(express.static('build'));
 app.use(cors_1.default());
 app.use(express_1.default.json());
-app.use('/api/lists', lists_1.default);
-app.use('/api/users', users_1.default);
-app.use('/api/login', login_1.default);
-app.get('/*', function (_req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.use('/kauppalappu/api/lists', lists_1.default);
+app.use('/kauppalappu/api/users', users_1.default);
+app.use('/kauppalappu/api/login', login_1.default);
+// app.get('/*', function (_req, res) {
+//     res.sendFile(path.join(__dirname, 'index.html'));
+// });
 app.use(middleware_1.default.errorHandler);
 exports.default = app;

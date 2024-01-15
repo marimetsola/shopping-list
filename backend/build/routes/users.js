@@ -17,8 +17,8 @@ const usersRouter = express_1.default.Router();
 require('express-async-errors');
 const userService_1 = __importDefault(require("../services/userService"));
 usersRouter.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield userService_1.default.getAll();
-    res.json(users);
+    // const users = await userService.getAll();
+    res.json("Users");
 }));
 usersRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userService_1.default.getUser(req.params.id);
