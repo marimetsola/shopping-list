@@ -143,7 +143,7 @@ See about using WebSocket API to listen to changes made to lists by other users.
 
 ## Contact
 
-larwazor@gmail.com
+cocosweetsmail@gmail.com
 
 ## Acknowledgements
 * [Full Stack open 2020](https://fullstackopen.com/)
