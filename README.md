@@ -8,7 +8,7 @@
   <p align="center">
     Responsive, easy to use shopping list web application
     <br />
-    <a href="https://larilofman.com/kauppalappu" target="_blank"><strong>Open app »</strong></a>
+    <a href="https://marimetsola.com/kauppalappu" target="_blank"><strong>Open app »</strong></a>
     <br />
 </p>
 
@@ -38,7 +38,7 @@
 
 A simple and easy to use shopping list web application made with the MERN stack. Create a list and manage the items using your desired device before breezing through your favourite grocery store with your trusted web app open on your phone.
 
-Hosted on EC2. <a href="https://larilofman.com/kauppalappu" target="_blank">Click here to open the application.</a>
+Hosted on EC2. <a href="https://marimetsola.com/kauppalappu" target="_blank">Click here to open the application.</a>
 
 Record of working hours: <a href="time_used.md">Markdown file</a>, <a href="time_used.ods">OpenOffice file</a>
 
