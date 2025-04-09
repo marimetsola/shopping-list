@@ -38,8 +38,8 @@ const Email: React.FC<Props> = ({ user }) => {
                 setEmailModalOpen(false);
                 setEmailChanged(true);
             } catch (error) {
-                if (error.response.status === 400) {
-                    action.setErrors({ name: error.response.data });
+                if ((error as any).response.status === 400) {
+                    action.setErrors({ name: (error as any).response.data });
                 } else {
                     action.setErrors({ password: "Invalid password." });
                 }

@@ -40,7 +40,7 @@ const Password: React.FC<Props> = ({ user }) => {
                 setPasswordModalOpen(false);
                 setPasswordChanged(true);
             } catch (error) {
-                if (error.response.status === 401) {
+                if ((error as any).response.status === 401) {
                     action.setErrors({ oldPassword: "Invalid password." });
                 } else {
                     action.setErrors({ newPassword: "Password is too short. Please use at least 5 characters." });

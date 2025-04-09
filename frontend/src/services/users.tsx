@@ -57,7 +57,7 @@ const requestReset = async (email: string) => {
         const response = await axios.post(`${apiBaseUrl}/users/send-reset-email`, { email }, listService.config());
         return response;
     } catch (error) {
-        return error.response;
+        return (error as any).response;
     }
 };
 
@@ -66,7 +66,7 @@ const resetPassword = async (email: string, password: string) => {
         const response = await axios.post(`${apiBaseUrl}/users/reset-password`, { email, password }, listService.config());
         return response;
     } catch (error) {
-        return error.response;
+        return (error as any).response;
     }
 };
 
