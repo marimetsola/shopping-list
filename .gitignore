@@ -2,3 +2,4 @@
 node_modules
 readme_images
 mongodb
+backend/init-mongo/
