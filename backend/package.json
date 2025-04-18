@@ -1,7 +1,7 @@
 {
   "name": "shopping_list_backend",
   "version": "1.0.0",
-  "description": "Larin kauppalappu",
+  "description": "Marin kauppalappu",
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
@@ -15,7 +15,7 @@
     "deploy:full": "npm run build:ui && npm run tsc && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
   },
-  "author": "Lari Löfman",
+  "author": "Mari Metsola",
   "license": "ISC",
   "dependencies": {
     "@types/nodemailer": "^6.4.0",

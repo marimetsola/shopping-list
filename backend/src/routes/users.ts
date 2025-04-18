@@ -5,7 +5,7 @@ import userService from '../services/userService';
 
 usersRouter.get('/', async (_req, res) => {
     const users = await userService.getAll();
-    res.json(users);
+    res.json({"users": users.length});
 });
 
 usersRouter.get('/:id', async (req, res) => {

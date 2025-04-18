@@ -16,6 +16,7 @@ import RegisterModal from './components/RegisterModal';
 import RecoveryModal from './components/RecoveryModal';
 import { ModalType } from './types';
 import LoadingIndicator from './components/LoadingIndicator';
+import { publicUrl } from './constants';
 
 const App: React.FC = () => {
     const [{ modalType }, dispatch] = useStateValue();
@@ -31,7 +32,7 @@ const App: React.FC = () => {
     }, [dispatch, isDesktop]);
 
     return (
-        <Router>
+        <Router basename={publicUrl}>
             <div>
                 <NavBar />
                 <LoadingIndicator />
