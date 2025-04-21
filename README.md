@@ -141,10 +141,6 @@ You can change your username, email and password in the account settings in addi
 
 See about using WebSocket API to listen to changes made to lists by other users.
 
-## Contact
-
-cocosweetsmail@gmail.com
-
 ## Acknowledgements
 * [Full Stack open 2020](https://fullstackopen.com/)
 * [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
