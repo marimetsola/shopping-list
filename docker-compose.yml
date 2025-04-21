@@ -1,0 +1,47 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    networks:
+      - shopping-list
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    networks:
+      - shopping-list
+    env_file:
+      - ./backend/.env
+
+  nginx-proxy:
+    image: nginx:stable-alpine
+    container_name: nginx-proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - shopping-list
+
+  mongo:
+    image: mongo
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./mongodb:/data/db
+      - ./backend/init-mongo:/docker-entrypoint-initdb.d
+    networks:
+      - shopping-list
+
+networks:
+  shopping-list:
+    driver: bridge

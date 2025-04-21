@@ -26,11 +26,11 @@ const RegisterModal: React.FC<Props> = ({ open }) => {
             history.push('/list');
             dispatch(setOpenModalType(ModalType.None));
         } catch (error) {
-            if (error.response.data.error) {
-                if (error.response.data.error.includes('name')) {
-                    action.setErrors({ name: error.response.data.error });
-                } else if (error.response.data.error.includes('address')) {
-                    action.setErrors({ email: error.response.data.error });
+            if ((error as any).response.data.error) {
+                if ((error as any).response.data.error.includes('name')) {
+                    action.setErrors({ name: (error as any).response.data.error });
+                } else if ((error as any).response.data.error.includes('address')) {
+                    action.setErrors({ email: (error as any).response.data.error });
                 }
             }
 

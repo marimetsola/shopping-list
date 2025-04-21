@@ -12,8 +12,10 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-loader-spinner": "^3.1.1",
     "@types/react-responsive": "^8.0.2",
+    "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
-    "axios": "^1.6.7",
+    "axios": "^0.26.1",
+    "dotenv": "^16.5.0",
     "formik": "^2.1.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -24,11 +26,11 @@
     "react-responsive": "^8.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "semantic-ui-react": "^0.88.2",
-    "typescript": "^3.7.5"
+    "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
     "start": "react-scripts start",
+    "docker-start": "CHOKIDAR_USEPOLLING=true react-scripts start --host 0.0.0.0",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -50,7 +52,12 @@
     ]
   },
   "devDependencies": {
-    "@types/react-beautiful-dnd": "^12.1.2"
+    "@types/babel__traverse": "7.14.2",
+    "@types/react-beautiful-dnd": "^13.1.8",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
+    "@typescript-eslint/parser": "2.34.0",
+    "eslint": "6.8.0",
+    "typescript": "3.9.10"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://backend:3001"
 }

@@ -4,16 +4,23 @@ import { apiBaseUrl } from '../constants';
 
 let token: string | null = null;
 
-const config = () => ({ headers: { Authorization: token } });
+const config = () => ({
+    headers: {
+      Authorization: token ?? '', // fallback to empty string if token is null
+    },
+  });
 
 const setToken = (newToken: string) => {
     token = `bearer ${newToken}`;
 };
 
 const getListsByUser = async () => {
-    const { data: listsFromApi } = await axios.get<ItemList[]>(
-        `${apiBaseUrl}/lists`, config()
-    );
+    // const { data: listsFromApi } = await axios.get<ItemList[]>(
+    //     `${apiBaseUrl}/lists`, config()
+    // );
+
+    const response = await axios.get<ItemList[]>(`${apiBaseUrl}/lists`, config());
+    const listsFromApi = response.data;
 
     return listsFromApi;
 };

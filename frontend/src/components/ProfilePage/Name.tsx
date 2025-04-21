@@ -38,7 +38,7 @@ const Name: React.FC<Props> = ({ user }) => {
                 setNameModalOpen(false);
                 setNameChanged(true);
             } catch (error) {
-                if (error.response.status === 400) {
+                if ((error as any).response.status === 400) {
                     action.setErrors({ name: "Username already taken." });
                 } else {
                     action.setErrors({ password: "Invalid password." });
