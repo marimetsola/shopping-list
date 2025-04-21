@@ -27,7 +27,6 @@
   * [Unintive User](#invite-user)
   * [Account Settings](#account-settings)
 * [Roadmap](#roadmap)
-* [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
 
 ## About The Project
